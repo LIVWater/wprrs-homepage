@@ -1146,6 +1146,10 @@
       top: clamp(7rem, 12vh, 9rem);
       align-self: start;
     }
+    /* Disable sticky on mobile — single-column, header just blocks content */
+    @media (max-width: 1023px) {
+      .what__sticky { position: relative; top: auto; }
+    }
     .what__sticky h2 {
       font-size: clamp(2.2rem, 4.2vw, 3.8rem);
       line-height: 1.05;
@@ -2246,19 +2250,51 @@
       outline: 2px solid var(--blue-light);
       outline-offset: 4px;
     }
+    /* Mobile: de-pin the section, stack all feature stages as readable content */
     @media (max-width: 720px) {
       .whistle-promo__progress { display: none; }
+      /* Remove 400vh height and sticky pin — flat static layout */
+      .whistle-promo { min-height: auto; padding: clamp(4rem, 8vh, 5rem) 0; }
+      .whistle-promo__pin {
+        position: relative;
+        height: auto;
+        overflow: visible;
+        padding: clamp(2rem, 4vh, 3rem) 0 0;
+        align-items: flex-start;
+      }
+      .whistle-trigger { display: none; }
+      /* Phone: keep it but compact, centred above copy */
+      .whistle-promo__grid { flex-direction: column-reverse; display: flex; gap: 2rem; }
+      .whistle-phone { width: clamp(130px, 36vw, 180px); margin: 0 auto; }
+      /* Remove absolute stacking on copy panels — let content flow to natural height */
+      .whistle-promo__copy { min-height: auto; overflow: visible; }
+      .whistle-stage-copy {
+        position: relative;
+        top: auto; left: auto; right: auto;
+        opacity: 1;
+        transform: none;
+        pointer-events: auto;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.12);
+        margin-bottom: 2rem;
+        transition: none;
+      }
+      .whistle-stage-copy:last-of-type { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+      /* CTA stage always visible below the feature stages */
+      .whistle-promo__main { display: block !important; opacity: 1 !important; }
+      .whistle-promo__cta-stage {
+        display: block;
+        position: relative;
+        margin-top: 3rem;
+        padding-top: 2.5rem;
+        border-top: 1px solid rgba(255,255,255,0.12);
+      }
+      .whistle-phone__slide { transition: none; }
     }
-
-    /* Mobile: shorter pin behaviour (still 4 stages but reduce padding) */
-    @media (max-width: 720px) {
-      .whistle-promo__copy { min-height: 28rem; }
-    }
-    /* Reduced-motion: collapse the pinned scroll to a static section
-       showing only stage 0 (no surprise scroll-hijack). */
+    /* Reduced-motion: same de-pin approach */
     @media (prefers-reduced-motion: reduce) {
       .whistle-promo { min-height: auto; padding: clamp(5rem, 10vh, 8rem) 0; }
-      .whistle-promo__pin { position: relative; height: auto; }
+      .whistle-promo__pin { position: relative; height: auto; overflow: visible; }
       .whistle-trigger { display: none; }
       .whistle-stage-copy, .whistle-phone__slide { transition: none; }
     }
