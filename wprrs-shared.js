@@ -21,7 +21,10 @@
   updateNav();
 
   function syncPanelTop() {
-    if (mobilePanel && nav) mobilePanel.style.top = nav.offsetHeight + 'px';
+    if (!mobilePanel || !nav) return;
+    const h = nav.offsetHeight;
+    mobilePanel.style.top = h + 'px';
+    mobilePanel.style.height = 'calc(100dvh - ' + h + 'px)';
   }
   syncPanelTop();
   window.addEventListener('resize', syncPanelTop, { passive: true });
@@ -32,6 +35,11 @@
     if (hamburger) hamburger.classList.remove('open');
     if (nav) nav.classList.remove('menu-open');
     if (hamburger) hamburger.setAttribute('aria-expanded', 'false');
+    // Collapse all open accordions on close
+    mobilePanel.querySelectorAll('.panel-section__toggle[aria-expanded="true"]').forEach(t => {
+      t.setAttribute('aria-expanded', 'false');
+      if (t.nextElementSibling) t.nextElementSibling.classList.remove('is-open');
+    });
   }
 
   if (hamburger && mobilePanel) {
@@ -46,7 +54,11 @@
     mobilePanel.querySelectorAll('.panel-link').forEach(link => {
       link.addEventListener('click', closeMobilePanel);
     });
-    // Accordion sections
+    // Close on footer CTA tap
+    mobilePanel.querySelectorAll('.panel-footer__btn').forEach(btn => {
+      btn.addEventListener('click', closeMobilePanel);
+    });
+    // Accordion sections — one open at a time
     mobilePanel.querySelectorAll('.panel-section__toggle').forEach(toggle => {
       toggle.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -56,7 +68,7 @@
         mobilePanel.querySelectorAll('.panel-section__toggle').forEach(other => {
           if (other !== toggle) {
             other.setAttribute('aria-expanded', 'false');
-            other.nextElementSibling.classList.remove('is-open');
+            if (other.nextElementSibling) other.nextElementSibling.classList.remove('is-open');
           }
         });
       });

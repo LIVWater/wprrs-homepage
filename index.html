@@ -460,94 +460,232 @@
       .nav__links .has-drop.is-open > .nav__dropdown .dropdown-link { animation: none; }
     }
 
-    /* Mobile drawer panel (hamburger-triggered) */
+    /* ============================================================
+       MOBILE DRAWER PANEL — full-viewport-height overlay
+       ============================================================ */
     .nav__panel {
       position: fixed;
       left: 0; right: 0;
-      top: 0;
+      top: 0; /* overridden inline by JS → nav.offsetHeight */
+      height: 100dvh; /* overridden inline by JS → calc(100dvh - navH) */
       z-index: 98;
-      background: var(--white);
-      border-top: 2px solid var(--red);
-      border-bottom: 1px solid var(--line-soft);
+      background: var(--navy-deep);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
       opacity: 0;
       pointer-events: none;
-      transform: translateY(-8px);
-      transition: opacity 0.32s var(--ease-p), transform 0.32s var(--ease-p);
+      transform: translateY(-14px);
+      transition: opacity 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+                  transform 0.42s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .nav__panel.open {
       opacity: 1;
       pointer-events: auto;
       transform: translateY(0);
     }
-    .panel-items { display: flex; flex-direction: column; }
+    /* Scrollable nav list */
+    .panel-items {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+      padding: 0.4rem 0;
+    }
+    /* Stagger items in on open */
+    .nav__panel.open .panel-items > * {
+      animation: panel-item-in 0.48s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    .nav__panel.open .panel-items > *:nth-child(1) { animation-delay: 0.04s; }
+    .nav__panel.open .panel-items > *:nth-child(2) { animation-delay: 0.09s; }
+    .nav__panel.open .panel-items > *:nth-child(3) { animation-delay: 0.14s; }
+    .nav__panel.open .panel-items > *:nth-child(4) { animation-delay: 0.19s; }
+    .nav__panel.open .panel-items > *:nth-child(5) { animation-delay: 0.24s; }
+    .nav__panel.open .panel-items > *:nth-child(6) { animation-delay: 0.29s; }
+    .nav__panel.open .panel-footer {
+      animation: panel-item-in 0.48s cubic-bezier(0.16, 1, 0.3, 1) 0.33s both;
+    }
+    @keyframes panel-item-in {
+      from { opacity: 0; transform: translateX(-10px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .nav__panel.open .panel-items > *,
+      .nav__panel.open .panel-footer { animation: none; }
+    }
+    /* Direct links */
     .panel-link {
-      display: block;
-      padding: 0.95rem var(--margin);
-      font-size: 0.78rem;
-      font-weight: 400;
-      letter-spacing: 0.04em;
-      color: var(--text-secondary);
-      border-bottom: 1px solid var(--line-soft);
-      transition: color 0.25s var(--ease-p), background 0.25s var(--ease-p), padding-left 0.25s var(--ease-p);
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 1.1rem var(--margin);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      transition: color 0.22s var(--ease-p),
+                  background 0.22s var(--ease-p),
+                  padding-left 0.22s var(--ease-p);
+    }
+    .panel-link::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: var(--red);
+      transform: scaleY(0);
+      transform-origin: center;
+      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .panel-link:last-child { border-bottom: none; }
-    .panel-link:hover {
-      color: var(--red);
-      background: rgba(218, 29, 39, 0.04);
-      padding-left: calc(var(--margin) + 0.6rem);
+    .panel-link:hover,
+    .panel-link:focus-visible {
+      color: rgba(255,255,255,0.95);
+      background: rgba(255,255,255,0.05);
+      padding-left: calc(var(--margin) + 0.65rem);
     }
-    /* Panel accordion sections (mobile — mirrors desktop dropdowns) */
-    .panel-section { border-bottom: 1px solid var(--line-soft); }
-    .panel-section:last-of-type { border-bottom: none; }
+    .panel-link:hover::before { transform: scaleY(1); }
+    .panel-link.is-current { color: var(--red); }
+    .panel-link.is-current::before { transform: scaleY(1); }
+    /* Accordion section headers */
+    .panel-section { border-bottom: 1px solid rgba(255,255,255,0.06); }
     .panel-section__toggle {
+      position: relative;
       display: flex;
       justify-content: space-between;
       align-items: center;
       width: 100%;
-      padding: 0.95rem var(--margin);
-      font-size: 0.78rem;
-      font-weight: 400;
-      letter-spacing: 0.04em;
-      color: var(--text-secondary);
+      padding: 1.1rem var(--margin);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
       background: none;
       border: none;
       cursor: pointer;
       text-align: left;
-      transition: color 0.25s var(--ease-p), background 0.25s var(--ease-p);
+      transition: color 0.22s var(--ease-p),
+                  background 0.22s var(--ease-p),
+                  padding-left 0.22s var(--ease-p);
+    }
+    .panel-section__toggle::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: var(--red);
+      transform: scaleY(0);
+      transform-origin: center;
+      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .panel-section__toggle:hover,
-    .panel-section__toggle[aria-expanded="true"] { color: var(--red); }
+    .panel-section__toggle:focus-visible {
+      color: rgba(255,255,255,0.95);
+      background: rgba(255,255,255,0.05);
+      padding-left: calc(var(--margin) + 0.65rem);
+    }
+    .panel-section__toggle:hover::before { transform: scaleY(1); }
+    .panel-section__toggle[aria-expanded="true"] {
+      color: var(--red);
+      background: rgba(218,29,39,0.08);
+    }
+    .panel-section__toggle[aria-expanded="true"]::before { transform: scaleY(1); }
     .panel-section__chevron {
       flex-shrink: 0;
-      width: 14px; height: 14px;
-      transition: transform 0.28s var(--ease-p);
+      width: 16px; height: 16px;
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
       color: inherit;
     }
     .panel-section__toggle[aria-expanded="true"] .panel-section__chevron {
       transform: rotate(180deg);
     }
+    /* Accordion sub-items */
     .panel-section__links {
       max-height: 0;
       overflow: hidden;
-      transition: max-height 0.32s var(--ease-p);
-      background: rgba(22, 28, 73, 0.025);
+      transition: max-height 0.42s cubic-bezier(0.16, 1, 0.3, 1);
+      background: rgba(0,0,0,0.2);
     }
-    .panel-section__links.is-open { max-height: 500px; }
+    .panel-section__links.is-open { max-height: 600px; }
     .panel-sub-link {
-      display: block;
-      padding: 0.7rem var(--margin) 0.7rem calc(var(--margin) + 1.1rem);
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.9rem var(--margin) 0.9rem calc(var(--margin) + 1.25rem);
       font-size: 0.75rem;
       letter-spacing: 0.04em;
-      color: var(--text-secondary);
-      border-top: 1px solid var(--line-soft);
-      transition: color 0.2s var(--ease-p), background 0.2s var(--ease-p), padding-left 0.2s var(--ease-p);
+      color: rgba(255,255,255,0.45);
+      border-top: 1px solid rgba(255,255,255,0.05);
+      transition: color 0.2s var(--ease-p),
+                  background 0.2s var(--ease-p),
+                  padding-left 0.2s var(--ease-p);
     }
-    .panel-sub-link:hover {
-      color: var(--red);
-      background: rgba(218, 29, 39, 0.04);
-      padding-left: calc(var(--margin) + 1.7rem);
+    .panel-sub-link::before {
+      content: '';
+      display: block;
+      flex-shrink: 0;
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--red);
+      opacity: 0;
+      transition: opacity 0.2s var(--ease-p);
     }
-    .panel-sub-link.is-current { color: var(--red); font-weight: 500; }
+    .panel-sub-link:hover,
+    .panel-sub-link:focus-visible {
+      color: rgba(255,255,255,0.92);
+      background: rgba(255,255,255,0.04);
+      padding-left: calc(var(--margin) + 1.65rem);
+    }
+    .panel-sub-link:hover::before { opacity: 1; }
+    .panel-sub-link.is-current { color: var(--red); }
+    .panel-sub-link.is-current::before { opacity: 1; }
+    /* Sticky footer CTAs */
+    .panel-footer {
+      flex-shrink: 0;
+      display: flex;
+      gap: 0.75rem;
+      padding: 1.1rem var(--margin) max(1.1rem, env(safe-area-inset-bottom));
+      border-top: 1px solid rgba(255,255,255,0.08);
+      background: var(--navy-deep);
+    }
+    .panel-footer__btn {
+      flex: 1;
+      text-align: center;
+      padding: 0.85rem 1rem;
+      border-radius: 999px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      transition: background 0.25s var(--ease-p),
+                  color 0.25s var(--ease-p),
+                  border-color 0.25s var(--ease-p);
+    }
+    .panel-footer__btn--ghost {
+      color: rgba(255,255,255,0.72);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .panel-footer__btn--ghost:hover {
+      color: #fff;
+      border-color: rgba(255,255,255,0.5);
+      background: rgba(255,255,255,0.08);
+    }
+    .panel-footer__btn--filled {
+      color: #fff;
+      background: var(--red);
+      border: 1px solid var(--red);
+    }
+    .panel-footer__btn--filled:hover {
+      background: var(--red-deep);
+      border-color: var(--red-deep);
+    }
     /* Disable boxed dropdowns at mobile breakpoint (drawer takes over) */
     @media (max-width: 920px) {
       .nav__dropdown { display: none; }
@@ -3606,9 +3744,13 @@
       <a href="events.html" class="panel-link">Events</a>
       <a href="news.html" class="panel-link">News</a>
       <a href="shop.html" class="panel-link">Shop</a>
-      <a href="https://wprrs-refhub.vercel.app/" class="panel-link" target="_blank" rel="noopener">Sign In</a>
-      <a href="contact.html" class="panel-link">Contact Us</a>
 
+    </div>
+
+    <!-- Sticky footer CTAs -->
+    <div class="panel-footer">
+      <a href="https://wprrs-refhub.vercel.app/" class="panel-footer__btn panel-footer__btn--ghost" target="_blank" rel="noopener">Sign In</a>
+      <a href="contact.html" class="panel-footer__btn panel-footer__btn--filled">Contact Us</a>
     </div>
   </div>
 
@@ -4788,9 +4930,12 @@
     }, { passive: true });
     updateNav();
 
-    // Anchor mobile panel to the bottom of the nav
+    // Anchor panel below nav and stretch to full remaining viewport height
     function syncPanelTop() {
-      if (mobilePanel) mobilePanel.style.top = nav.offsetHeight + 'px';
+      if (!mobilePanel) return;
+      const h = nav.offsetHeight;
+      mobilePanel.style.top = h + 'px';
+      mobilePanel.style.height = 'calc(100dvh - ' + h + 'px)';
     }
     syncPanelTop();
     window.addEventListener('resize', syncPanelTop, { passive: true });
@@ -4801,6 +4946,11 @@
       hamburger.classList.remove('open');
       nav.classList.remove('menu-open');
       hamburger.setAttribute('aria-expanded', 'false');
+      // Collapse all open accordion sections on close
+      mobilePanel.querySelectorAll('.panel-section__toggle[aria-expanded="true"]').forEach(t => {
+        t.setAttribute('aria-expanded', 'false');
+        if (t.nextElementSibling) t.nextElementSibling.classList.remove('is-open');
+      });
     }
 
     if (hamburger && mobilePanel) {
@@ -4812,22 +4962,27 @@
         nav.classList.toggle('menu-open', isOpen);
         hamburger.setAttribute('aria-expanded', String(isOpen));
       });
+      // Close on direct link tap
       mobilePanel.querySelectorAll('.panel-link').forEach(link => {
         link.addEventListener('click', closeMobilePanel);
       });
+      // Close on footer CTA tap
+      mobilePanel.querySelectorAll('.panel-footer__btn').forEach(btn => {
+        btn.addEventListener('click', closeMobilePanel);
+      });
 
-      // Accordion sections — toggle open/close
+      // Accordion sections — toggle open/close, one at a time
       mobilePanel.querySelectorAll('.panel-section__toggle').forEach(toggle => {
         toggle.addEventListener('click', (e) => {
           e.stopPropagation();
           const links = toggle.nextElementSibling;
           const isOpen = links.classList.toggle('is-open');
           toggle.setAttribute('aria-expanded', String(isOpen));
-          // Close other open sections
+          // Collapse siblings
           mobilePanel.querySelectorAll('.panel-section__toggle').forEach(other => {
             if (other !== toggle) {
               other.setAttribute('aria-expanded', 'false');
-              other.nextElementSibling.classList.remove('is-open');
+              if (other.nextElementSibling) other.nextElementSibling.classList.remove('is-open');
             }
           });
         });
