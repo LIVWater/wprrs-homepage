@@ -5023,7 +5023,7 @@
     // ============================================================
     (function () {
       let path = (window.location.pathname.split('/').pop() || '').toLowerCase();
-      if (!path || path === 'index.html') path = 'wprrs-homepage-v2.html';
+      if (!path || path === 'index.html') path = 'index.html';
       function hrefMatchesPath(href) {
         if (!href || href.startsWith('#') || href.startsWith('http')) return false;
         const file = href.split('#')[0].split('/').pop().toLowerCase();
