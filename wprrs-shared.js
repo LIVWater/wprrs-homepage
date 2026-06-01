@@ -46,6 +46,24 @@
     mobilePanel.querySelectorAll('.panel-link').forEach(link => {
       link.addEventListener('click', closeMobilePanel);
     });
+    // Accordion sections
+    mobilePanel.querySelectorAll('.panel-section__toggle').forEach(toggle => {
+      toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const links = toggle.nextElementSibling;
+        const isOpen = links.classList.toggle('is-open');
+        toggle.setAttribute('aria-expanded', String(isOpen));
+        mobilePanel.querySelectorAll('.panel-section__toggle').forEach(other => {
+          if (other !== toggle) {
+            other.setAttribute('aria-expanded', 'false');
+            other.nextElementSibling.classList.remove('is-open');
+          }
+        });
+      });
+    });
+    mobilePanel.querySelectorAll('.panel-sub-link').forEach(link => {
+      link.addEventListener('click', closeMobilePanel);
+    });
     document.addEventListener('click', (e) => {
       if (nav && !nav.contains(e.target) && !mobilePanel.contains(e.target)) closeMobilePanel();
     });

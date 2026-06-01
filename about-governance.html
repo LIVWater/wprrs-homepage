@@ -13,13 +13,13 @@
 <body>
 
   <nav class="nav" id="nav">
-    <a href="wprrs-homepage-v2.html" class="nav__logo-wrap" aria-label="WPRRS home"><img src="Flower Logo.svg" class="nav__logo" alt="WPRRS"></a>
+    <a href="index.html" class="nav__logo-wrap" aria-label="WPRRS home"><img src="Flower Logo.svg" class="nav__logo" alt="WPRRS"></a>
     <ul class="nav__links">
       <li class="has-drop"><button type="button" class="nav__trigger" aria-haspopup="menu" aria-expanded="false">About</button><div class="nav__dropdown" role="menu"><a href="about-history.html" class="dropdown-link">History</a><a href="about-governance.html" class="dropdown-link">Governance</a><a href="about-code-of-conduct.html" class="dropdown-link">Code of Conduct</a><a href="about-constitution.html" class="dropdown-link">Constitution &amp; By-Laws</a><a href="about-honorary-members.html" class="dropdown-link">Honorary Members</a><a href="about-prestige-awards.html" class="dropdown-link">Prestige Awards</a><a href="about-annual-reports.html" class="dropdown-link">Annual Reports</a></div></li>
       <li class="has-drop"><button type="button" class="nav__trigger" aria-haspopup="menu" aria-expanded="false">Referees</button><div class="nav__dropdown" role="menu"><a href="become-a-referee.html" class="dropdown-link">Become a Referee</a><a href="training.html" class="dropdown-link">Training &amp; Development</a></div></li>
       <li class="has-drop"><button type="button" class="nav__trigger" aria-haspopup="menu" aria-expanded="false">Resources</button><div class="nav__dropdown" role="menu"><a href="wprrs-platform.html" class="dropdown-link">App &amp; Dashboard</a><a href="resource-library.html" class="dropdown-link">Resource Library</a></div></li>
       <li><a href="events.html">Events</a></li>
-      <li><a href="wprrs-homepage-v2.html#news">News</a></li><li><a href="shop.html">Shop</a></li>
+      <li><a href="index.html#news">News</a></li><li><a href="shop.html">Shop</a></li>
     </ul>
     <div class="nav__actions">
       <a href="https://wprrs-refhub.vercel.app/" class="nav__btn nav__btn--ghost" target="_blank" rel="noopener">Sign In</a>
@@ -27,12 +27,70 @@
       <button class="nav__hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
     </div>
   </nav>
-  <div class="nav__panel" id="panel-mobile"><div class="panel-items"><a href="about-history.html" class="panel-link">About</a><a href="become-a-referee.html" class="panel-link">Become a Referee</a><a href="training.html" class="panel-link">Training &amp; Development</a><a href="wprrs-platform.html" class="panel-link">App &amp; Dashboard</a><a href="resource-library.html" class="panel-link">Resource Library</a><a href="events.html" class="panel-link">Events</a><a href="news.html" class="panel-link">News</a><a href="shop.html" class="panel-link">Shop</a><a href="https://wprrs-refhub.vercel.app/" class="panel-link" target="_blank" rel="noopener">Sign In</a><a href="contact.html" class="panel-link">Contact Us</a></div></div>
+    <div class="nav__panel" id="panel-mobile">
+    <div class="panel-items">
+
+      <!-- About (accordion) -->
+      <div class="panel-section">
+        <button type="button" class="panel-section__toggle" aria-expanded="false">
+          About
+          <svg class="panel-section__chevron" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M2.5 5l4.5 4 4.5-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="panel-section__links">
+          <a href="about-history.html" class="panel-sub-link">History</a>
+          <a href="about-governance.html" class="panel-sub-link">Governance</a>
+          <a href="about-code-of-conduct.html" class="panel-sub-link">Code of Conduct</a>
+          <a href="about-constitution.html" class="panel-sub-link">Constitution &amp; By-Laws</a>
+          <a href="about-honorary-members.html" class="panel-sub-link">Honorary Members</a>
+          <a href="about-prestige-awards.html" class="panel-sub-link">Prestige Awards</a>
+          <a href="about-annual-reports.html" class="panel-sub-link">Annual Reports</a>
+        </div>
+      </div>
+
+      <!-- Referees (accordion) -->
+      <div class="panel-section">
+        <button type="button" class="panel-section__toggle" aria-expanded="false">
+          Referees
+          <svg class="panel-section__chevron" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M2.5 5l4.5 4 4.5-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="panel-section__links">
+          <a href="become-a-referee.html" class="panel-sub-link">Become a Referee</a>
+          <a href="training.html" class="panel-sub-link">Training &amp; Development</a>
+        </div>
+      </div>
+
+      <!-- Resources (accordion) -->
+      <div class="panel-section">
+        <button type="button" class="panel-section__toggle" aria-expanded="false">
+          Resources
+          <svg class="panel-section__chevron" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M2.5 5l4.5 4 4.5-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="panel-section__links">
+          <a href="wprrs-platform.html" class="panel-sub-link">App &amp; Dashboard</a>
+          <a href="resource-library.html" class="panel-sub-link">Resource Library</a>
+        </div>
+      </div>
+
+      <!-- Direct links -->
+      <a href="events.html" class="panel-link">Events</a>
+      <a href="news.html" class="panel-link">News</a>
+      <a href="shop.html" class="panel-link">Shop</a>
+      <a href="https://wprrs-refhub.vercel.app/" class="panel-link" target="_blank" rel="noopener">Sign In</a>
+      <a href="contact.html" class="panel-link">Contact Us</a>
+
+    </div>
+  </div>
 
   <section class="page-hero">
     <span class="page-hero__watermark" aria-hidden="true">Lead</span>
     <div class="page-hero__inner">
-      <span class="page-hero__crumb"><a href="wprrs-homepage-v2.html">Home</a><span class="sep">/</span><a href="about-history.html">About</a><span class="sep">/</span>Governance</span>
+      <span class="page-hero__crumb"><a href="index.html">Home</a><span class="sep">/</span><a href="about-history.html">About</a><span class="sep">/</span>Governance</span>
       <h1 class="page-hero__title">How the Society is <span class="ed-em">run</span>.</h1>
       <p class="page-hero__sub">Eight portfolios, an elected executive, and three decades of chairs who have shaped the organisation — a structured, accountable governance model.</p>
     </div>

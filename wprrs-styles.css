@@ -3419,3 +3419,59 @@ h1, h2, h3, h4 { font-weight: 200; line-height: 1.05; letter-spacing: -0.015em; 
   .dash-mock__stats { grid-template-columns: repeat(2, 1fr); }
   .dash-mock__panels { grid-template-columns: 1fr; }
 }
+
+/* ============================================================
+   MOBILE NAV PANEL — ACCORDION SECTIONS
+   (mirrors desktop dropdown structure)
+   ============================================================ */
+.panel-section { border-bottom: 1px solid var(--line-soft); }
+.panel-section:last-of-type { border-bottom: none; }
+.panel-section__toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0.95rem var(--margin);
+  font-size: 0.78rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: color 0.25s var(--ease-p), background 0.25s var(--ease-p);
+}
+.panel-section__toggle:hover,
+.panel-section__toggle[aria-expanded="true"] { color: var(--red); }
+.panel-section__chevron {
+  flex-shrink: 0;
+  width: 14px; height: 14px;
+  transition: transform 0.28s var(--ease-p);
+  color: inherit;
+}
+.panel-section__toggle[aria-expanded="true"] .panel-section__chevron {
+  transform: rotate(180deg);
+}
+.panel-section__links {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.32s var(--ease-p);
+  background: rgba(22, 28, 73, 0.025);
+}
+.panel-section__links.is-open { max-height: 500px; }
+.panel-sub-link {
+  display: block;
+  padding: 0.7rem var(--margin) 0.7rem calc(var(--margin) + 1.1rem);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  border-top: 1px solid var(--line-soft);
+  transition: color 0.2s var(--ease-p), background 0.2s var(--ease-p), padding-left 0.2s var(--ease-p);
+}
+.panel-sub-link:hover {
+  color: var(--red);
+  background: rgba(218, 29, 39, 0.04);
+  padding-left: calc(var(--margin) + 1.7rem);
+}
+.panel-sub-link.is-current { color: var(--red); font-weight: 500; }
