@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Resource Library — Western Province Rugby Referees' Society</title>
+  <meta name="description" content="The WPRRS Resource Library — match day duties, match reporting, useful external references, virtual meetings, and the Society's annual reports, all in one place.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Playfair+Display:ital,wght@1,400;1,500;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="wprrs-styles.css">
+  <style>
+    /* Page-specific: 5-up resource library index card grid.
+       Mirrors the homepage QA bento aesthetic with the editorial
+       numbered tile pattern used across the Society's interior pages. */
+    .lib-index {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 640px)  { .lib-index { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1024px) { .lib-index { grid-template-columns: repeat(5, 1fr); } }
+    .lib-tile {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      padding: 1.6rem 1.5rem 1.4rem;
+      background: var(--white);
+      border: 1px solid var(--line-soft);
+      border-radius: 14px;
+      min-height: 12rem;
+      isolation: isolate;
+      overflow: hidden;
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                  border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                  box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .lib-tile::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 2px;
+      background: var(--red);
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .lib-tile:hover {
+      transform: translateY(-5px);
+      border-color: var(--navy);
+      box-shadow: 0 24px 60px -32px rgba(15, 18, 50, 0.22);
+    }
+    .lib-tile:hover::after { transform: scaleX(1); }
+    .lib-tile__num {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-weight: 500;
+      font-size: 2rem;
+      color: var(--red);
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+    .lib-tile__name {
+      font-size: 1.1rem;
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--navy);
+      letter-spacing: -0.005em;
+    }
+    .lib-tile__desc {
+      font-size: 0.86rem;
+      line-height: 1.5;
+      color: var(--text-secondary);
+      flex: 1;
+    }
+    .lib-tile__cta {
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--navy);
+      padding-bottom: 0.2rem;
+      border-bottom: 1px solid var(--navy);
+      align-self: flex-start;
+      transition: color 0.3s, border-color 0.3s;
+    }
+    .lib-tile:hover .lib-tile__cta {
+      color: var(--red);
+      border-color: var(--red);
+    }
+
+    /* External-link rows for the Useful References block */
+    .link-rows {
+      display: flex;
+      flex-direction: column;
+      border-top: 1px solid var(--line-soft);
+    }
+    .link-row {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 1.4rem;
+      padding: 1.3rem 0.4rem;
+      border-bottom: 1px solid var(--line-soft);
+      transition: padding 0.4s var(--ease-r), background 0.4s var(--ease-r);
+    }
+    .link-row:hover { padding-left: 1.1rem; padding-right: 1.1rem; background: var(--bg-mid); border-radius: 12px; }
+    .link-row__num {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-weight: 500;
+      font-size: 1.2rem;
+      color: var(--red);
+      letter-spacing: -0.01em;
+      min-width: 2rem;
+    }
+    .link-row__body { display: flex; flex-direction: column; gap: 0.2rem; }
+    .link-row__title {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--navy);
+      letter-spacing: -0.005em;
+    }
+    .link-row__sub { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.45; }
+    .link-row__arrow {
+      width: 2.4rem; height: 2.4rem;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--navy);
+      font-size: 1rem;
+      transition: background 0.3s, color 0.3s, border-color 0.3s, transform 0.3s var(--ease-r);
+    }
+    .link-row:hover .link-row__arrow {
+      background: var(--red); border-color: var(--red); color: var(--white);
+      transform: rotate(-45deg);
+    }
+
+    /* Annual report dense card rows (meetings now use the shared
+       .event-row pattern from wprrs-styles.css) */
+    .report-row {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 1.4rem;
+      align-items: center;
+      padding: 1.4rem 0.4rem;
+      border-bottom: 1px solid var(--line-soft);
+      transition: padding 0.4s var(--ease-r), background 0.4s var(--ease-r);
+    }
+    .report-row:first-child { border-top: 1px solid var(--line-soft); }
+    .report-row:hover { padding-left: 1.1rem; padding-right: 1.1rem; background: var(--bg-mid); border-radius: 12px; }
+    .report-row__info h3 { font-size: 1.05rem; font-weight: 400; color: var(--navy); margin-bottom: 0.2rem; }
+    .report-row__info p { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.45; }
+    .report-row__cta {
+      position: relative;
+      font-size: 0.62rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--navy); padding: 0.55rem 1rem;
+      border: 1px solid var(--navy); border-radius: 999px;
+      overflow: hidden;
+      isolation: isolate;
+      transition: color 0.4s var(--ease-p), border-color 0.4s var(--ease-p), transform 0.3s var(--ease-r);
+      white-space: nowrap;
+    }
+    .report-row__cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: var(--red);
+      transform: translateX(-101%);
+      transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: -1;
+    }
+    .report-row__cta:hover::before { transform: translateX(0); }
+    .report-row__cta:hover { border-color: var(--red); color: var(--white); transform: translateY(-1px); }
+    @media (prefers-reduced-motion: reduce) {
+      .report-row__cta::before { transition: none; }
+    }
+    .report-row__year {
+      font-family: 'Playfair Display', serif; font-style: italic; font-weight: 500;
+      font-size: 1.6rem; color: var(--red); letter-spacing: -0.01em;
+      min-width: 4rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAV (matches simplified homepage v2 nav: 2 items per dropdown) ===== -->
+  <nav class="nav" id="nav">
+    <a href="wprrs-homepage-v2.html" class="nav__logo-wrap" aria-label="WPRRS home"><img src="Flower Logo.svg" class="nav__logo" alt="WPRRS"></a>
+    <ul class="nav__links">
+      <li class="has-drop"><button type="button" class="nav__trigger" aria-haspopup="menu" aria-expanded="false">About</button><div class="nav__dropdown" role="menu"><a href="about-history.html" class="dropdown-link">History</a><a href="about-governance.html" class="dropdown-link">Governance</a><a href="about-code-of-conduct.html" class="dropdown-link">Code of Conduct</a><a href="about-constitution.html" class="dropdown-link">Constitution &amp; By-Laws</a><a href="about-honorary-members.html" class="dropdown-link">Honorary Members</a><a href="about-prestige-awards.html" class="dropdown-link">Prestige Awards</a><a href="about-annual-reports.html" class="dropdown-link">Annual Reports</a></div></li>
+      <li class="has-drop"><button type="button" class="nav__trigger" aria-haspopup="menu" aria-expanded="false">Referees</button><div class="nav__dropdown" role="menu"><a href="become-a-referee.html" class="dropdown-link">Become a Referee</a><a href="training.html" class="dropdown-link">Training &amp; Development</a></div></li>
+      <li class="has-drop"><button type="button" class="nav__trigger" aria-haspopup="menu" aria-expanded="false">Resources</button><div class="nav__dropdown" role="menu"><a href="wprrs-platform.html" class="dropdown-link">App &amp; Dashboard</a><a href="resource-library.html" class="dropdown-link">Resource Library</a></div></li>
+      <li><a href="events.html">Events</a></li>
+      <li><a href="news.html">News</a></li>
+    </ul>
+    <div class="nav__actions">
+      <a href="https://wprrs-refhub.vercel.app/" class="nav__btn nav__btn--ghost" target="_blank" rel="noopener">Sign In</a>
+      <a href="contact.html" class="nav__btn nav__btn--filled">Contact Us</a>
+      <button class="nav__hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <div class="nav__panel" id="panel-mobile"><div class="panel-items"><a href="about-history.html" class="panel-link">About</a><a href="become-a-referee.html" class="panel-link">Become a Referee</a><a href="training.html" class="panel-link">Training &amp; Development</a><a href="wprrs-platform.html" class="panel-link">App &amp; Dashboard</a><a href="resource-library.html" class="panel-link">Resource Library</a><a href="events.html" class="panel-link">Events</a><a href="news.html" class="panel-link">News</a><a href="https://wprrs-refhub.vercel.app/" class="panel-link" target="_blank" rel="noopener">Sign In</a><a href="contact.html" class="panel-link">Contact Us</a></div></div>
+
+  <!-- ===== PAGE HERO ===== -->
+  <section class="page-hero">
+    <span class="page-hero__watermark" aria-hidden="true">Library</span>
+    <div class="page-hero__inner">
+      <span class="page-hero__crumb"><a href="wprrs-homepage-v2.html">Home</a><span class="sep">/</span><a href="wprrs-platform.html">Resources</a><span class="sep">/</span>Resource Library</span>
+      <h1 class="page-hero__title">Everything a referee <span class="ed-em">needs</span>, in one place.</h1>
+      <p class="page-hero__sub">Match-day protocols, reporting templates, curated external references, virtual meeting recordings, and every annual report the Society has published — assembled into a single reference for active members.</p>
+    </div>
+  </section>
+
+  <!-- ===== QUOTE INTRO (loads with the left-to-right animation) ===== -->
+  <section class="section section--brand section--pt-lg section--pb-lg">
+    <div class="container">
+      <div class="quote reveal">
+        <div class="quote__dots"><span></span><span></span></div>
+        <p>One library. Five pillars. The same standard from beginner fixtures to Division 1.</p>
+      </div>
+      <p class="quote__body reveal">The Library covers the full referee workflow — preparation, in-game protocols, post-match reporting, ongoing education, and the Society's institutional record. Everything cross-references back to WHISTLE, so what you sign for in the app and what you read here stay in step.</p>
+    </div>
+  </section>
+
+  <!-- ===== LIBRARY INDEX — 5 entry cards ===== -->
+  <section class="section section--pt-sm section--pb-lg" id="library">
+    <div class="container">
+      <div class="section-head reveal" style="margin-bottom: 3rem;">
+        <span class="eyebrow">The library</span>
+        <h2 style="font-size: clamp(2.2rem, 4.2vw, 3.8rem); line-height: 1.05; font-weight: 200; letter-spacing: -0.02em; color: var(--navy); margin-top: 1rem;">Five <span class="ed-em">pillars</span> of officiating.</h2>
+      </div>
+      <div class="lib-index reveal">
+        <a href="#duties" class="lib-tile">
+          <span class="lib-tile__num">01</span>
+          <span class="lib-tile__name">Match Day Duties</span>
+          <p class="lib-tile__desc">The pre-match, in-match, and post-match protocol from confirmation to final whistle.</p>
+          <span class="lib-tile__cta">Read protocol →</span>
+        </a>
+        <a href="#reporting" class="lib-tile">
+          <span class="lib-tile__num">02</span>
+          <span class="lib-tile__name">Match &amp; Incident Reporting</span>
+          <p class="lib-tile__desc">What the post-match report captures, when to file an incident, and how it routes.</p>
+          <span class="lib-tile__cta">See reporting flow →</span>
+        </a>
+        <a href="#references" class="lib-tile">
+          <span class="lib-tile__num">03</span>
+          <span class="lib-tile__name">Useful References</span>
+          <p class="lib-tile__desc">World Rugby Laws, SARRA, BokSmart, peer societies, and society-internal documents.</p>
+          <span class="lib-tile__cta">Open references →</span>
+        </a>
+        <a href="#meetings" class="lib-tile">
+          <span class="lib-tile__num">04</span>
+          <span class="lib-tile__name">Virtual Meetings</span>
+          <p class="lib-tile__desc">Fortnightly online sessions — law clarifications, briefings, and member Q&amp;A.</p>
+          <span class="lib-tile__cta">See schedule →</span>
+        </a>
+        <a href="#reports" class="lib-tile">
+          <span class="lib-tile__num">05</span>
+          <span class="lib-tile__name">Annual Reports</span>
+          <p class="lib-tile__desc">Every annual report the Society has published, downloadable in full.</p>
+          <span class="lib-tile__cta">Browse archive →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 01 · MATCH DAY DUTIES ===== -->
+  <section class="section section--pt-lg section--pb-lg" id="duties">
+    <div class="container">
+      <div class="what">
+        <div class="what__sticky reveal">
+          <span class="eyebrow">01 · Match day</span>
+          <h2>Prepare like a <span class="ed-em">professional</span>.</h2>
+          <p style="margin-top:1.2rem; font-size:1rem; line-height:1.65; color:var(--text-secondary); max-width:36ch;">The protocol runs from confirming the appointment on Monday to filing the report on Saturday evening. Same arc, every level.</p>
+          <div style="display:flex; flex-wrap:wrap; gap:0.7rem; margin-top:1.6rem;">
+            <a href="match-day-duties.html" class="btn btn--primary">Full match-day guide</a>
+          </div>
+        </div>
+        <div class="what__list reveal">
+          <div class="what-card">
+            <div class="what-card__num">01</div>
+            <div class="what-card__body">
+              <h3>Confirm &amp; review</h3>
+              <p>Acknowledge the appointment in WHISTLE. Confirm kick-off time, venue, competition and any specific protocols. Refresh current World Rugby Laws and local regulations for the level.</p>
+              <span class="what-card__tag">Pre-match</span>
+            </div>
+          </div>
+          <div class="what-card">
+            <div class="what-card__num">02</div>
+            <div class="what-card__body">
+              <h3>Equipment &amp; arrival</h3>
+              <p>Whistle plus two spares, watch, cards, notebook, kit and studs. Arrive 60 minutes before kick-off — earlier for festivals or unfamiliar venues — and walk the field for hazards.</p>
+              <span class="what-card__tag">Pre-match</span>
+            </div>
+          </div>
+          <div class="what-card">
+            <div class="what-card__num">03</div>
+            <div class="what-card__body">
+              <h3>Briefing &amp; in-game</h3>
+              <p>Meet both captains 15 minutes before kick-off — scrum engagement, tackle area, foul play, and the BokSmart Blue Card procedure. Manage the contest with consistent communication and clear signals.</p>
+              <span class="what-card__tag">In-match</span>
+            </div>
+          </div>
+          <div class="what-card">
+            <div class="what-card__num">04</div>
+            <div class="what-card__body">
+              <h3>Final whistle &amp; report</h3>
+              <p>Confirm the score with both captains, thank the touch judges, and file the match report through WHISTLE before close of business. Serious incidents file separately, same day.</p>
+              <span class="what-card__tag">Post-match</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 02 · MATCH & INCIDENT REPORTING ===== -->
+  <section class="section section--dark section--pt-lg section--pb-lg" id="reporting">
+    <div class="container">
+      <div class="section-head reveal" style="max-width: 60rem; margin-bottom: 3rem;">
+        <span class="eyebrow eyebrow--light">02 · Reporting</span>
+        <h2 style="font-size: clamp(2.2rem, 4.2vw, 3.8rem); line-height: 1.05; font-weight: 200; letter-spacing: -0.02em; color: var(--white); margin-top: 1rem;">One per match — and one when it <span class="ed-em">matters</span>.</h2>
+        <p style="font-size: 1.05rem; line-height: 1.65; color: rgba(255,255,255,0.78); margin-top: 1.2rem; max-width: 56ch;">Every appointed match generates a report. Every serious incident generates a dedicated incident report. Both submit through WHISTLE on the same day.</p>
+      </div>
+
+      <div class="lib-index reveal" style="grid-template-columns: 1fr; gap: 1rem; max-width: 70rem;">
+        <article class="lib-tile" style="background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.12); flex-direction: row; align-items: flex-start; gap: 2rem; padding: 2rem 2rem 1.8rem;">
+          <span class="lib-tile__num">01</span>
+          <div style="flex:1;">
+            <h3 style="color: var(--white); font-size: 1.4rem; font-weight: 400; margin-bottom: 0.5rem; letter-spacing: -0.01em;">Match Report</h3>
+            <p style="color: rgba(255,255,255,0.78); font-size: 0.95rem; line-height: 1.55;">Fixture details, half-time and full-time scores, cards, injuries, and match notes. Pre-populated for each appointment in WHISTLE; submit by 18:00 on match day.</p>
+          </div>
+        </article>
+        <article class="lib-tile" style="background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.12); flex-direction: row; align-items: flex-start; gap: 2rem; padding: 2rem 2rem 1.8rem;">
+          <span class="lib-tile__num">02</span>
+          <div style="flex:1;">
+            <h3 style="color: var(--white); font-size: 1.4rem; font-weight: 400; margin-bottom: 0.5rem; letter-spacing: -0.01em;">Incident Report</h3>
+            <p style="color: rgba(255,255,255,0.78); font-size: 0.95rem; line-height: 1.55;">Filed for foul play sent off, abuse of officials, BokSmart Blue Card incidents, citings, or any matter likely to require a disciplinary hearing. Routes directly to the discipline committee.</p>
+          </div>
+        </article>
+      </div>
+
+      <div style="margin-top: 2.5rem; display: flex; flex-wrap: wrap; gap: 0.7rem;">
+        <a href="match-report.html" class="btn btn--primary">Full reporting guide</a>
+        <a href="https://wprrs-refhub.vercel.app/" class="btn btn--on-dark" target="_blank" rel="noopener">Open WHISTLE</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 03 · USEFUL REFERENCES ===== -->
+  <section class="section section--pt-lg section--pb-lg" id="references">
+    <div class="container">
+      <div class="section-head reveal" style="margin-bottom: 2.5rem;">
+        <span class="eyebrow">03 · References</span>
+        <h2 style="font-size: clamp(2.2rem, 4.2vw, 3.8rem); line-height: 1.05; font-weight: 200; letter-spacing: -0.02em; color: var(--navy); margin-top: 1rem;">Curated <span class="ed-em">references</span>.</h2>
+        <p style="font-size: 1rem; line-height: 1.65; color: var(--text-secondary); margin-top: 1.2rem; max-width: 56ch;">The external sites and documents members reach for most often — Laws, player welfare, international referees' bodies, and the SA Rugby authority on officiating.</p>
+      </div>
+      <div class="link-rows reveal">
+        <a href="https://www.world.rugby/the-game/laws" target="_blank" rel="noopener" class="link-row">
+          <span class="link-row__num">01</span>
+          <div class="link-row__body">
+            <span class="link-row__title">World Rugby — Laws of the Game</span>
+            <span class="link-row__sub">The official, current set of Laws, including in-season updates and clarifications.</span>
+          </div>
+          <span class="link-row__arrow" aria-hidden="true">→</span>
+        </a>
+        <a href="https://passport.world.rugby" target="_blank" rel="noopener" class="link-row">
+          <span class="link-row__num">02</span>
+          <div class="link-row__body">
+            <span class="link-row__title">World Rugby Passport</span>
+            <span class="link-row__sub">Rugby Ready, Introduction to Refereeing, and Levels 1 &amp; 2 — mandatory for every active member.</span>
+          </div>
+          <span class="link-row__arrow" aria-hidden="true">→</span>
+        </a>
+        <a href="https://my.boksmart.com" target="_blank" rel="noopener" class="link-row">
+          <span class="link-row__num">03</span>
+          <div class="link-row__body">
+            <span class="link-row__title">BokSmart — MyBokSmart portal</span>
+            <span class="link-row__sub">Player welfare modules and the Blue Card concussion protocol. Annual certification required.</span>
+          </div>
+          <span class="link-row__arrow" aria-hidden="true">→</span>
+        </a>
+        <a href="https://springboks.rugby" target="_blank" rel="noopener" class="link-row">
+          <span class="link-row__num">04</span>
+          <div class="link-row__body">
+            <span class="link-row__title">SA Rugby (SARU)</span>
+            <span class="link-row__sub">National competition regulations, calendars, and SARRA (the national referees' authority).</span>
+          </div>
+          <span class="link-row__arrow" aria-hidden="true">→</span>
+        </a>
+        <a href="about-constitution.html" class="link-row">
+          <span class="link-row__num">05</span>
+          <div class="link-row__body">
+            <span class="link-row__title">WPRRS Constitution &amp; By-Laws</span>
+            <span class="link-row__sub">The Society's governing document — membership rules, executive structure, and procedures.</span>
+          </div>
+          <span class="link-row__arrow" aria-hidden="true">→</span>
+        </a>
+        <a href="about-code-of-conduct.html" class="link-row">
+          <span class="link-row__num">06</span>
+          <div class="link-row__body">
+            <span class="link-row__title">WPRRS Code of Conduct</span>
+            <span class="link-row__sub">Standards of behaviour for active members on and off the field.</span>
+          </div>
+          <span class="link-row__arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+      <div style="margin-top: 2rem;">
+        <a href="useful-links.html" class="btn btn--secondary">Full reference catalogue</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 04 · VIRTUAL MEETINGS ===== -->
+  <section class="section section--pt-lg section--pb-lg" id="meetings" style="background: var(--bg-mid);">
+    <div class="container">
+      <div class="events-header reveal">
+        <div>
+          <span class="eyebrow">04 · Virtual meetings</span>
+          <h2 style="font-size: clamp(2.2rem, 4.2vw, 3.8rem); line-height: 1.05; font-weight: 200; letter-spacing: -0.02em; color: var(--navy); margin-top: 1rem;">Members <span class="ed-em">online</span>, fortnightly.</h2>
+        </div>
+        <a href="virtual-meetings.html" class="view-all">Full schedule →</a>
+      </div>
+      <div class="events-list">
+        <div class="event-row reveal" data-event-title="Season opener — law focus" data-event-date="2026-09-04" data-event-location="Microsoft Teams" data-event-start="19:30" data-event-end="21:00">
+          <div class="event-row__date">
+            <span class="event-row__day">04</span>
+            <span class="event-row__month">Sep</span>
+          </div>
+          <div class="event-row__info">
+            <h3>Season opener — law focus for the new fixture list</h3>
+            <p>Hosted by the Coaching portfolio. 19:30 SAST · Microsoft Teams</p>
+          </div>
+          <div class="event-row__actions">
+            <span class="event-row__pill">Briefing</span>
+            <button type="button" class="event-row__ics" aria-label="Add Season opener to calendar"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>Add to calendar</button>
+          </div>
+        </div>
+        <div class="event-row reveal" data-event-title="Tackle area — clarifications &amp; video review" data-event-date="2026-09-18" data-event-location="Microsoft Teams" data-event-start="19:30" data-event-end="21:00">
+          <div class="event-row__date">
+            <span class="event-row__day">18</span>
+            <span class="event-row__month">Sep</span>
+          </div>
+          <div class="event-row__info">
+            <h3>Tackle area — clarifications &amp; video review</h3>
+            <p>Mid-season review with a national panel reviewer. 19:30 SAST · Microsoft Teams</p>
+          </div>
+          <div class="event-row__actions">
+            <span class="event-row__pill">Law</span>
+            <button type="button" class="event-row__ics" aria-label="Add Tackle area session to calendar"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>Add to calendar</button>
+          </div>
+        </div>
+        <div class="event-row reveal" data-event-title="Guest speaker — international Test official Q&amp;A" data-event-date="2026-10-02" data-event-location="Microsoft Teams" data-event-start="19:30" data-event-end="21:00">
+          <div class="event-row__date">
+            <span class="event-row__day">02</span>
+            <span class="event-row__month">Oct</span>
+          </div>
+          <div class="event-row__info">
+            <h3>Guest speaker — international Test official Q&amp;A</h3>
+            <p>Followed by an open member Q&amp;A. 19:30 SAST · Microsoft Teams</p>
+          </div>
+          <div class="event-row__actions">
+            <span class="event-row__pill">Guest</span>
+            <button type="button" class="event-row__ics" aria-label="Add Guest speaker session to calendar"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>Add to calendar</button>
+          </div>
+        </div>
+        <div class="event-row reveal" data-event-title="BokSmart refresher — concussion &amp; Blue Card" data-event-date="2026-10-16" data-event-location="Microsoft Teams" data-event-start="19:30" data-event-end="21:00">
+          <div class="event-row__date">
+            <span class="event-row__day">16</span>
+            <span class="event-row__month">Oct</span>
+          </div>
+          <div class="event-row__info">
+            <h3>BokSmart refresher — concussion &amp; Blue Card</h3>
+            <p>Annual BokSmart refresher for active members. 19:30 SAST · Microsoft Teams</p>
+          </div>
+          <div class="event-row__actions">
+            <span class="event-row__pill">Safety</span>
+            <button type="button" class="event-row__ics" aria-label="Add BokSmart refresher to calendar"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>Add to calendar</button>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top: 2.5rem;">
+        <a href="virtual-meetings.html" class="btn btn--primary">Full schedule + recordings</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 05 · ANNUAL REPORTS ===== -->
+  <section class="section section--pt-lg section--pb-lg" id="reports">
+    <div class="container">
+      <div class="section-head reveal" style="margin-bottom: 2.5rem;">
+        <span class="eyebrow">05 · Archive</span>
+        <h2 style="font-size: clamp(2.2rem, 4.2vw, 3.8rem); line-height: 1.05; font-weight: 200; letter-spacing: -0.02em; color: var(--navy); margin-top: 1rem;">Annual <span class="ed-em">reports</span>.</h2>
+        <p style="font-size: 1rem; line-height: 1.65; color: var(--text-secondary); margin-top: 1.2rem; max-width: 56ch;">Every annual report the Society has published — chair, treasurer, training, match-day statistics, and portfolio updates from the executive.</p>
+      </div>
+      <div class="reveal">
+        <div class="report-row">
+          <span class="report-row__year">2024</span>
+          <div class="report-row__info">
+            <h3>Annual Report 2024 — 32 years of service</h3>
+            <p>Chair's review · Treasurer's report · Training pathway update · 6,800+ match appointments · Portfolio updates</p>
+          </div>
+          <a href="about-annual-reports.html" class="report-row__cta">Download PDF</a>
+        </div>
+        <div class="report-row">
+          <span class="report-row__year">2023</span>
+          <div class="report-row__info">
+            <h3>Annual Report 2023</h3>
+            <p>Return-to-form season post-COVID · BokSmart 100% compliance · WHISTLE roll-out</p>
+          </div>
+          <a href="about-annual-reports.html" class="report-row__cta">Download PDF</a>
+        </div>
+        <div class="report-row">
+          <span class="report-row__year">2022</span>
+          <div class="report-row__info">
+            <h3>Annual Report 2022 — 30th anniversary</h3>
+            <p>Anniversary edition · Honorary members appointed · Junior pathway intake doubled</p>
+          </div>
+          <a href="about-annual-reports.html" class="report-row__cta">Download PDF</a>
+        </div>
+        <div class="report-row">
+          <span class="report-row__year">2021</span>
+          <div class="report-row__info">
+            <h3>Annual Report 2021</h3>
+            <p>COVID-modified season · Online coaching delivery · Society finances</p>
+          </div>
+          <a href="about-annual-reports.html" class="report-row__cta">Download PDF</a>
+        </div>
+      </div>
+      <div style="margin-top: 2rem;">
+        <a href="about-annual-reports.html" class="btn btn--secondary">Earlier archives</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="cta">
+    <span class="cta__watermark" aria-hidden="true">WPRRS</span>
+    <div class="container">
+      <div class="cta__inner reveal">
+        <span class="eyebrow" style="color: var(--red);">Open the platform</span>
+        <h2 class="cta__headline">Everything here is <span class="ed-em">in</span> WHISTLE.</h2>
+        <p class="cta__sub">Match reports, appointments, virtual meeting links, and the latest annual report — all sit inside the WHISTLE app for active members. Sign in to pick up where you left off.</p>
+        <div class="cta__actions">
+          <a href="https://wprrs-refhub.vercel.app/" class="btn btn--primary" target="_blank" rel="noopener">Open WHISTLE</a>
+          <a href="contact.html" class="btn btn--on-dark">Speak to the office</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__inner">
+        <div class="footer__brand-block">
+          <div class="footer__brand">
+            <img src="Flower Logo.svg" alt="">
+            <div class="footer__brand-name">WPRRS<br><span style="font-weight:300; font-size:0.78rem; letter-spacing:0.04em;">Western Province Rugby Referees</span></div>
+          </div>
+          <p class="footer__brand-sub">An affiliate of the Western Province Rugby Union, developing world-standard referees since 1992.</p>
+        </div>
+        <div class="footer__col">
+          <h4>Organisation</h4>
+          <ul>
+            <li><a href="about-history.html">History</a></li>
+            <li><a href="about-governance.html">Governance</a></li>
+            <li><a href="about-code-of-conduct.html">Code of Conduct</a></li>
+            <li><a href="about-constitution.html">Constitution &amp; By-Laws</a></li>
+            <li><a href="about-honorary-members.html">Honorary Members</a></li>
+            <li><a href="about-prestige-awards.html">Prestige Awards</a></li>
+            <li><a href="about-annual-reports.html">Annual Reports</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h4>Referees</h4>
+          <ul>
+            <li><a href="become-a-referee.html">Become a Referee</a></li>
+            <li><a href="training.html">Training</a></li>
+            <li><a href="wprrs-platform.html">WHISTLE</a></li>
+            <li><a href="resource-library.html">Resource Library</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="news.html">News</a></li>
+            <li><a href="sponsors.html">Sponsors</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h4>Contact</h4>
+          <ul>
+            <li><a href="tel:0216594600">021 659 4600 — WP Rugby Union</a></li>
+            <li><a href="tel:0216594502">021 659 4502 — Referees' Office</a></li>
+            <li><a href="mailto:administration@wprugby.co.za">administration@wprugby.co.za</a></li>
+            <li><a href="mailto:smahlatsi@wprugby.co.za">smahlatsi@wprugby.co.za</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <span>© 2026 Western Province Rugby Referees' Society. All rights reserved.</span>
+        <span>Affiliated with <a href="#">Western Province Rugby Union</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="wprrs-shared.js"></script>
+</body>
+</html>

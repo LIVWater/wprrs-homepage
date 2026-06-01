@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Training &amp; Development — Western Province Rugby Referees' Society</title>
+  <meta name="description" content="The WPRRS development pathway — Beginner to Division 1, World Rugby certification, the grading system, BokSmart, and match appointments.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Playfair+Display:ital,wght@1,400;1,500;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="wprrs-styles.css">
+  <style>
+    /* ============================================================
+       TRAINING PAGE — pathway CTAs, quick-link cards, join popup
+       ============================================================ */
+
+    /* CTA row at the bottom of each pathway card */
+    .what-card__cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin: 0.6rem 0 1rem;
+    }
+    .what-card__cta-row .btn {
+      font-size: 0.65rem;
+      padding: 0.65rem 1.2rem;
+    }
+
+    /* Quick-link grid at the end of the pathway list */
+    .pathway-quick-links {
+      margin-top: 2.4rem;
+      padding: 2.2rem;
+      background: var(--bg-mid);
+      border-radius: var(--radius-card);
+    }
+    .pathway-quick-links h3 {
+      font-family: 'Raleway', sans-serif;
+      font-weight: 200;
+      font-size: clamp(1.4rem, 2vw, 1.8rem);
+      color: var(--navy);
+      letter-spacing: -0.012em;
+      margin-bottom: 0.4rem;
+    }
+    .pathway-quick-links > p {
+      font-size: 0.96rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+      margin-bottom: 1.4rem;
+    }
+    .pathway-quick-links__grid {
+      display: grid;
+      gap: 0.8rem;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 720px) {
+      .pathway-quick-links__grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .pathway-quick-card {
+      position: relative;
+      padding: 1.3rem 1.3rem 1.2rem;
+      background: var(--white);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-card);
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      transition: border-color 0.3s, transform 0.3s var(--ease-r);
+      min-height: 8rem;
+    }
+    .pathway-quick-card:hover { border-color: var(--navy); transform: translateY(-2px); }
+    .pathway-quick-card__kicker {
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--red);
+    }
+    .pathway-quick-card__title {
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: var(--navy);
+      letter-spacing: -0.005em;
+      margin: 0.3rem 0 0.4rem;
+    }
+    .pathway-quick-card__meta {
+      font-size: 0.84rem;
+      line-height: 1.5;
+      color: var(--text-secondary);
+    }
+    .pathway-quick-card__arrow {
+      position: absolute;
+      top: 1.1rem;
+      right: 1.1rem;
+      width: 1.8rem;
+      height: 1.8rem;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--navy);
+      font-size: 0.85rem;
+      transition: background 0.3s, color 0.3s, border-color 0.3s, transform 0.3s var(--ease-r);
+    }
+    .pathway-quick-card:hover .pathway-quick-card__arrow {
+      background: var(--red);
+      border-color: var(--red);
+      color: var(--white);
+      transform: translateX(2px);
+    }
+
+    /* ===== JOIN POPUP CTA ===== */
+    .join-popup-trigger {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 90;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.95rem 1.4rem;
+      background: var(--red);
+      color: var(--white);
+      border: none;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.3s var(--ease-p), transform 0.3s var(--ease-r), opacity 0.3s;
+    }
+    .join-popup-trigger:hover { background: var(--red-deep); transform: translateY(-2px); }
+    .join-popup-trigger svg { width: 1rem; height: 1rem; }
+    .join-popup-trigger.is-hidden { opacity: 0; pointer-events: none; transform: translateY(20px); }
+
+    .join-popup-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(15, 18, 50, 0.55);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.35s var(--ease-p), visibility 0s linear 0.35s;
+    }
+    .join-popup-backdrop.is-open {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.35s var(--ease-p);
+    }
+
+    .join-popup {
+      position: relative;
+      max-width: 32rem;
+      width: 100%;
+      background: var(--white);
+      border-radius: var(--radius-card);
+      padding: 2.5rem 2rem 2rem;
+      transform: scale(0.95) translateY(20px);
+      opacity: 0;
+      transition: transform 0.45s var(--ease-r), opacity 0.4s var(--ease-p);
+      overflow: hidden;
+      isolation: isolate;
+    }
+    .join-popup-backdrop.is-open .join-popup {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+    }
+    .join-popup::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: var(--red);
+    }
+    .join-popup__close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      border: none;
+      background: transparent;
+      color: var(--text-tertiary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.25s, background 0.25s;
+    }
+    .join-popup__close:hover { color: var(--navy); background: var(--bg-mid); }
+    .join-popup__close svg { width: 14px; height: 14px; }
+    .join-popup__kicker {
+      font-size: 0.66rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 0.8rem;
+    }
+    .join-popup__title {
+      font-family: 'Raleway', sans-serif;
+      font-weight: 200;
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      line-height: 1.05;
+      letter-spacing: -0.018em;
+      color: var(--navy);
+      margin-bottom: 1rem;
+    }
+    .join-popup__title .ed-em { color: var(--navy); }
+    .join-popup__body {
+      font-size: 1rem;
+      line-height: 1.65;
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+    }
+    .join-popup__list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 1.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .join-popup__list li {
+      position: relative;
+      padding-left: 1.4rem;
+      font-size: 0.94rem;
+      line-height: 1.5;
+      color: var(--text-secondary);
+    }
+    .join-popup__list li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.65rem;
+      width: 8px;
+      height: 1.5px;
+      background: var(--red);
+    }
+    .join-popup__actions {
+      display: flex;
+      gap: 0.7rem;
+      flex-wrap: wrap;
+    }
+    .join-popup__dismiss {
+      background: transparent;
+      border: none;
+      color: var(--text-tertiary);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      cursor: pointer;
+      padding: 0.95rem 0;
+      transition: color 0.25s;
+    }
+    .join-popup__dismiss:hover { color: var(--navy); }
+    @media (prefers-reduced-motion: reduce) {
+      .join-popup, .join-popup-backdrop, .join-popup-trigger { transition: opacity 0.2s linear; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav" id="nav">
+    <a href="wprrs-homepage-v2.html" class="nav__logo-wrap" aria-label="WPRRS home"><img src="Flower Logo.svg" class="nav__logo" alt="WPRRS"></a>
+    <ul class="nav__links">
+      <li class="has-drop"><button type="button" class="nav__trigger" aria-haspopup="menu" aria-expanded="false">About</button><div class="nav__dropdown" role="menu"><a href="about-history.html" class="dropdown-link">History</a><a href="about-governance.html" class="dropdown-link">Governance</a><a href="about-code-of-conduct.html" class="dropdown-link">Code of Conduct</a><a href="about-constitution.html" class="dropdown-link">Constitution &amp; By-Laws</a><a href="about-honorary-members.html" class="dropdown-link">Honorary Members</a><a href="about-prestige-awards.html" class="dropdown-link">Prestige Awards</a><a href="about-annual-reports.html" class="dropdown-link">Annual Reports</a></div></li>
+      <li class="has-drop"><button type="button" class="nav__trigger" aria-haspopup="menu" aria-expanded="false">Referees</button><div class="nav__dropdown" role="menu"><a href="become-a-referee.html" class="dropdown-link">Become a Referee</a><a href="training.html" class="dropdown-link">Training &amp; Development</a></div></li>
+      <li class="has-drop"><button type="button" class="nav__trigger" aria-haspopup="menu" aria-expanded="false">Resources</button><div class="nav__dropdown" role="menu"><a href="wprrs-platform.html" class="dropdown-link">App &amp; Dashboard</a><a href="resource-library.html" class="dropdown-link">Resource Library</a></div></li>
+      <li><a href="events.html">Events</a></li>
+      <li><a href="wprrs-homepage-v2.html#news">News</a></li><li><a href="shop.html">Shop</a></li>
+    </ul>
+    <div class="nav__actions">
+      <a href="https://wprrs-refhub.vercel.app/" class="nav__btn nav__btn--ghost" target="_blank" rel="noopener">Sign In</a>
+      <a href="contact.html" class="nav__btn nav__btn--filled">Contact Us</a>
+      <button class="nav__hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <div class="nav__panel" id="panel-mobile"><div class="panel-items"><a href="about-history.html" class="panel-link">About</a><a href="become-a-referee.html" class="panel-link">Become a Referee</a><a href="training.html" class="panel-link">Training &amp; Development</a><a href="wprrs-platform.html" class="panel-link">App &amp; Dashboard</a><a href="resource-library.html" class="panel-link">Resource Library</a><a href="events.html" class="panel-link">Events</a><a href="news.html" class="panel-link">News</a><a href="shop.html" class="panel-link">Shop</a><a href="https://wprrs-refhub.vercel.app/" class="panel-link" target="_blank" rel="noopener">Sign In</a><a href="contact.html" class="panel-link">Contact Us</a></div></div>
+
+  <section class="page-hero">
+    <span class="page-hero__watermark" aria-hidden="true">Train</span>
+    <div class="page-hero__inner">
+      <span class="page-hero__crumb"><a href="wprrs-homepage-v2.html">Home</a><span class="sep">/</span><a href="become-a-referee.html">Referees</a><span class="sep">/</span>Training &amp; Development</span>
+      <h1 class="page-hero__title">Training <span class="ed-em">&amp;</span> development.</h1>
+      <p class="page-hero__sub">A structured pathway from your first whistle through Division 1 and beyond — World Rugby certification, regional coaching, fitness, and player welfare at every level.</p>
+    </div>
+  </section>
+
+  <!-- ===== PATHWAY OVERVIEW ===== -->
+  <section class="section section--pt-lg section--pb-lg">
+    <div class="container">
+      <div class="what">
+        <div class="what__sticky reveal">
+          <span class="eyebrow">The pathway</span>
+          <h2>One <span class="ed-em">programme</span>, four pillars.</h2>
+          <p style="margin-top:1.2rem; font-size:1rem; line-height:1.65; color:var(--text-secondary); max-width:30ch;">Every active member moves through the same four-pillar development programme — calibrated to your grade, but built around the same principles.</p>
+          <!-- Top-level CTAs for the whole pathway -->
+          <div style="display:flex; flex-wrap:wrap; gap:0.7rem; margin-top:1.6rem;">
+            <a href="become-a-referee.html" class="btn btn--primary">Start your application</a>
+            <a href="events.html" class="btn btn--secondary">Course calendar</a>
+          </div>
+        </div>
+        <div class="what__list">
+          <div class="what-card reveal">
+            <div class="what-card__num">01</div>
+            <div class="what-card__body">
+              <h3>World Rugby certification</h3>
+              <p>The foundation is built online via the World Rugby Passport. Rugby Ready, Introduction to Rugby Refereeing, and Laws of the Game are mandatory for every active member, with Level 1 and Level 2 in-person courses delivered by the Society throughout the year.</p>
+              <div class="what-card__cta-row">
+                <a href="https://passport.world.rugby" target="_blank" rel="noopener" class="btn btn--primary">Start World Rugby courses</a>
+                <a href="become-a-referee.html" class="btn btn--secondary">Apply to the Society</a>
+              </div>
+              <span class="what-card__tag">Foundation</span>
+            </div>
+          </div>
+          <div class="what-card reveal">
+            <div class="what-card__num">02</div>
+            <div class="what-card__body">
+              <h3>Regional coaching sessions</h3>
+              <p>Each region has a dedicated coach running weekly sessions during the playing season. The focus is positioning, communication, signal clarity, and law application — building the on-field craft that exams can't teach.</p>
+              <div class="what-card__cta-row">
+                <a href="contact.html#reg-coach-contact" class="btn btn--primary">Find your regional coach</a>
+                <a href="events.html" class="btn btn--secondary">Session calendar</a>
+              </div>
+              <span class="what-card__tag">Coaching</span>
+            </div>
+          </div>
+          <div class="what-card reveal">
+            <div class="what-card__num">03</div>
+            <div class="what-card__body">
+              <h3>Fitness testing</h3>
+              <p>Annual mandatory testing using the YOYO intermittent recovery protocol — YOYO 15 for entry-level, YOYO 17 for higher divisions. Fitness scores are one of the three grading inputs and a hard requirement for promotion.</p>
+              <div class="what-card__cta-row">
+                <a href="events.html" class="btn btn--primary">Book your YOYO test</a>
+                <a href="#grading" class="btn btn--secondary">See grading thresholds</a>
+              </div>
+              <span class="what-card__tag">Fitness</span>
+            </div>
+          </div>
+          <div class="what-card reveal">
+            <div class="what-card__num">04</div>
+            <div class="what-card__body">
+              <h3>Match reviewing</h3>
+              <p>Senior assessors attend matches across the Province and produce written reviews on positioning, decision-making, communication, and law application. Every active referee receives regular structured feedback as part of grading.</p>
+              <div class="what-card__cta-row">
+                <a href="wprrs-platform.html" class="btn btn--primary">View my reviews in WHISTLE</a>
+                <a href="useful-links.html" class="btn btn--secondary">Reviewing resources</a>
+              </div>
+              <span class="what-card__tag">Review</span>
+            </div>
+          </div>
+          <!-- Aggregate quick links for jumping between key Referee workflows -->
+          <div class="pathway-quick-links reveal" aria-label="Quick links">
+            <h3>Get going</h3>
+            <p>Three things active members do most often. Jump straight in.</p>
+            <div class="pathway-quick-links__grid">
+              <a href="become-a-referee.html" class="pathway-quick-card">
+                <span class="pathway-quick-card__kicker">Start</span>
+                <span class="pathway-quick-card__title">Begin a course</span>
+                <span class="pathway-quick-card__meta">Application, online courses, Level 1 cohort</span>
+                <span class="pathway-quick-card__arrow" aria-hidden="true">→</span>
+              </a>
+              <a href="#grading" class="pathway-quick-card">
+                <span class="pathway-quick-card__kicker">Track</span>
+                <span class="pathway-quick-card__title">Get your grading</span>
+                <span class="pathway-quick-card__meta">Fitness · exam · on-field merit</span>
+                <span class="pathway-quick-card__arrow" aria-hidden="true">→</span>
+              </a>
+              <a href="useful-links.html" class="pathway-quick-card">
+                <span class="pathway-quick-card__kicker">Reference</span>
+                <span class="pathway-quick-card__title">Browse resources</span>
+                <span class="pathway-quick-card__meta">Laws · BokSmart · SARRA · Society docs</span>
+                <span class="pathway-quick-card__arrow" aria-hidden="true">→</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== GRADING SYSTEM ===== -->
+  <section class="section section--mid section--pt-lg section--pb-lg" id="grading">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Grading System</span>
+        <h2>From <span class="ed-em">Beginner</span> to Division 1 — and beyond.</h2>
+        <p>The grading system is transparent and merit-based. Three measurable elements determine where you sit and when you move up: fitness test results, examination marks, and on-field performance reviews. Each division has its own criteria.</p>
+      </div>
+      <div class="portfolio-grid stagger-parent">
+        <div class="portfolio-card stagger-child"><span class="portfolio-card__num">01</span><span class="portfolio-card__name">SARRA National Panel</span></div>
+        <div class="portfolio-card stagger-child"><span class="portfolio-card__num">02</span><span class="portfolio-card__name">SARRA Women's Panel</span></div>
+        <div class="portfolio-card stagger-child"><span class="portfolio-card__num">03</span><span class="portfolio-card__name">Division 1</span></div>
+        <div class="portfolio-card stagger-child"><span class="portfolio-card__num">04</span><span class="portfolio-card__name">Division 1 Reserve</span></div>
+        <div class="portfolio-card stagger-child"><span class="portfolio-card__num">05</span><span class="portfolio-card__name">Division 2 — YOYO 17</span></div>
+        <div class="portfolio-card stagger-child"><span class="portfolio-card__num">06</span><span class="portfolio-card__name">Division 2 Reserve</span></div>
+        <div class="portfolio-card stagger-child"><span class="portfolio-card__num">07</span><span class="portfolio-card__name">Division 3</span></div>
+        <div class="portfolio-card stagger-child"><span class="portfolio-card__num">08</span><span class="portfolio-card__name">Division 3 Reserve</span></div>
+        <div class="portfolio-card stagger-child"><span class="portfolio-card__num">09</span><span class="portfolio-card__name">Division 4</span></div>
+        <div class="portfolio-card stagger-child"><span class="portfolio-card__num">10</span><span class="portfolio-card__name">Division 4 Reserve</span></div>
+        <div class="portfolio-card stagger-child"><span class="portfolio-card__num">11</span><span class="portfolio-card__name">Division 5</span></div>
+        <div class="portfolio-card stagger-child"><span class="portfolio-card__num">12</span><span class="portfolio-card__name">Division 6</span></div>
+        <div class="portfolio-card stagger-child"><span class="portfolio-card__num">13</span><span class="portfolio-card__name">Division 7</span></div>
+        <div class="portfolio-card stagger-child"><span class="portfolio-card__num">14</span><span class="portfolio-card__name">Unclassified — YOYO 15</span></div>
+        <div class="portfolio-card stagger-child"><span class="portfolio-card__num">15</span><span class="portfolio-card__name">Beginners</span></div>
+      </div>
+      <div class="reveal" style="margin-top:3rem; max-width: 56rem;">
+        <p style="font-size:1.05rem; line-height:1.7; color:var(--text-secondary);">Each division has specific performance, fitness, and examination thresholds. Promotion requires meeting all three across a full season. Sustained excellence at Division 1 opens the door to the SARRA National Panel and national appointments.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== APPOINTMENTS ===== -->
+  <section class="section section--pt-lg section--pb-lg" id="appointments">
+    <div class="container">
+      <div class="split">
+        <div class="split__aside reveal">
+          <span class="eyebrow">Match Appointments</span>
+          <h2>Where you <span class="ed-em">officiate</span>.</h2>
+          <p>Appointments are managed through WHISTLE — our digital platform — with notification by SMS and email. Your division and availability determine the games offered.</p>
+        </div>
+        <div class="reveal">
+          <div class="contact-grid">
+            <div class="contact-block">
+              <h3>Club fixtures</h3>
+              <p>Approximately 90 affiliated clubs across Western Province play 160+ sanctioned fixtures per weekend across senior, junior, and women's competitions.</p>
+            </div>
+            <div class="contact-block">
+              <h3>School matches</h3>
+              <p>Wherever capacity permits, we appoint referees to school matches across the Province — a key development opportunity for junior and beginner refs.</p>
+            </div>
+            <div class="contact-block">
+              <h3>Provincial competitions</h3>
+              <p>Higher-graded referees are appointed to provincial competitions including Currie Cup First Division, Varsity Cup, and SA Schools rugby.</p>
+            </div>
+            <div class="contact-block">
+              <h3>WHISTLE platform</h3>
+              <p>All appointments, availability, and match reports flow through WHISTLE. Sign in to manage your weekly availability and accept appointments.</p>
+              <p><a href="wprrs-platform.html" class="what-card__link" style="margin-top:0.5rem;">Open WHISTLE →</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== BOKSMART ===== -->
+  <section class="section section--dark section--pt-lg section--pb-lg" id="boksmart">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">BokSmart Safety</span>
+        <h2>Player welfare is <span class="ed-em">non-negotiable</span>.</h2>
+        <p>The BokSmart National Rugby Safety Programme is a joint venture between SA Rugby and the Chris Burger/Petro Jackson Players' Fund, designed to reduce catastrophic injuries through education, certification, and best-practice protocols on contact.</p>
+      </div>
+      <div class="values__grid stagger-parent">
+        <div class="value-card stagger-child">
+          <div class="value-card__idx">01</div>
+          <div class="value-card__name">Mandatory accreditation</div>
+          <p class="value-card__desc">No coach, referee, or support official may enter the playing enclosure without a valid BokSmart accreditation. Recertification is required every two years.</p>
+        </div>
+        <div class="value-card stagger-child">
+          <div class="value-card__idx">02</div>
+          <div class="value-card__name">Course delivery</div>
+          <p class="value-card__desc">WPRRS hosts accreditation courses multiple times each season. The course covers concussion management, scrum safety, and the Blue Card protocol.</p>
+        </div>
+        <div class="value-card stagger-child">
+          <div class="value-card__idx">03</div>
+          <div class="value-card__name">MyBokSmart Online</div>
+          <p class="value-card__desc">The 6th instalment of the BokSmart Rugby Safety Course is now fully online via the MyBokSmart platform. Sign up at my.boksmart.com to certify or recertify.</p>
+        </div>
+        <div class="value-card stagger-child">
+          <div class="value-card__idx">04</div>
+          <div class="value-card__name">Blue Card protocol</div>
+          <p class="value-card__desc">A Blue Card removes a player from the field for suspected concussion and triggers the graduated return-to-play protocol. Every referee must know it and apply it.</p>
+        </div>
+        <div class="value-card stagger-child">
+          <div class="value-card__idx">05</div>
+          <div class="value-card__name">Vision Zero</div>
+          <p class="value-card__desc">BokSmart's #VisionZero campaign targets the elimination of catastrophic spinal injuries from South African rugby. Referees are central to that goal.</p>
+        </div>
+        <div class="value-card stagger-child">
+          <div class="value-card__idx">06</div>
+          <div class="value-card__name">Resources</div>
+          <p class="value-card__desc">Blue Card data, return-to-play guidance, and GRTS infographics are available through the Society. Contact the office for current dates and downloads.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="cta">
+    <span class="cta__watermark" aria-hidden="true">Develop</span>
+    <div class="container">
+      <div class="cta__inner reveal">
+        <span class="eyebrow" style="color: var(--blue-light);">Get started</span>
+        <h2 class="cta__headline">Start your <span class="ed-em">development</span>.</h2>
+        <p class="cta__sub">Whether you're applying for the first time, recertifying BokSmart, or preparing for the next grading review — the Society's training calendar runs throughout the year.</p>
+        <div class="cta__actions">
+          <a href="become-a-referee.html" class="btn btn--primary">Apply to join</a>
+          <a href="events.html" class="btn btn--on-dark">Upcoming courses</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__inner">
+        <div class="footer__brand-block">
+          <div class="footer__brand"><img src="Flower Logo.svg" alt=""><div class="footer__brand-name">WPRRS<br><span style="font-weight:300; font-size:0.78rem; letter-spacing:0.04em;">Western Province Rugby Referees</span></div></div>
+          <p class="footer__brand-sub">An affiliate of the Western Province Rugby Union, developing world-standard referees since 1992.</p>
+        </div>
+        <div class="footer__col"><h4>Organisation</h4><ul><li><a href="about-history.html">History</a></li><li><a href="about-governance.html">Governance</a></li><li><a href="about-code-of-conduct.html">Code of Conduct</a></li><li><a href="about-constitution.html">Constitution &amp; By-Laws</a></li><li><a href="about-honorary-members.html">Honorary Members</a></li><li><a href="about-prestige-awards.html">Prestige Awards</a></li><li><a href="about-annual-reports.html">Annual Reports</a></li></ul></div>
+        <div class="footer__col"><h4>Referees</h4><ul><li><a href="become-a-referee.html">Become a Referee</a></li><li><a href="training.html">Training</a></li><li><a href="training.html#grading">Grading System</a></li><li><a href="training.html#boksmart">BokSmart</a></li><li><a href="wprrs-platform.html">WHISTLE</a></li><li><a href="events.html">Events</a></li></ul></div>
+        <div class="footer__col"><h4>Contact</h4><ul><li><a href="tel:+27216594600">021 659 4600 — WP Rugby Union</a></li><li><a href="tel:+27216594502">021 659 4502 — Referees' Office</a></li><li><a href="mailto:administration@wprugby.co.za">administration@wprugby.co.za</a></li><li><a href="mailto:smahlatsi@wprugby.co.za">smahlatsi@wprugby.co.za</a></li></ul></div>
+      </div>
+      <div class="footer__bottom"><span>© 2026 Western Province Rugby Referees' Society. All rights reserved.</span><span>Affiliated with <a href="#">Western Province Rugby Union</a></span></div>
+    </div>
+  </footer>
+
+  <!-- ===== JOIN-THE-SOCIETY POPUP CTA ===== -->
+  <button type="button" class="join-popup-trigger" id="join-popup-trigger" aria-label="Join the Society">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M12 5v14M5 12h14"/>
+    </svg>
+    Join the Society
+  </button>
+
+  <div class="join-popup-backdrop" id="join-popup-backdrop" role="dialog" aria-modal="true" aria-labelledby="join-popup-title" hidden>
+    <div class="join-popup" id="join-popup">
+      <button type="button" class="join-popup__close" id="join-popup-close" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      <span class="join-popup__kicker">Join the Society</span>
+      <h2 class="join-popup__title" id="join-popup-title">Take up <span class="ed-em">the</span> whistle.</h2>
+      <p class="join-popup__body">Aged 16 or older, male or female. The training is paid for, the Level 1 cohort is run by the Society, and your first appointment is within a season.</p>
+      <ul class="join-popup__list">
+        <li>R250 one-off registration. No annual subscription on top.</li>
+        <li>World Rugby online courses included.</li>
+        <li>Society-run Level 1 cohort with a regional coach attached.</li>
+        <li>Match-day payments from your first graded fixture.</li>
+      </ul>
+      <div class="join-popup__actions">
+        <a href="become-a-referee.html" class="btn btn--primary">Apply now</a>
+        <button type="button" class="join-popup__dismiss" id="join-popup-dismiss">Maybe later</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="wprrs-shared.js" defer></script>
+
+  <script>
+    // ============================================================
+    // Join-the-Society popup
+    // ============================================================
+    (function () {
+      const trigger = document.getElementById('join-popup-trigger');
+      const backdrop = document.getElementById('join-popup-backdrop');
+      const closeBtn = document.getElementById('join-popup-close');
+      const dismissBtn = document.getElementById('join-popup-dismiss');
+      if (!trigger || !backdrop) return;
+
+      const STORAGE_KEY = 'wprrs-join-popup-dismissed';
+      const AUTO_DELAY_MS = 12000; // 12s before auto-open on first visit
+      let autoTimer = null;
+
+      function openPopup() {
+        backdrop.hidden = false;
+        // Force layout before adding class so the transition runs
+        backdrop.offsetHeight;
+        backdrop.classList.add('is-open');
+        trigger.classList.add('is-hidden');
+        document.body.style.overflow = 'hidden';
+        if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; }
+        // Move focus to the close button for accessibility
+        setTimeout(() => closeBtn && closeBtn.focus(), 50);
+      }
+      function closePopup(remember) {
+        backdrop.classList.remove('is-open');
+        trigger.classList.remove('is-hidden');
+        document.body.style.overflow = '';
+        // Wait for transition to finish before hiding the dialog
+        setTimeout(() => { backdrop.hidden = true; }, 380);
+        if (remember) {
+          try { sessionStorage.setItem(STORAGE_KEY, '1'); } catch (e) {}
+        }
+      }
+
+      trigger.addEventListener('click', openPopup);
+      closeBtn.addEventListener('click', () => closePopup(true));
+      dismissBtn.addEventListener('click', () => closePopup(true));
+      // Click on backdrop (not popup itself) closes
+      backdrop.addEventListener('click', (e) => {
+        if (e.target === backdrop) closePopup(true);
+      });
+      // Escape key closes
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && backdrop.classList.contains('is-open')) closePopup(true);
+      });
+
+      // Auto-open once per session after a short delay, unless already dismissed
+      let dismissed = false;
+      try { dismissed = sessionStorage.getItem(STORAGE_KEY) === '1'; } catch (e) {}
+      if (!dismissed) {
+        autoTimer = setTimeout(openPopup, AUTO_DELAY_MS);
+      }
+    })();
+  </script>
+</body>
+</html>

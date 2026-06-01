@@ -1,0 +1,1770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WHISTLE Platform - Western Province Rugby Referees' Society</title>
+  <meta name="description" content="WHISTLE is the Society's platform for appointments, match reports, grading, fitness, and BokSmart status. Built for the 250 active referees of Western Province.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Playfair+Display:ital,wght@1,400;1,500;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="wprrs-styles.css">
+
+  <style>
+    /* ============================================================
+       PLATFORM PAGE - Novu-style sticky hero + pinned showcase
+       + horizontal cards + marquee testimonials + FAQ + dark CTA
+       ============================================================ */
+
+    :root {
+      --p-radius-section: 28px;
+      --p-radius-section-lg: 40px;
+      --p-radius-card: 24px;
+      --p-radius-card-lg: 30px;
+    }
+
+    .platform-page main { display: block; }
+
+    /* The platform page uses a Novu-style sticky hero (.p-hero sits
+       at z-index: 0). Every section that scrolls OVER the hero must
+       live in a higher stacking context. .p-section already declares
+       z-index: 10; the WHISTLE feature sections + dashboard demo
+       need the same treatment. */
+    .whistle-feature,
+    .whistle-cta,
+    .dashboard-demo {
+      position: relative;
+      z-index: 10;
+    }
+
+    /* ===== STICKY HERO ===== */
+    .p-hero {
+      position: sticky;
+      top: 0;
+      z-index: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      padding: 0 5vw;
+      text-align: left;
+      color: var(--white);
+      overflow: hidden;
+      background: var(--navy-deep);
+    }
+    .p-hero__bg {
+      position: absolute;
+      inset: 0;
+      bottom: -120px;
+      pointer-events: none;
+      overflow: hidden;
+      background: #000;
+    }
+    .p-hero__bg-inner { position: absolute; inset: -5%; animation: kenburns 22s ease-in-out infinite alternate; }
+    .p-hero__bg img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center 40%;
+    }
+    @keyframes kenburns {
+      0%   { transform: scale(1)    translate(0, 0); }
+      100% { transform: scale(1.08) translate(-1.5%, -2%); }
+    }
+    .p-hero__scrim {
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg,
+        rgba(15,18,50,0.35) 0%,
+        rgba(15,18,50,0.55) 45%,
+        rgba(15,18,50,0.92) 100%);
+    }
+    .p-hero__inner {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      max-width: 60rem;
+      animation: pHeroIntro 1.4s var(--ease-r) both;
+    }
+    @keyframes pHeroIntro {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .p-hero__title {
+      font-family: 'Raleway', sans-serif;
+      font-weight: 200;
+      font-size: clamp(2.8rem, 7vw, 6.2rem);
+      line-height: 1.0;
+      letter-spacing: -0.022em;
+      color: var(--white);
+      max-width: 18ch;
+    }
+    .p-hero__title .ed-em { color: var(--white); }
+    .p-hero__sub {
+      margin-top: 1.5rem;
+      max-width: 42ch;
+      font-size: clamp(1rem, 1.4vw, 1.18rem);
+      line-height: 1.55;
+      font-weight: 300;
+      color: rgba(255,255,255,0.82);
+    }
+    .p-hero__cta-row { margin-top: 2.5rem; display: flex; gap: 1rem; flex-wrap: wrap; justify-content: flex-start; }
+
+    /* Letter-slide-up button (Novu signature) */
+    .p-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.95rem 1.7rem;
+      border-radius: 999px;
+      background: var(--white);
+      color: var(--navy-deep);
+      font-size: 0.84rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      line-height: 1;
+      transition: transform 0.4s var(--ease-r);
+    }
+    .p-pill:hover { transform: translateY(-2px); }
+    .p-pill:focus-visible { outline: 2px solid var(--blue-light); outline-offset: 3px; }
+    .p-pill--ghost {
+      background: transparent;
+      color: var(--white);
+      border: 1px solid rgba(255,255,255,0.4);
+    }
+    .p-pill--ghost:hover { background: rgba(255,255,255,0.08); }
+    .p-pill__letters { display: inline-flex; }
+    .p-pill__letter {
+      position: relative;
+      display: inline-block;
+      overflow: hidden;
+      height: 1em;
+      line-height: 1;
+      vertical-align: baseline;
+    }
+    .p-pill__letter > span {
+      display: inline-block;
+      transition: transform 0.5s cubic-bezier(0.65,0,0.35,1);
+    }
+    .p-pill__letter > span + span {
+      position: absolute;
+      left: 0;
+      top: 100%;
+    }
+    .p-pill:hover .p-pill__letter > span { transform: translateY(-100%); }
+    .p-pill__letter:nth-child(1) > span { transition-delay: 0ms; }
+    .p-pill__letter:nth-child(2) > span { transition-delay: 22ms; }
+    .p-pill__letter:nth-child(3) > span { transition-delay: 44ms; }
+    .p-pill__letter:nth-child(4) > span { transition-delay: 66ms; }
+    .p-pill__letter:nth-child(5) > span { transition-delay: 88ms; }
+    .p-pill__letter:nth-child(6) > span { transition-delay: 110ms; }
+    .p-pill__letter:nth-child(7) > span { transition-delay: 132ms; }
+    .p-pill__letter:nth-child(8) > span { transition-delay: 154ms; }
+    .p-pill__letter:nth-child(9) > span { transition-delay: 176ms; }
+    .p-pill__letter:nth-child(10) > span { transition-delay: 198ms; }
+    .p-pill__letter:nth-child(11) > span { transition-delay: 220ms; }
+    .p-pill__letter:nth-child(12) > span { transition-delay: 242ms; }
+    .p-pill__letter:nth-child(13) > span { transition-delay: 264ms; }
+
+    /* ===== SHARED: Section base ===== */
+    .p-section {
+      position: relative;
+      z-index: 10;
+      background: var(--white);
+      color: var(--navy-deep);
+    }
+    .p-section--rounded-top {
+      border-top-left-radius: var(--p-radius-section);
+      border-top-right-radius: var(--p-radius-section);
+    }
+    .p-section--rounded-bottom {
+      border-bottom-left-radius: var(--p-radius-section);
+      border-bottom-right-radius: var(--p-radius-section);
+    }
+    @media (min-width: 768px) {
+      .p-section--rounded-top {
+        border-top-left-radius: var(--p-radius-section-lg);
+        border-top-right-radius: var(--p-radius-section-lg);
+      }
+      .p-section--rounded-bottom {
+        border-bottom-left-radius: var(--p-radius-section-lg);
+        border-bottom-right-radius: var(--p-radius-section-lg);
+      }
+    }
+    .p-container {
+      max-width: 80rem;
+      margin: 0 auto;
+      padding: 0 1.25rem;
+    }
+    @media (min-width: 768px) {
+      .p-container { padding: 0 2.5rem; }
+    }
+    .p-h2 {
+      font-family: 'Raleway', sans-serif;
+      font-weight: 200;
+      font-size: clamp(2rem, 4vw, 3rem);
+      letter-spacing: -0.018em;
+      line-height: 1.05;
+      color: var(--navy-deep);
+    }
+    .p-h2 .ed-em { color: var(--navy-deep); }
+    .p-sub {
+      margin-top: 1rem;
+      font-size: clamp(1rem, 1.2vw, 1.1rem);
+      line-height: 1.65;
+      font-weight: 300;
+      color: rgba(15,18,50,0.65);
+    }
+
+    /* ===== PINNED PHONE SHOWCASE ===== */
+    .p-showcase { padding: 2rem 0 3rem; }
+    .p-showcase__desktop { display: none; }
+    @media (min-width: 768px) {
+      .p-showcase__desktop { display: block; }
+      .p-showcase__mobile { display: none; }
+    }
+    .p-showcase__grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 2rem;
+      align-items: stretch;
+    }
+    @media (min-width: 1024px) {
+      .p-showcase__grid { gap: 4rem; }
+    }
+    .p-showcase__col { position: relative; z-index: 2; display: flex; flex-direction: column; }
+    .p-showcase__slot {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      height: 80svh;
+    }
+    .p-showcase__copy { max-width: 22rem; }
+    .p-showcase__copy h2 {
+      font-family: 'Raleway', sans-serif;
+      font-weight: 200;
+      font-size: clamp(1.7rem, 2.4vw, 2.4rem);
+      line-height: 1.05;
+      letter-spacing: -0.012em;
+      color: var(--navy-deep);
+    }
+    .p-showcase__copy h2 .ed-em { color: var(--red); }
+    .p-showcase__copy p {
+      margin-top: 0.9rem;
+      font-size: 1.02rem;
+      line-height: 1.65;
+      font-weight: 300;
+      color: rgba(15,18,50,0.65);
+    }
+    .p-showcase__pin-col { position: relative; }
+    .p-showcase__pin {
+      position: sticky;
+      top: 0;
+      height: 100svh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10svh 0;
+    }
+    .p-showcase__halo {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      width: 100vw;
+      height: 100%;
+      transform: translateX(-50%);
+      background:
+        radial-gradient(ellipse 80% 75% at 18% 28%, rgba(19,175,240,0.10), transparent 72%),
+        radial-gradient(ellipse 90% 85% at 82% 70%, rgba(218,29,39,0.07), transparent 72%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Phone frame (CSS-built) */
+    .p-phone {
+      position: relative;
+      aspect-ratio: 1380 / 2880;
+      height: 72vh;
+      max-height: 820px;
+      min-height: 480px;
+      z-index: 1;
+    }
+    .p-phone__bezel {
+      position: absolute;
+      top: 1.4%; bottom: 1.4%; left: 3%; right: 3%;
+      background: #000;
+      border-radius: 16% / 7.5%;
+    }
+    .p-phone__screen {
+      position: absolute;
+      top: 2.5%; bottom: 2.5%; left: 4.3%; right: 4.3%;
+      background: var(--navy-deep);
+      border-radius: 14% / 6.5%;
+      overflow: hidden;
+    }
+    /* Three stacked real-app iframes - each deep-linked to a feature.
+       The .p-phone[data-active-screen] attribute (set by JS as copy
+       slots scroll past) fades to the matching iframe. */
+    .p-phone__app {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: var(--navy-deep);
+      border-radius: inherit;
+      z-index: 1;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.55s var(--ease-p);
+    }
+    .p-phone[data-active-screen="appointments"] .p-phone__app[data-screen="appointments"],
+    .p-phone[data-active-screen="forms"]        .p-phone__app[data-screen="forms"],
+    .p-phone[data-active-screen="performance"]  .p-phone__app[data-screen="performance"] {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .p-phone__app { transition: none; }
+    }
+    .p-phone__hint {
+      position: absolute;
+      bottom: -3.2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 0.9rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 999px;
+      font-size: 0.6rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.65);
+      white-space: nowrap;
+    }
+    .p-phone__hint-dot {
+      width: 6px; height: 6px;
+      background: var(--red);
+      border-radius: 50%;
+      animation: whistleLivePulse 1.8s ease-in-out infinite;
+    }
+    /* Each slide stacks; opacity is toggled by JS */
+    .p-phone__slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.9s cubic-bezier(0.4,0,0.2,1);
+      display: flex;
+      flex-direction: column;
+      padding: 11% 7% 9%;
+      color: var(--white);
+      background: var(--navy-deep);
+    }
+    .p-phone__slide.is-active { opacity: 1; }
+    .p-phone__notch {
+      position: absolute;
+      top: 2.5%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 32%;
+      height: 4%;
+      background: #000;
+      border-radius: 999px;
+      z-index: 5;
+    }
+    /* SLIDE 1 - appointments list */
+    .p-phone__brand {
+      font-size: 0.66rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: 0.8rem;
+    }
+    .p-phone__greet {
+      font-family: 'Raleway', sans-serif;
+      font-weight: 300;
+      font-size: 1.2rem;
+      letter-spacing: -0.01em;
+      margin-bottom: 1.2rem;
+    }
+    .p-phone__greet .ed-em { color: var(--white); }
+    .p-phone__appts { display: flex; flex-direction: column; gap: 0.6rem; }
+    .p-phone__appt {
+      display: flex;
+      gap: 0.7rem;
+      align-items: center;
+      padding: 0.7rem 0.8rem;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+    }
+    .p-phone__appt-time {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-weight: 500;
+      font-size: 1.1rem;
+      color: var(--red);
+      min-width: 3.2em;
+    }
+    .p-phone__appt-body { display: flex; flex-direction: column; line-height: 1.2; }
+    .p-phone__appt-title { font-size: 0.82rem; font-weight: 500; }
+    .p-phone__appt-meta { font-size: 0.66rem; color: rgba(255,255,255,0.55); margin-top: 0.18rem; letter-spacing: 0.04em; }
+    .p-phone__appt-pill {
+      margin-left: auto;
+      font-size: 0.54rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--blue-light);
+      border: 1px solid rgba(19,175,240,0.5);
+      padding: 0.25rem 0.5rem;
+      border-radius: 999px;
+    }
+    /* SLIDE 2 - match report form */
+    .p-phone__form { display: flex; flex-direction: column; gap: 0.7rem; }
+    .p-phone__field { display: flex; flex-direction: column; gap: 0.25rem; }
+    .p-phone__field-label {
+      font-size: 0.55rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+      font-weight: 600;
+    }
+    .p-phone__field-value {
+      font-size: 0.86rem;
+      padding: 0.55rem 0.7rem;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      color: var(--white);
+    }
+    .p-phone__score-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+    .p-phone__submit {
+      margin-top: 0.4rem;
+      padding: 0.7rem;
+      text-align: center;
+      background: var(--red);
+      color: var(--white);
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-weight: 600;
+      border-radius: 999px;
+    }
+    /* SLIDE 3 - grading dashboard */
+    .p-phone__metric {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      padding: 0.9rem 0.8rem;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      margin-bottom: 0.6rem;
+    }
+    .p-phone__metric-label { font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
+    .p-phone__metric-row { display: flex; align-items: baseline; gap: 0.4rem; }
+    .p-phone__metric-val {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-weight: 500;
+      font-size: 1.5rem;
+      color: var(--white);
+      line-height: 1;
+    }
+    .p-phone__metric-delta { font-size: 0.62rem; color: var(--blue-light); font-weight: 600; }
+    .p-phone__bar {
+      height: 5px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 999px;
+      position: relative;
+      overflow: hidden;
+      margin-top: 0.3rem;
+    }
+    .p-phone__bar::after {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: var(--p, 50%);
+      background: var(--red);
+      border-radius: 999px;
+    }
+    /* SLIDE 4 - sunday wrap-up */
+    .p-phone__wrap-eyebrow { font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--blue-light); margin-bottom: 0.5rem; }
+    .p-phone__wrap-title {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-weight: 500;
+      font-size: 1.6rem;
+      line-height: 1.05;
+      color: var(--white);
+      margin-bottom: 1rem;
+    }
+    .p-phone__wrap-stat {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 0.6rem 0.7rem;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      margin-bottom: 0.5rem;
+    }
+    .p-phone__wrap-num {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-weight: 500;
+      font-size: 1.4rem;
+      color: var(--red);
+      line-height: 1;
+      min-width: 1.7em;
+    }
+    .p-phone__wrap-label { font-size: 0.72rem; color: rgba(255,255,255,0.78); line-height: 1.3; }
+
+    /* Mobile showcase (stacked) */
+    .p-showcase__mobile {
+      position: relative;
+      height: 400svh;
+    }
+    .p-showcase__mobile-pin {
+      position: sticky;
+      top: 0;
+      height: 100svh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.8rem;
+      padding: 0 1.25rem;
+    }
+    .p-showcase__mobile-phone { transform: scale(0.7); transform-origin: center; }
+    .p-showcase__mobile-copy { max-width: 26rem; text-align: center; }
+    .p-showcase__mobile-copy h2 {
+      font-family: 'Raleway', sans-serif;
+      font-weight: 200;
+      font-size: 1.7rem;
+      line-height: 1.05;
+      color: var(--navy-deep);
+    }
+    .p-showcase__mobile-copy h2 .ed-em { color: var(--red); }
+    .p-showcase__mobile-copy p { margin-top: 0.7rem; font-size: 0.96rem; line-height: 1.55; color: rgba(15,18,50,0.65); }
+
+    /* ===== HORIZONTAL CARD SCROLLER (highlights) ===== */
+    .p-highlights {
+      padding: 3rem 0 3rem;
+    }
+    @media (min-width: 768px) {
+      .p-highlights { padding: 5rem 0 5rem; }
+    }
+    .p-hl-track {
+      display: flex;
+      gap: 1rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-padding-left: 1.25rem;
+      padding: 5rem 1.25rem;
+      scrollbar-width: none;
+    }
+    @media (min-width: 768px) {
+      .p-hl-track {
+        gap: 1.5rem;
+        scroll-padding-left: 2.5rem;
+        padding: 5rem 2.5rem;
+      }
+    }
+    .p-hl-track::-webkit-scrollbar { display: none; }
+    .p-hl-track > article { scroll-snap-align: start; scroll-snap-stop: always; flex-shrink: 0; }
+    .p-hl-card {
+      position: relative;
+      width: calc(100vw - 5rem);
+      aspect-ratio: 5 / 8;
+      border-radius: 20px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      background: var(--navy-deep);
+      color: var(--white);
+      isolation: isolate;
+    }
+    @media (min-width: 768px) {
+      .p-hl-card {
+        width: auto;
+        aspect-ratio: 11 / 10;
+        height: calc(78svh - 32px);
+        max-height: 760px;
+        min-height: 560px;
+        border-radius: 30px;
+      }
+    }
+    .p-hl-card--photo {
+      background-size: cover;
+      background-position: center;
+    }
+    .p-hl-card--photo::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(15,18,50,0.55) 0%, rgba(15,18,50,0.25) 35%, rgba(15,18,50,0.0) 60%, rgba(15,18,50,0.45) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .p-hl-card--light { background: var(--white); color: var(--navy-deep); }
+    /* Solid brand-colour cards rotated through the WHISTLE palette.
+       Each card has a real photo on top and a colour panel below. */
+    .p-hl-card--brand { color: var(--white); }
+    .p-hl-card--red       { background: var(--red); }
+    .p-hl-card--navy      { background: var(--navy); }
+    .p-hl-card--navy-deep { background: var(--navy-deep); }
+    .p-hl-card--navy-mid  { background: var(--navy-mid); }
+    .p-hl-card__photo {
+      position: relative;
+      height: 52%;
+      background-size: cover;
+      background-position: center;
+      flex-shrink: 0;
+    }
+    .p-hl-card__photo::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.0) 50%, rgba(0,0,0,0.18) 100%);
+      pointer-events: none;
+    }
+    .p-hl-card--brand .p-hl-card__copy {
+      position: relative;
+      z-index: 2;
+      padding: 1.6rem 1.6rem 1.8rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+    @media (min-width: 768px) {
+      .p-hl-card--brand .p-hl-card__copy { padding: 2rem 2.2rem 2.2rem; }
+    }
+    .p-hl-card--brand .p-hl-card__body {
+      color: rgba(255,255,255,0.86);
+      max-width: 36ch;
+    }
+    /* Whole-card link, invisible overlay */
+    .p-hl-card__link {
+      position: absolute;
+      inset: 0;
+      z-index: 4;
+      text-indent: -9999px;
+      overflow: hidden;
+    }
+    /* Click anywhere on the card opens the full live demo above */
+    .p-hl-card__link {
+      position: absolute;
+      inset: 0;
+      z-index: 4;
+      text-indent: -9999px;
+      overflow: hidden;
+    }
+    .p-hl-card__copy {
+      position: relative;
+      z-index: 3;
+      padding: 1.6rem 1.6rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+    @media (min-width: 768px) {
+      .p-hl-card__copy { padding: 2.2rem 2.2rem 0; }
+    }
+    .p-hl-card__title {
+      font-family: 'Raleway', sans-serif;
+      font-weight: 300;
+      font-size: clamp(1.4rem, 2vw, 2rem);
+      line-height: 1.05;
+      letter-spacing: -0.015em;
+    }
+    .p-hl-card__title .ed-em { color: inherit; }
+    .p-hl-card--light .p-hl-card__title { color: var(--navy-deep); }
+    .p-hl-card__title em {
+      font-style: italic;
+      font-family: 'Playfair Display', serif;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+    }
+    .p-hl-card__body {
+      max-width: 32ch;
+      font-size: 0.96rem;
+      line-height: 1.5;
+      font-weight: 300;
+      color: rgba(255,255,255,0.85);
+    }
+    .p-hl-card--light .p-hl-card__body { color: rgba(15,18,50,0.65); }
+
+    /* Card mockup elements */
+    .p-hl-card__mockup {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 2;
+      pointer-events: none;
+      padding: 0 8% 8%;
+    }
+    .p-hl-card__priorities {
+      width: 78%;
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+    .p-hl-card__priority {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 0.7rem 0.85rem;
+      background: rgba(255,255,255,0.88);
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+    }
+    .p-hl-card__priority-tick {
+      width: 18px; height: 18px;
+      border: 1.5px dashed rgba(15,18,50,0.32);
+      border-radius: 5px;
+      flex-shrink: 0;
+    }
+    .p-hl-card__priority-label { font-size: 0.84rem; color: var(--navy-deep); font-weight: 400; flex: 1; }
+    .p-hl-card__priority-tag {
+      font-size: 0.56rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--navy-deep);
+      background: rgba(19,175,240,0.18);
+      padding: 0.25rem 0.55rem;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+    .p-hl-card__formframe {
+      width: 78%;
+      background: var(--navy-deep);
+      border-radius: 16px;
+      padding: 1rem;
+      color: var(--white);
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .p-hl-card__formrow {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      padding: 0.55rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+    }
+    .p-hl-card__formrow:last-child { border-bottom: none; }
+    .p-hl-card__formrow span:first-child { color: rgba(255,255,255,0.55); letter-spacing: 0.06em; }
+    .p-hl-card__chart {
+      width: 78%;
+      background: var(--bg-mid);
+      border-radius: 16px;
+      padding: 1.2rem;
+      display: flex;
+      gap: 0.4rem;
+      align-items: flex-end;
+      height: 38%;
+    }
+    .p-hl-card__bar {
+      flex: 1;
+      background: var(--navy-deep);
+      border-radius: 4px;
+      min-height: 12%;
+      transition: opacity 0.4s var(--ease-p);
+    }
+    .p-hl-card__bar:nth-last-child(1) { background: var(--red); }
+
+    /* Card scroller controls */
+    .p-hl-controls {
+      display: flex;
+      justify-content: center;
+      margin-top: -1rem;
+    }
+    @media (pointer: coarse) {
+      .p-hl-controls { display: none; }
+    }
+    .p-hl-controls__group {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.25rem;
+      background: rgba(15,18,50,0.04);
+      border: 1px solid rgba(15,18,50,0.08);
+      border-radius: 999px;
+    }
+    .p-hl-controls button {
+      width: 42px; height: 42px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(15,18,50,0.7);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: background 0.25s, color 0.25s;
+    }
+    .p-hl-controls button:hover { background: rgba(15,18,50,0.05); color: var(--navy-deep); }
+    .p-hl-controls button:disabled { opacity: 0.3; cursor: default; }
+
+    /* ===== PRIVACY CARD ===== */
+    .p-privacy { padding: 3rem 1.25rem 0; }
+    @media (min-width: 768px) { .p-privacy { padding: 5rem 2.5rem 0; } }
+    .p-privacy__card {
+      position: relative;
+      max-width: 80rem;
+      margin: 0 auto;
+      min-height: 480px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 4rem 2rem;
+      background: var(--navy-deep);
+      color: var(--white);
+      border-radius: var(--p-radius-card);
+      overflow: hidden;
+      isolation: isolate;
+    }
+    @media (min-width: 768px) {
+      .p-privacy__card {
+        height: calc(78svh - 32px);
+        max-height: 760px;
+        min-height: 560px;
+        border-radius: var(--p-radius-card-lg);
+        padding: 0 8%;
+      }
+    }
+    .p-privacy__halo {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(19,175,240,0.0) 35%, rgba(19,175,240,0.08) 80%, rgba(19,175,240,0.2) 100%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .p-privacy__lock {
+      position: absolute;
+      right: 4%;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 70%;
+      width: auto;
+      opacity: 0.08;
+      z-index: 0;
+    }
+    @media (max-width: 767px) {
+      .p-privacy__lock { right: 50%; transform: translate(50%, -50%); height: 50%; }
+    }
+    .p-privacy__body {
+      position: relative;
+      z-index: 2;
+      max-width: 32rem;
+    }
+    .p-privacy__body h2 {
+      font-family: 'Raleway', sans-serif;
+      font-weight: 200;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.05;
+      letter-spacing: -0.012em;
+      color: var(--white);
+    }
+    .p-privacy__body h2 .ed-em { color: var(--white); }
+    .p-privacy__body p {
+      margin-top: 1.2rem;
+      font-size: clamp(1rem, 1.2vw, 1.12rem);
+      line-height: 1.6;
+      font-weight: 300;
+      color: rgba(255,255,255,0.7);
+      max-width: 38ch;
+    }
+
+    /* ===== TESTIMONIALS MARQUEE ===== */
+    .p-quotes-head { text-align: center; padding: 5rem 1.25rem 0; }
+    @media (min-width: 768px) { .p-quotes-head { padding: 7rem 2.5rem 0; } }
+    .p-quotes-head .p-h2 { color: var(--navy-deep); max-width: 22ch; margin: 0 auto; }
+    .p-quotes-head .p-sub { max-width: 36rem; margin-left: auto; margin-right: auto; }
+
+    .p-quotes-marquee {
+      overflow-x: clip;
+      padding: 3rem 0 6rem;
+    }
+    .p-quotes-track {
+      display: flex;
+      gap: 1.5rem;
+      width: max-content;
+      animation: pMarquee 60s linear infinite;
+    }
+    @keyframes pMarquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .p-quotes-marquee:hover .p-quotes-track { animation-play-state: paused; }
+    .p-quote {
+      width: 340px;
+      flex-shrink: 0;
+      padding: 2rem;
+      border-radius: 28px;
+      background: var(--white);
+      display: flex;
+      flex-direction: column;
+      min-height: 280px;
+      border: 1px solid rgba(15,18,50,0.06);
+    }
+    @media (min-width: 768px) { .p-quote { width: 420px; padding: 2.2rem; } }
+    .p-quote__stars { display: flex; gap: 0.25rem; color: var(--red); margin-bottom: 1rem; }
+    .p-quote__stars svg { width: 14px; height: 14px; }
+    .p-quote__body {
+      flex: 1;
+      font-size: clamp(1.05rem, 1.3vw, 1.2rem);
+      line-height: 1.45;
+      color: rgba(15,18,50,0.85);
+      font-weight: 300;
+    }
+    .p-quote__attrib {
+      margin-top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+    .p-quote__name { font-size: 0.92rem; color: var(--navy-deep); font-weight: 500; }
+    .p-quote__role { font-size: 0.78rem; color: rgba(15,18,50,0.45); letter-spacing: 0.04em; }
+
+    /* ===== FAQ ===== */
+    .p-faq { padding: 5rem 0 7rem; }
+    @media (min-width: 768px) { .p-faq { padding: 7rem 0 9rem; } }
+    .p-faq__head { text-align: center; max-width: 38rem; margin: 0 auto; }
+    .p-faq__list {
+      max-width: 48rem;
+      margin: 3.5rem auto 0;
+      border-top: 1px solid rgba(15,18,50,0.1);
+    }
+    .p-faq__item { border-bottom: 1px solid rgba(15,18,50,0.1); }
+    .p-faq__btn {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      padding: 1.5rem 0;
+      font: inherit;
+      font-size: clamp(1rem, 1.1vw, 1.08rem);
+      font-weight: 500;
+      color: var(--navy-deep);
+      text-align: left;
+      background: none;
+      border: none;
+      cursor: pointer;
+      letter-spacing: -0.005em;
+    }
+    .p-faq__icon {
+      position: relative;
+      width: 18px; height: 18px;
+      flex-shrink: 0;
+      color: rgba(15,18,50,0.55);
+      transition: transform 0.4s var(--ease-p);
+    }
+    .p-faq__icon::before,
+    .p-faq__icon::after {
+      content: '';
+      position: absolute;
+      background: currentColor;
+      border-radius: 999px;
+    }
+    .p-faq__icon::before { left: 0; right: 0; top: 50%; height: 1.5px; transform: translateY(-50%); }
+    .p-faq__icon::after { top: 0; bottom: 0; left: 50%; width: 1.5px; transform: translateX(-50%); transition: opacity 0.4s var(--ease-p); }
+    .p-faq__item[aria-expanded="true"] .p-faq__icon::after { opacity: 0; }
+    .p-faq__panel {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.5s var(--ease-p);
+    }
+    .p-faq__item[aria-expanded="true"] .p-faq__panel { grid-template-rows: 1fr; }
+    .p-faq__panel-inner { overflow: hidden; }
+    .p-faq__copy {
+      padding: 0 2.5rem 1.5rem 0;
+      font-size: 0.98rem;
+      line-height: 1.65;
+      color: rgba(15,18,50,0.65);
+      font-weight: 300;
+      opacity: 0;
+      transition: opacity 0.3s var(--ease-p);
+    }
+    .p-faq__item[aria-expanded="true"] .p-faq__copy { opacity: 1; }
+
+    /* ===== FINAL CTA ===== */
+    .p-cta-section {
+      position: relative;
+      z-index: 10;
+      margin-top: calc(-1 * var(--p-radius-section));
+      min-height: calc(100svh + var(--p-radius-section));
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: #000;
+    }
+    @media (min-width: 768px) {
+      .p-cta-section {
+        margin-top: calc(-1 * var(--p-radius-section-lg));
+        min-height: calc(100svh + var(--p-radius-section-lg));
+      }
+    }
+    .p-cta-bg {
+      position: absolute;
+      inset: 0;
+      animation: kenburns 30s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    .p-cta-bg img { width: 100%; height: 100%; object-fit: cover; }
+    .p-cta-scrim {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(15,18,50,0.25) 0%, rgba(15,18,50,0.5) 55%, rgba(15,18,50,0.78) 100%);
+    }
+    .p-cta-inner {
+      position: relative;
+      z-index: 2;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8rem 1.25rem 5rem;
+      text-align: center;
+    }
+    @media (min-width: 768px) { .p-cta-inner { padding: 12rem 2.5rem 7rem; } }
+    .p-cta-body { max-width: 36rem; }
+    .p-cta-body h2 {
+      font-family: 'Raleway', sans-serif;
+      font-weight: 200;
+      font-size: clamp(2.4rem, 6vw, 4.4rem);
+      line-height: 1.0;
+      letter-spacing: -0.018em;
+      color: var(--white);
+    }
+    .p-cta-body h2 .ed-em { color: var(--white); }
+    .p-cta-body p {
+      margin-top: 1.4rem;
+      max-width: 36ch;
+      margin-left: auto; margin-right: auto;
+      font-size: clamp(1rem, 1.3vw, 1.2rem);
+      line-height: 1.55;
+      font-weight: 300;
+      color: rgba(255,255,255,0.85);
+    }
+    .p-cta-body .p-pill { margin-top: 2.5rem; }
+
+    /* Hide the existing nav scrim/blur effect since hero is sticky and bg is dark */
+    .platform-page .nav { background: rgba(15,18,50,0.0); border-bottom-color: transparent; }
+    .platform-page .nav.scrolled { background: var(--white); border-bottom-color: var(--line-soft); }
+    .platform-page .nav__links a,
+    .platform-page .nav__btn--ghost { color: var(--white); border-color: rgba(255,255,255,0.4); }
+    .platform-page .nav__links a::after { background: var(--white); }
+    .platform-page .nav.scrolled .nav__links a,
+    .platform-page .nav.scrolled .nav__btn--ghost { color: var(--navy); border-color: var(--line); }
+    .platform-page .nav.scrolled .nav__links a::after { background: var(--red); }
+    .platform-page .nav__hamburger span { background: var(--white); }
+    .platform-page .nav.scrolled .nav__hamburger span { background: var(--navy); }
+  </style>
+</head>
+<body class="platform-page">
+
+  <!-- ===== NAV (matches main site) ===== -->
+  <nav class="nav" id="nav">
+    <a href="wprrs-homepage-v2.html" class="nav__logo-wrap" aria-label="WPRRS home"><img src="Flower Logo.svg" class="nav__logo" alt="WPRRS"></a>
+    <ul class="nav__links">
+      <li class="has-drop"><button type="button" class="nav__trigger" aria-haspopup="menu" aria-expanded="false">About</button><div class="nav__dropdown" role="menu"><a href="about-history.html" class="dropdown-link">History</a><a href="about-governance.html" class="dropdown-link">Governance</a><a href="about-code-of-conduct.html" class="dropdown-link">Code of Conduct</a><a href="about-constitution.html" class="dropdown-link">Constitution &amp; By-Laws</a><a href="about-honorary-members.html" class="dropdown-link">Honorary Members</a><a href="about-prestige-awards.html" class="dropdown-link">Prestige Awards</a><a href="about-annual-reports.html" class="dropdown-link">Annual Reports</a></div></li>
+      <li class="has-drop"><button type="button" class="nav__trigger" aria-haspopup="menu" aria-expanded="false">Referees</button><div class="nav__dropdown" role="menu"><a href="become-a-referee.html" class="dropdown-link">Become a Referee</a><a href="training.html" class="dropdown-link">Training &amp; Development</a></div></li>
+      <li class="has-drop"><button type="button" class="nav__trigger" aria-haspopup="menu" aria-expanded="false">Resources</button><div class="nav__dropdown" role="menu"><a href="wprrs-platform.html" class="dropdown-link">App &amp; Dashboard</a><a href="resource-library.html" class="dropdown-link">Resource Library</a></div></li>
+      <li><a href="events.html">Events</a></li>
+      <li><a href="news.html">News</a></li><li><a href="shop.html">Shop</a></li>
+    </ul>
+    <div class="nav__actions">
+      <a href="#cta" class="nav__btn nav__btn--ghost">Sign In</a>
+      <a href="contact.html" class="nav__btn nav__btn--filled">Contact Us</a>
+      <button class="nav__hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <div class="nav__panel" id="panel-mobile"><div class="panel-items"><a href="about-history.html" class="panel-link">About</a><a href="become-a-referee.html" class="panel-link">Become a Referee</a><a href="training.html" class="panel-link">Training &amp; Development</a><a href="wprrs-platform.html" class="panel-link">App &amp; Dashboard</a><a href="resource-library.html" class="panel-link">Resource Library</a><a href="events.html" class="panel-link">Events</a><a href="news.html" class="panel-link">News</a><a href="shop.html" class="panel-link">Shop</a><a href="https://wprrs-refhub.vercel.app/" class="panel-link" target="_blank" rel="noopener">Sign In</a><a href="contact.html" class="panel-link">Contact Us</a></div></div>
+
+  <main>
+
+    <!-- ===== STICKY HERO ===== -->
+    <section id="top" class="p-hero">
+      <div class="p-hero__bg">
+        <div class="p-hero__bg-inner">
+          <img src="Images/IMGL3051-1-scaled-1280x960.jpg" alt="">
+        </div>
+        <div class="p-hero__scrim"></div>
+      </div>
+      <div class="p-hero__inner">
+        <h1 class="p-hero__title">Run your weekend.<br>Own your <span class="ed-em">grade</span>.</h1>
+        <p class="p-hero__sub">WHISTLE turns the working week of a Western Province referee into one sign-in. Appointments, reports, grading, fitness, BokSmart. All here.</p>
+        <div class="p-hero__cta-row">
+          <a href="#cta" class="p-pill">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+              <path d="M12 2L3 7v6c0 5 3.8 9.7 9 11 5.2-1.3 9-6 9-11V7l-9-5z"/>
+            </svg>
+            <span class="p-pill__letters">
+              <span class="p-pill__letter"><span>O</span><span>O</span></span>
+              <span class="p-pill__letter"><span>p</span><span>p</span></span>
+              <span class="p-pill__letter"><span>e</span><span>e</span></span>
+              <span class="p-pill__letter"><span>n</span><span>n</span></span>
+              <span class="p-pill__letter"><span>&nbsp;</span><span>&nbsp;</span></span>
+              <span class="p-pill__letter"><span>W</span><span>W</span></span>
+              <span class="p-pill__letter"><span>H</span><span>H</span></span>
+              <span class="p-pill__letter"><span>I</span><span>I</span></span>
+              <span class="p-pill__letter"><span>S</span><span>S</span></span>
+              <span class="p-pill__letter"><span>T</span><span>T</span></span>
+              <span class="p-pill__letter"><span>L</span><span>L</span></span>
+              <span class="p-pill__letter"><span>E</span><span>E</span></span>
+            </span>
+          </a>
+          <a href="#showcase" class="p-pill p-pill--ghost">See how it works</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PINNED PHONE SHOWCASE ===== -->
+    <!-- ===== WHISTLE FEATURE 0 - Load / Sign-in (1st screenshot) ===== -->
+    <section class="whistle-feature p-section--rounded-top" id="whistle-signin">
+      <div class="container">
+        <div class="whistle-feature__grid">
+          <div class="whistle-feature__copy">
+            <span class="whistle-feature__eyebrow">Open WHISTLE</span>
+            <h2 class="whistle-feature__title">Sign in, <span class="ed-em">step</span> into the season.</h2>
+            <p class="whistle-feature__lede">Active members get WHISTLE access on registration. One log-in opens both the Referee app and (for the office) the Admin dashboard.</p>
+            <ul class="whistle-feature__features">
+              <li>Society single sign-on (no separate passwords to remember)</li>
+              <li>Same credentials work on mobile and on the desktop dashboard</li>
+              <li>Lost your password? Email the office, reset in two clicks</li>
+            </ul>
+          </div>
+          <div class="whistle-feature__phone-wrap">
+            <div class="whistle-phone">
+              <div class="whistle-phone__bezel"></div>
+              <div class="whistle-phone__screen">
+                <div class="whistle-phone__notch"></div>
+                <div class="whistle-phone__slide is-active" data-stage="signin">
+                    <div class="wph-brand">WHISTLE · sign in</div>
+                    <div class="wph-greet">Welcome <em>back</em>.</div>
+                    <div class="wph-form">
+                      <div class="wph-field">
+                        <span class="wph-field__label">Username</span>
+                        <span class="wph-field__val">RefHub@WP_Rugby</span>
+                      </div>
+                      <div class="wph-field">
+                        <span class="wph-field__label">Password</span>
+                        <span class="wph-field__val">••••••••••</span>
+                      </div>
+                      <div class="wph-submit">Sign in</div>
+                    </div>
+                  </div>
+              </div>
+            </div>
+            <span class="whistle-phone__hint"><span class="whistle-phone__hint-dot"></span>Sign in to begin</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== WHISTLE FEATURE 1 - Appointments (100vh) ===== -->
+    <section class="whistle-feature" id="showcase">
+      <div class="container">
+        <div class="whistle-feature__grid">
+          <div class="whistle-feature__copy">
+            <span class="whistle-feature__eyebrow">WHISTLE Platform</span>
+            <h2 class="whistle-feature__title">This <span class="ed-em">Saturday</span>.</h2>
+            <p class="whistle-feature__lede">Every appointment, every venue, every protocol in one tap. Open WHISTLE on a Friday and your whole weekend is laid out.</p>
+            <ul class="whistle-feature__features">
+              <li>Kick-off, ground, and grade for each fixture</li>
+              <li>Decline or swap with a tap, routed to the appointments officer</li>
+              <li>Push reminders 24 hours before kick-off</li>
+            </ul>
+          </div>
+          <div class="whistle-feature__phone-wrap">
+            <div class="whistle-phone">
+              <div class="whistle-phone__bezel"></div>
+              <div class="whistle-phone__screen">
+                <div class="whistle-phone__notch"></div>
+                <div class="whistle-phone__slide is-active" data-stage="appointments">
+                    <div class="wph-brand">WHISTLE</div>
+                    <div class="wph-greet">This <em>Saturday</em></div>
+                    <div class="wph-row">
+                      <span class="wph-row__time">09:30</span>
+                      <div class="wph-row__body">
+                        <span class="wph-row__title">Bishops vs SACS</span>
+                        <span class="wph-row__meta">U16A · Newlands</span>
+                      </div>
+                      <span class="wph-pill">Ref</span>
+                    </div>
+                    <div class="wph-row">
+                      <span class="wph-row__time">12:00</span>
+                      <div class="wph-row__body">
+                        <span class="wph-row__title">Hamiltons vs Villager</span>
+                        <span class="wph-row__meta">Div 2 · Green Point</span>
+                      </div>
+                      <span class="wph-pill wph-pill--alt">AR</span>
+                    </div>
+                    <div class="wph-row">
+                      <span class="wph-row__time">15:30</span>
+                      <div class="wph-row__body">
+                        <span class="wph-row__title">UCT vs Maties</span>
+                        <span class="wph-row__meta">Var Cup · UCT</span>
+                      </div>
+                      <span class="wph-pill">Ref</span>
+                    </div>
+                  </div>
+              </div>
+            </div>
+            <span class="whistle-phone__hint"><span class="whistle-phone__hint-dot"></span>Live app - click in</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== WHISTLE FEATURE 2 - Match reports (100vh, phone left) ===== -->
+    <section class="whistle-feature whistle-feature--reverse" id="whistle-reports">
+      <div class="container">
+        <div class="whistle-feature__grid">
+          <div class="whistle-feature__copy">
+            <span class="whistle-feature__eyebrow">Match reports</span>
+            <h2 class="whistle-feature__title">Reports in <span class="ed-em">a minute</span>.</h2>
+            <p class="whistle-feature__lede">Pre-populated forms for every fixture. Score, cards, and incidents file straight to the Society and route to discipline automatically when needed.</p>
+            <ul class="whistle-feature__features">
+              <li>Half-time and full-time scores, side-by-side</li>
+              <li>Cards, citings and HIAs structured for the disciplinary process</li>
+              <li>Drafts saved on-device until you have signal again</li>
+            </ul>
+          </div>
+          <div class="whistle-feature__phone-wrap">
+            <div class="whistle-phone">
+              <div class="whistle-phone__bezel"></div>
+              <div class="whistle-phone__screen">
+                <div class="whistle-phone__notch"></div>
+                <div class="whistle-phone__slide is-active" data-stage="forms">
+                    <div class="wph-brand">Match report</div>
+                    <div class="wph-greet">Bishops vs <em>SACS</em></div>
+                    <div class="wph-form">
+                      <div class="wph-score">
+                        <div class="wph-field"><span class="wph-field__label">Home</span><span class="wph-field__val">24</span></div>
+                        <div class="wph-field"><span class="wph-field__label">Away</span><span class="wph-field__val">17</span></div>
+                      </div>
+                      <div class="wph-field"><span class="wph-field__label">Cards</span><span class="wph-field__val">1Y · 18'</span></div>
+                      <div class="wph-field"><span class="wph-field__label">Incidents</span><span class="wph-field__val">None reported</span></div>
+                      <div class="wph-submit">File report</div>
+                    </div>
+                  </div>
+              </div>
+            </div>
+            <span class="whistle-phone__hint"><span class="whistle-phone__hint-dot"></span>Live app - click in</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== WHISTLE FEATURE 3 - Grading (100vh) ===== -->
+    <section class="whistle-feature" id="whistle-grading">
+      <div class="container">
+        <div class="whistle-feature__grid">
+          <div class="whistle-feature__copy">
+            <span class="whistle-feature__eyebrow">Grading</span>
+            <h2 class="whistle-feature__title">Your <span class="ed-em">grade</span>, live.</h2>
+            <p class="whistle-feature__lede">Fitness, exam, on-field merit, updated after every appointment. Your Sunday wrap-up arrives before you wake up.</p>
+            <ul class="whistle-feature__features">
+              <li>YOYO fitness scores tracked against your division</li>
+              <li>On-field grading from reviewers in your inbox</li>
+              <li>Sunday wrap: fixtures officiated, cards, reviews returned</li>
+            </ul>
+          </div>
+          <div class="whistle-feature__phone-wrap">
+            <div class="whistle-phone">
+              <div class="whistle-phone__bezel"></div>
+              <div class="whistle-phone__screen">
+                <div class="whistle-phone__notch"></div>
+                <div class="whistle-phone__slide is-active" data-stage="performance">
+                    <div class="wph-brand">Grading</div>
+                    <div class="wph-greet">Division <em>2</em></div>
+                    <div class="wph-metric">
+                      <span class="wph-metric__label">Fitness · YOYO 17</span>
+                      <div style="display:flex; align-items:baseline;">
+                        <span class="wph-metric__val">18.4</span>
+                        <span class="wph-metric__delta">▲ 0.6</span>
+                      </div>
+                      <div class="wph-bar" style="--p: 78%;"></div>
+                    </div>
+                    <div class="wph-metric">
+                      <span class="wph-metric__label">Exam</span>
+                      <div style="display:flex; align-items:baseline;">
+                        <span class="wph-metric__val">86%</span>
+                        <span class="wph-metric__delta">▲ 4</span>
+                      </div>
+                      <div class="wph-bar" style="--p: 86%;"></div>
+                    </div>
+                    <div class="wph-metric">
+                      <span class="wph-metric__label">Merit</span>
+                      <div style="display:flex; align-items:baseline;">
+                        <span class="wph-metric__val">7.8</span>
+                        <span class="wph-metric__delta">▲ 0.3</span>
+                      </div>
+                      <div class="wph-bar" style="--p: 65%;"></div>
+                    </div>
+                  </div>
+              </div>
+            </div>
+            <span class="whistle-phone__hint"><span class="whistle-phone__hint-dot"></span>Live app - click in</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== WHISTLE CTA (download + dashboard link) ===== -->
+    <section class="whistle-cta">
+      <div class="container">
+        <div class="whistle-cta__inner">
+          <span class="whistle-cta__eyebrow">Ready?</span>
+          <h2 class="whistle-cta__title">The Society in <span class="ed-em">your</span> pocket.</h2>
+          <p class="whistle-cta__lede">Active members get WHISTLE access on registration. Download the app, sign in, and your week opens to today.</p>
+          <div class="whistle-cta__actions">
+            <a href="#" class="btn-store" aria-label="Download WHISTLE on the App Store">
+              <svg class="btn-store__icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M16.365 12.56c-.01-2.02 1.65-2.99 1.72-3.04-.94-1.37-2.4-1.55-2.92-1.57-1.23-.12-2.41.73-3.04.73-.63 0-1.6-.71-2.64-.69-1.36.02-2.62.79-3.32 2-1.41 2.44-.36 6.05 1.02 8.03.67.96 1.48 2.04 2.54 2 1.02-.04 1.41-.66 2.65-.66s1.59.66 2.66.64c1.1-.02 1.8-.98 2.47-1.95.78-1.12 1.1-2.2 1.11-2.25-.02-.01-2.13-.82-2.15-3.24zM14.37 6.9c.56-.68.94-1.62.84-2.56-.81.03-1.79.54-2.37 1.22-.52.6-.97 1.56-.85 2.48.9.07 1.82-.46 2.38-1.14z"/>
+              </svg>
+              <span class="btn-store__text">
+                <span class="btn-store__caption">Download on the</span>
+                <span class="btn-store__name">App Store</span>
+              </span>
+            </a>
+            <a href="#" class="btn-store" aria-label="Get WHISTLE on Google Play">
+              <svg class="btn-store__icon" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true">
+                <path d="M325.3 234.3 104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/>
+              </svg>
+              <span class="btn-store__text">
+                <span class="btn-store__caption">Get it on</span>
+                <span class="btn-store__name">Google Play</span>
+              </span>
+            </a>
+            <a href="https://wprrs-refhub.vercel.app/" class="whistle-signin" target="_blank" rel="noopener" aria-label="See the admin dashboard">
+              <svg class="whistle-signin__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                <polyline points="10 17 15 12 10 7"/>
+                <line x1="15" y1="12" x2="3" y2="12"/>
+              </svg>
+              <span class="whistle-signin__text">
+                <span class="whistle-signin__caption">Admin view</span>
+                <span class="whistle-signin__name">See the dashboard</span>
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== HORIZONTAL CARD HIGHLIGHTS - solid brand bg + real photos ===== -->
+    <section class="p-section p-highlights">
+      <div class="p-hl-track" id="hl-track" role="region" aria-label="WHISTLE highlights">
+
+        <article>
+          <div class="p-hl-card p-hl-card--brand p-hl-card--red">
+            <div class="p-hl-card__photo" style="background-image:url('Images/IMGL3051-1-scaled-1280x960.jpg');"></div>
+            <div class="p-hl-card__copy">
+              <h3 class="p-hl-card__title">Sign in and <em>check</em></h3>
+              <p class="p-hl-card__body">Open WHISTLE in the morning and see today's appointments, kick-off times, the protocol for each fixture, and the route to the venue.</p>
+            </div>
+            <a href="#showcase" class="p-hl-card__link" aria-label="See the appointments screen">See the appointments screen</a>
+          </div>
+        </article>
+
+        <article>
+          <div class="p-hl-card p-hl-card--brand p-hl-card--navy">
+            <div class="p-hl-card__photo" style="background-image:url('Images/5A4A2865-1024x683-640x480.jpg');"></div>
+            <div class="p-hl-card__copy">
+              <h3 class="p-hl-card__title">Reports in <em>seconds</em></h3>
+              <p class="p-hl-card__body">Score, cards, injuries, notes. The form opens with the fixture detail pre-loaded. Incidents route to the disciplinary process automatically.</p>
+            </div>
+            <a href="#showcase" class="p-hl-card__link" aria-label="See the match-report screen">See the match-report screen</a>
+          </div>
+        </article>
+
+        <article>
+          <div class="p-hl-card p-hl-card--brand p-hl-card--navy-deep">
+            <div class="p-hl-card__photo" style="background-image:url('Images/IMGL1982-scaled-1280x960.jpg');"></div>
+            <div class="p-hl-card__copy">
+              <h3 class="p-hl-card__title">Three priorities a <em>weekend</em></h3>
+              <p class="p-hl-card__body">Prepare, officiate, file. Everything else is supportive. The interface keeps you on the three things that move you up a grade.</p>
+            </div>
+            <a href="#showcase" class="p-hl-card__link" aria-label="See the weekly priorities">See the weekly priorities</a>
+          </div>
+        </article>
+
+        <article>
+          <div class="p-hl-card p-hl-card--brand p-hl-card--red">
+            <div class="p-hl-card__photo" style="background-image:url('Images/REFS-CHARITY-RIDE-91-scaled-1280x960.jpg');"></div>
+            <div class="p-hl-card__copy">
+              <h3 class="p-hl-card__title">Right from your <em>pocket</em></h3>
+              <p class="p-hl-card__body">Works in the clubhouse car park as well as it does at a desk. Glance at the weekend, capture a note by voice, mark off what is done.</p>
+            </div>
+            <a href="#showcase" class="p-hl-card__link" aria-label="Try the mobile experience">Try the mobile experience</a>
+          </div>
+        </article>
+
+        <article>
+          <div class="p-hl-card p-hl-card--brand p-hl-card--navy-mid">
+            <div class="p-hl-card__photo" style="background-image:url('Images/5A4A5503-scaled-1280x960.jpg');"></div>
+            <div class="p-hl-card__copy">
+              <h3 class="p-hl-card__title">The Society's <em>view</em></h3>
+              <p class="p-hl-card__body">Appointments officers, the office, and the executive run the weekend from the admin dashboard. Fixtures, members, grading, discipline in one surface.</p>
+            </div>
+            <a href="#dashboard" class="p-hl-card__link" aria-label="Open the live admin dashboard">Open the live admin dashboard</a>
+          </div>
+        </article>
+
+      </div>
+
+      <div class="p-hl-controls">
+        <div class="p-hl-controls__group">
+          <button type="button" aria-label="Previous" id="hl-prev">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          <button type="button" aria-label="Next" id="hl-next">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PRIVACY / GOVERNANCE CARD ===== -->
+    <section class="p-section p-privacy">
+      <div class="p-privacy__card">
+        <div class="p-privacy__halo"></div>
+        <svg viewBox="0 0 200 280" class="p-privacy__lock" aria-hidden="true">
+          <path d="M100 22c-31 0-56 25-56 56v52h20V78c0-20 16-36 36-36s36 16 36 36v52h20V78c0-31-25-56-56-56z" fill="rgba(255,255,255,0.55)"/>
+          <rect x="18" y="114" width="164" height="150" rx="16" fill="rgba(255,255,255,0.78)"/>
+          <circle cx="100" cy="180" r="9" fill="rgba(15,18,50,0.35)"/>
+          <path d="M96 180 h8 l-2 24 h-4 z" fill="rgba(15,18,50,0.35)"/>
+        </svg>
+        <div class="p-privacy__body">
+          <h2>Built for the <span class="ed-em">Society</span>.</h2>
+          <p>Your data stays with you and with us. Hosted in South Africa, owned by the Society, governed by the AGM, POPIA-aligned by default. Never sold. Never shared. Backed up daily.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== TESTIMONIALS MARQUEE ===== -->
+    <section class="p-section">
+      <div class="p-quotes-head">
+        <h2 class="p-h2">From the active <span class="ed-em">members</span>.</h2>
+        <p class="p-sub">Honest reactions from referees using WHISTLE through a full Western Province season. Before the launch. Before the polish.</p>
+      </div>
+      <div class="p-quotes-marquee">
+        <div class="p-quotes-track">
+          <!-- Set 1 -->
+          <article class="p-quote">
+            <div class="p-quote__stars">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+            </div>
+            <p class="p-quote__body">"Finally a platform that fits how a weekend actually runs. Appointments in, reports out, no extra steps."</p>
+            <div class="p-quote__attrib">
+              <span class="p-quote__name">Active member</span>
+              <span class="p-quote__role">Division 2 · Six seasons</span>
+            </div>
+          </article>
+
+          <article class="p-quote">
+            <div class="p-quote__stars">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+            </div>
+            <p class="p-quote__body">"I used to check three WhatsApp groups and an email folder on Friday afternoon. Now I check WHISTLE."</p>
+            <div class="p-quote__attrib">
+              <span class="p-quote__name">Active member</span>
+              <span class="p-quote__role">Division 3 · Three seasons</span>
+            </div>
+          </article>
+
+          <article class="p-quote">
+            <div class="p-quote__stars">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+            </div>
+            <p class="p-quote__body">"Three priorities a weekend. Prepare, officiate, file. That single constraint changed my season."</p>
+            <div class="p-quote__attrib">
+              <span class="p-quote__name">Active member</span>
+              <span class="p-quote__role">Division 1 · Eight seasons</span>
+            </div>
+          </article>
+
+          <article class="p-quote">
+            <div class="p-quote__stars">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+            </div>
+            <p class="p-quote__body">"The grading dashboard is the first thing I check on a Monday. The Sunday wrap-up is the last on a Sunday."</p>
+            <div class="p-quote__attrib">
+              <span class="p-quote__name">Junior referee</span>
+              <span class="p-quote__role">Two seasons · Strand</span>
+            </div>
+          </article>
+
+          <article class="p-quote">
+            <div class="p-quote__stars">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+            </div>
+            <p class="p-quote__body">"It does not buzz. It does not nag. It just quietly organises my weekend and gives me back the only list I needed."</p>
+            <div class="p-quote__attrib">
+              <span class="p-quote__name">Regional coach</span>
+              <span class="p-quote__role">Brackenfell</span>
+            </div>
+          </article>
+
+          <article class="p-quote">
+            <div class="p-quote__stars">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+            </div>
+            <p class="p-quote__body">"I am a coach and a ref. WHISTLE shows me both sides of the same weekend without two logins."</p>
+            <div class="p-quote__attrib">
+              <span class="p-quote__name">Regional coach</span>
+              <span class="p-quote__role">Helderberg · Active member</span>
+            </div>
+          </article>
+
+          <!-- Set 2 (duplicate for seamless loop) -->
+          <article class="p-quote" aria-hidden="true">
+            <div class="p-quote__stars">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+            </div>
+            <p class="p-quote__body">"Finally a platform that fits how a weekend actually runs. Appointments in, reports out, no extra steps."</p>
+            <div class="p-quote__attrib">
+              <span class="p-quote__name">Active member</span>
+              <span class="p-quote__role">Division 2 · Six seasons</span>
+            </div>
+          </article>
+          <article class="p-quote" aria-hidden="true">
+            <div class="p-quote__stars">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+            </div>
+            <p class="p-quote__body">"I used to check three WhatsApp groups and an email folder on Friday afternoon. Now I check WHISTLE."</p>
+            <div class="p-quote__attrib">
+              <span class="p-quote__name">Active member</span>
+              <span class="p-quote__role">Division 3 · Three seasons</span>
+            </div>
+          </article>
+          <article class="p-quote" aria-hidden="true">
+            <div class="p-quote__stars">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+            </div>
+            <p class="p-quote__body">"Three priorities a weekend. Prepare, officiate, file. That single constraint changed my season."</p>
+            <div class="p-quote__attrib">
+              <span class="p-quote__name">Active member</span>
+              <span class="p-quote__role">Division 1 · Eight seasons</span>
+            </div>
+          </article>
+          <article class="p-quote" aria-hidden="true">
+            <div class="p-quote__stars">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+            </div>
+            <p class="p-quote__body">"The grading dashboard is the first thing I check on a Monday. The Sunday wrap-up is the last on a Sunday."</p>
+            <div class="p-quote__attrib">
+              <span class="p-quote__name">Junior referee</span>
+              <span class="p-quote__role">Two seasons · Strand</span>
+            </div>
+          </article>
+          <article class="p-quote" aria-hidden="true">
+            <div class="p-quote__stars">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+            </div>
+            <p class="p-quote__body">"It does not buzz. It does not nag. It just quietly organises my weekend and gives me back the only list I needed."</p>
+            <div class="p-quote__attrib">
+              <span class="p-quote__name">Regional coach</span>
+              <span class="p-quote__role">Brackenfell</span>
+            </div>
+          </article>
+          <article class="p-quote" aria-hidden="true">
+            <div class="p-quote__stars">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.9 7.1.6-5.4 4.7 1.7 7L12 17.6 5.7 21.2l1.7-7L2 9.5l7.1-.6L12 2z"/></svg>
+            </div>
+            <p class="p-quote__body">"I am a coach and a ref. WHISTLE shows me both sides of the same weekend without two logins."</p>
+            <div class="p-quote__attrib">
+              <span class="p-quote__name">Regional coach</span>
+              <span class="p-quote__role">Helderberg · Active member</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== FAQ ===== -->
+    <section id="faq" class="p-section p-section--rounded-bottom p-faq">
+      <div class="p-container">
+        <div class="p-faq__head">
+          <h2 class="p-h2">Got <span class="ed-em">questions</span>?</h2>
+        </div>
+        <div class="p-faq__list" id="faq-list">
+
+          <div class="p-faq__item" aria-expanded="false">
+            <button type="button" class="p-faq__btn"><span>How is WHISTLE different from WhatsApp and email?</span><span class="p-faq__icon" aria-hidden="true"></span></button>
+            <div class="p-faq__panel"><div class="p-faq__panel-inner"><div class="p-faq__copy">WhatsApp is fast but it loses context. Email leaves you searching threads. WHISTLE is one place: today's fixtures, your reports, your grading, the Society's communications. Nothing scrolls off. Nothing gets missed.</div></div></div>
+          </div>
+
+          <div class="p-faq__item" aria-expanded="false">
+            <button type="button" class="p-faq__btn"><span>How does the appointment flow work?</span><span class="p-faq__icon" aria-hidden="true"></span></button>
+            <div class="p-faq__panel"><div class="p-faq__panel-inner"><div class="p-faq__copy">Appointments are made by the Appointments portfolio every Wednesday for the coming weekend. They land in your WHISTLE inbox with kick-off, venue, competition, both clubs, and any specific protocol. One tap to accept. Notifications by SMS as well, in case you do not open the app.</div></div></div>
+          </div>
+
+          <div class="p-faq__item" aria-expanded="false">
+            <button type="button" class="p-faq__btn"><span>What goes in a match report?</span><span class="p-faq__icon" aria-hidden="true"></span></button>
+            <div class="p-faq__panel"><div class="p-faq__panel-inner"><div class="p-faq__copy">Score, cards (number, time, offence), injuries reported, and any notes the Society needs to see. The form is short by design. Incident reports route to the disciplinary process automatically and remain confidential to the executive and the Union.</div></div></div>
+          </div>
+
+          <div class="p-faq__item" aria-expanded="false">
+            <button type="button" class="p-faq__btn"><span>How does the grading dashboard update?</span><span class="p-faq__icon" aria-hidden="true"></span></button>
+            <div class="p-faq__panel"><div class="p-faq__panel-inner"><div class="p-faq__copy">Fitness test results land within 48 hours of the YOYO. Exam marks land within a week of the annual exam. On-field reviews update after each assessor reads your match. You can see the rolling average for the season and your position against the divisional threshold.</div></div></div>
+          </div>
+
+          <div class="p-faq__item" aria-expanded="false">
+            <button type="button" class="p-faq__btn"><span>What is the Sunday wrap-up?</span><span class="p-faq__icon" aria-hidden="true"></span></button>
+            <div class="p-faq__panel"><div class="p-faq__panel-inner"><div class="p-faq__copy">Every Sunday at 18:00 SAST, WHISTLE shows you the weekend at a glance: fixtures officiated, reports filed, cards issued, injuries reported. Anything unfinished moves into next week automatically. It is a quiet close to the weekend, not a dashboard.</div></div></div>
+          </div>
+
+          <div class="p-faq__item" aria-expanded="false">
+            <button type="button" class="p-faq__btn"><span>What if I forget my password?</span><span class="p-faq__icon" aria-hidden="true"></span></button>
+            <div class="p-faq__panel"><div class="p-faq__panel-inner"><div class="p-faq__copy">Tap "Forgot password" on the sign-in screen. If automated reset does not reach you, the administration team can reset within one working day. Contact admin at <a href="mailto:administration@wprugby.co.za" style="color:var(--red); border-bottom: 1px solid var(--red);">administration@wprugby.co.za</a>.</div></div></div>
+          </div>
+
+          <div class="p-faq__item" aria-expanded="false">
+            <button type="button" class="p-faq__btn"><span>Is my data private?</span><span class="p-faq__icon" aria-hidden="true"></span></button>
+            <div class="p-faq__panel"><div class="p-faq__panel-inner"><div class="p-faq__copy">Yes. Your data is owned by the Society, hosted in South Africa, POPIA-aligned by default. The Society does not sell or share member data. Match-day data feeds the Society's appointments and disciplinary processes and is otherwise kept confidential to members and the executive.</div></div></div>
+          </div>
+
+          <div class="p-faq__item" aria-expanded="false">
+            <button type="button" class="p-faq__btn"><span>How much does WHISTLE cost?</span><span class="p-faq__icon" aria-hidden="true"></span></button>
+            <div class="p-faq__panel"><div class="p-faq__panel-inner"><div class="p-faq__copy">WHISTLE is included in active membership. No additional subscription, no per-fixture charge. The platform is funded by the Society's main and subsidiary sponsors and reviewed by the AGM each year.</div></div></div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== FOOTER (matches main site) ===== -->
+  <footer class="footer" style="position:relative; z-index: 11;">
+    <div class="container">
+      <div class="footer__inner">
+        <div class="footer__brand-block"><div class="footer__brand"><img src="Flower Logo.svg" alt=""><div class="footer__brand-name">WPRRS<br><span style="font-weight:300; font-size:0.78rem; letter-spacing:0.04em;">Western Province Rugby Referees</span></div></div><p class="footer__brand-sub">An affiliate of the Western Province Rugby Union, developing world-standard referees since 1992.</p></div>
+        <div class="footer__col"><h4>Organisation</h4><ul><li><a href="about-history.html">History</a></li><li><a href="about-governance.html">Governance</a></li><li><a href="about-code-of-conduct.html">Code of Conduct</a></li><li><a href="about-constitution.html">Constitution &amp; By-Laws</a></li><li><a href="about-honorary-members.html">Honorary Members</a></li><li><a href="about-prestige-awards.html">Prestige Awards</a></li><li><a href="about-annual-reports.html">Annual Reports</a></li></ul></div>
+        <div class="footer__col"><h4>Referees</h4><ul><li><a href="become-a-referee.html">Become a Referee</a></li><li><a href="training.html">Training</a></li><li><a href="training.html#grading">Grading System</a></li><li><a href="training.html#boksmart">BokSmart</a></li><li><a href="wprrs-platform.html">WHISTLE</a></li><li><a href="events.html">Events</a></li><li><a href="news.html">News</a></li><li><a href="shop.html">Shop</a></li><li><a href="sponsors.html">Sponsors</a></li><li><a href="gallery.html">Gallery</a></li></ul></div>
+        <div class="footer__col"><h4>Contact</h4><ul><li><a href="tel:+27216594600">021 659 4600 - WP Rugby Union</a></li><li><a href="tel:+27216594502">021 659 4502 - Referees' Office</a></li><li><a href="mailto:administration@wprugby.co.za">administration@wprugby.co.za</a></li><li><a href="mailto:smahlatsi@wprugby.co.za">smahlatsi@wprugby.co.za</a></li></ul></div>
+      </div>
+      <div class="footer__bottom"><span>© 2026 Western Province Rugby Referees' Society. All rights reserved.</span><span>Affiliated with <a href="#">Western Province Rugby Union</a></span></div>
+    </div>
+  </footer>
+
+  <script src="wprrs-shared.js" defer></script>
+
+  <script>
+    // ============================================================
+    // Platform page - sticky-scroll phone slide sync + horizontal
+    // card scroller controls + FAQ accordion
+    // ============================================================
+    (function () {
+
+      // 1. WHISTLE-promo stage controller now lives in wprrs-shared.js
+      //    (auto-attaches via #whistle-pin). No page-local JS needed for
+      //    the pinned mobile narrative.
+
+      // 2. Horizontal card scroller controls
+      const track = document.getElementById('hl-track');
+      const prevBtn = document.getElementById('hl-prev');
+      const nextBtn = document.getElementById('hl-next');
+      if (track && prevBtn && nextBtn) {
+        const updateBtns = () => {
+          prevBtn.disabled = track.scrollLeft <= 4;
+          nextBtn.disabled = track.scrollLeft >= track.scrollWidth - track.clientWidth - 4;
+        };
+        const scrollByCard = (dir) => {
+          const card = track.querySelector('article');
+          if (!card) return;
+          const cardW = card.getBoundingClientRect().width + 24;
+          track.scrollBy({ left: dir * cardW, behavior: 'smooth' });
+        };
+        prevBtn.addEventListener('click', () => scrollByCard(-1));
+        nextBtn.addEventListener('click', () => scrollByCard(1));
+        track.addEventListener('scroll', updateBtns, { passive: true });
+        updateBtns();
+      }
+
+      // 3. FAQ accordion
+      const faqList = document.getElementById('faq-list');
+      if (faqList) {
+        faqList.querySelectorAll('.p-faq__item').forEach(item => {
+          const btn = item.querySelector('.p-faq__btn');
+          btn.addEventListener('click', () => {
+            const open = item.getAttribute('aria-expanded') === 'true';
+            // Close others (single-open accordion)
+            faqList.querySelectorAll('.p-faq__item').forEach(other => {
+              if (other !== item) other.setAttribute('aria-expanded', 'false');
+            });
+            item.setAttribute('aria-expanded', open ? 'false' : 'true');
+          });
+        });
+      }
+
+    })();
+  </script>
+</body>
+</html>

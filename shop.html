@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shop — Western Province Rugby Referees' Society</title>
+  <meta name="description" content="Official Western Province Rugby Referees kit and merchandise — match-day jersey, training apparel, and Society-branded gear.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Playfair+Display:ital,wght@1,400;1,500;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="wprrs-styles.css">
+  <style>
+    /* ============================================================
+       INTRO PRELOADER — Main Logo + "Shop" H1 cascade
+       Same engine as the landing-page splash: white overlay, icon
+       scales in, the title splits per-letter and fades in on a
+       cascade, then the whole layer lifts.
+       ============================================================ */
+    body.intro-locked { overflow: hidden; }
+    .intro {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 var(--margin);
+      opacity: 1;
+      transition: opacity 1s var(--ease-p), visibility 0s linear 1s;
+    }
+    .intro.is-leaving {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .intro__icon {
+      width: clamp(220px, 22vw, 320px);
+      height: auto;
+      opacity: 0;
+      transform: scale(0.62);
+      transform-origin: center;
+      animation: introIconIn 2.6s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
+      will-change: transform, opacity;
+    }
+    @keyframes introIconIn {
+      0%   { opacity: 0; transform: scale(0.62); }
+      60%  { opacity: 1; }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    /* "Shop" H1 — sits anchored to centre-bottom of the splash, smaller
+       scale so the logo carries the composition. JS splits into per-letter
+       spans for the cascade. */
+    .intro__title {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: clamp(2.5rem, 7vh, 5.5rem);
+      text-align: center;
+      font-family: 'Raleway', sans-serif;
+      font-weight: 200;
+      font-size: clamp(1.6rem, 3.4vw, 2.8rem);
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      color: var(--navy);
+      margin: 0;
+    }
+    .intro__word {
+      display: inline-block;
+      white-space: nowrap;
+    }
+    .intro__letter {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(12px);
+      animation: introLetterIn 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      will-change: transform, opacity;
+    }
+    @keyframes introLetterIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .intro { display: none; }
+      body.intro-locked { overflow: auto; }
+    }
+
+    /* ============================================================
+       SHOP PAGE — minimal product gallery
+       Reuses the design system: editorial titles, .ed-em accent,
+       and the .product-card pattern from the homepage shop section.
+       ============================================================ */
+    .shop-page {
+      padding: clamp(7rem, 14vh, 11rem) 0 clamp(4rem, 8vh, 7rem);
+    }
+    .shop-page__head {
+      max-width: 60rem;
+      margin: 0 auto clamp(3rem, 6vh, 5rem);
+      text-align: center;
+    }
+    .shop-page__head .eyebrow { color: var(--red); }
+    .shop-page__head h1 {
+      font-size: clamp(2.6rem, 5.5vw, 5rem);
+      line-height: 1.0;
+      font-weight: 200;
+      letter-spacing: -0.025em;
+      color: var(--navy);
+      margin-top: 1rem;
+    }
+    .shop-page__head h1 .ed-em { color: var(--navy); }
+    .shop-page__head p {
+      max-width: 52ch;
+      margin: 1.5rem auto 0;
+      font-size: 1.05rem;
+      line-height: 1.65;
+      color: var(--text-secondary);
+    }
+
+    .shop-grid {
+      display: grid;
+      gap: 1.25rem;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 640px)  { .shop-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 900px)  { .shop-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (min-width: 1200px) { .shop-grid { grid-template-columns: repeat(5, 1fr); } }
+
+    .product-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      background: var(--white);
+      border: 1px solid var(--line-soft);
+      border-radius: 14px;
+      overflow: hidden;
+      isolation: isolate;
+      transition: transform 0.5s cubic-bezier(0.16,1,0.3,1),
+                  border-color 0.5s cubic-bezier(0.16,1,0.3,1),
+                  box-shadow 0.5s cubic-bezier(0.16,1,0.3,1);
+    }
+    .product-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--navy);
+      box-shadow: 0 24px 60px -28px rgba(15,18,50,0.18);
+    }
+    .product-card__media {
+      position: relative;
+      aspect-ratio: 4 / 5;
+      background: linear-gradient(180deg, #F3F4F8 0%, #E8EAF1 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .product-card__media img {
+      max-width: 78%;
+      max-height: 88%;
+      object-fit: contain;
+      transition: transform 0.7s cubic-bezier(0.16,1,0.3,1);
+      will-change: transform;
+    }
+    .product-card:hover .product-card__media img { transform: scale(1.05); }
+    .product-card__tier {
+      position: absolute;
+      top: 0.9rem;
+      left: 0.9rem;
+      font-size: 0.58rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--white);
+      background: var(--red);
+      padding: 0.32rem 0.65rem;
+      border-radius: 999px;
+      z-index: 2;
+    }
+    .product-card__body {
+      padding: 1.2rem 1.3rem 1.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+    .product-card__category {
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+    }
+    .product-card__name {
+      font-size: 1.1rem;
+      font-weight: 400;
+      line-height: 1.25;
+      color: var(--navy);
+      letter-spacing: -0.005em;
+    }
+    .product-card__price-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.6rem;
+      margin-top: 0.4rem;
+    }
+    .product-card__price {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-weight: 500;
+      font-size: 1.3rem;
+      color: var(--red);
+      letter-spacing: -0.01em;
+    }
+    .product-card__cta {
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--navy);
+      padding-bottom: 0.2rem;
+      border-bottom: 1px solid var(--navy);
+      transition: color 0.3s, border-color 0.3s;
+    }
+    .product-card:hover .product-card__cta {
+      color: var(--red);
+      border-color: var(--red);
+    }
+
+    /* Quiet info strip — three plain columns on bg-mid */
+    .shop-info {
+      background: var(--bg-mid);
+      padding: clamp(4rem, 8vh, 6rem) 0;
+    }
+    .shop-info__grid {
+      display: grid;
+      gap: clamp(2rem, 5vw, 4rem);
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 720px) { .shop-info__grid { grid-template-columns: repeat(3, 1fr); } }
+    .shop-info__card { display: flex; flex-direction: column; gap: 0.7rem; max-width: 32ch; }
+    .shop-info__kicker {
+      font-size: 0.66rem;
+      font-weight: 600;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--red);
+    }
+    .shop-info__title {
+      font-size: 1.25rem;
+      font-weight: 400;
+      color: var(--navy);
+      letter-spacing: -0.005em;
+    }
+    .shop-info__body {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
+
+    /* Reveal helpers — minimal copy of the homepage scroll-reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.85s cubic-bezier(0.16,1,0.3,1),
+                  transform 0.85s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.is-visible { opacity: 1; transform: none; }
+    .stagger-child {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1),
+                  transform 0.7s cubic-bezier(0.16,1,0.3,1);
+    }
+    .stagger-parent.is-visible .stagger-child { opacity: 1; transform: none; }
+    .stagger-parent.is-visible .stagger-child:nth-child(1) { transition-delay:   0ms; }
+    .stagger-parent.is-visible .stagger-child:nth-child(2) { transition-delay:  60ms; }
+    .stagger-parent.is-visible .stagger-child:nth-child(3) { transition-delay: 120ms; }
+    .stagger-parent.is-visible .stagger-child:nth-child(4) { transition-delay: 180ms; }
+    .stagger-parent.is-visible .stagger-child:nth-child(5) { transition-delay: 240ms; }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal, .stagger-child { opacity: 1 !important; transform: none !important; }
+    }
+  </style>
+</head>
+<body class="intro-locked">
+
+  <!-- ===== INTRO PRELOADER ===== -->
+  <div class="intro" id="intro" aria-hidden="true">
+    <img class="intro__icon" src="Main Logo_Background.png" alt="">
+    <h1 class="intro__title">Shop</h1>
+  </div>
+
+  <!-- ===== NAV (simplified, click-toggle dropdowns) ===== -->
+  <nav class="nav" id="nav">
+    <a href="wprrs-homepage-v2.html" class="nav__logo-wrap" aria-label="WPRRS home"><img src="Flower Logo.svg" class="nav__logo" alt="WPRRS"></a>
+    <ul class="nav__links">
+      <li class="has-drop"><button type="button" class="nav__trigger" aria-haspopup="menu" aria-expanded="false">About</button><div class="nav__dropdown" role="menu"><a href="about-history.html" class="dropdown-link">History</a><a href="about-governance.html" class="dropdown-link">Governance</a><a href="about-code-of-conduct.html" class="dropdown-link">Code of Conduct</a><a href="about-constitution.html" class="dropdown-link">Constitution &amp; By-Laws</a><a href="about-honorary-members.html" class="dropdown-link">Honorary Members</a><a href="about-prestige-awards.html" class="dropdown-link">Prestige Awards</a><a href="about-annual-reports.html" class="dropdown-link">Annual Reports</a></div></li>
+      <li class="has-drop"><button type="button" class="nav__trigger" aria-haspopup="menu" aria-expanded="false">Referees</button><div class="nav__dropdown" role="menu"><a href="become-a-referee.html" class="dropdown-link">Become a Referee</a><a href="training.html" class="dropdown-link">Training &amp; Development</a></div></li>
+      <li class="has-drop"><button type="button" class="nav__trigger" aria-haspopup="menu" aria-expanded="false">Resources</button><div class="nav__dropdown" role="menu"><a href="wprrs-platform.html" class="dropdown-link">App &amp; Dashboard</a><a href="resource-library.html" class="dropdown-link">Resource Library</a></div></li>
+      <li><a href="events.html">Events</a></li>
+      <li><a href="news.html">News</a></li>
+      <li><a href="shop.html">Shop</a></li>
+    </ul>
+    <div class="nav__actions">
+      <a href="https://wprrs-refhub.vercel.app/" class="nav__btn nav__btn--ghost" target="_blank" rel="noopener">Sign In</a>
+      <a href="contact.html" class="nav__btn nav__btn--filled">Contact Us</a>
+      <button class="nav__hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <div class="nav__panel" id="panel-mobile">
+    <div class="panel-items" style="flex-direction:column;">
+      <a href="about-history.html" class="panel-link">About</a>
+      <a href="become-a-referee.html" class="panel-link">Become a Referee</a>
+      <a href="training.html" class="panel-link">Training &amp; Development</a>
+      <a href="wprrs-platform.html" class="panel-link">App &amp; Dashboard</a>
+      <a href="resource-library.html" class="panel-link">Resource Library</a>
+      <a href="events.html" class="panel-link">Events</a>
+      <a href="news.html" class="panel-link">News</a>
+      <a href="shop.html" class="panel-link">Shop</a>
+      <a href="https://wprrs-refhub.vercel.app/" class="panel-link" target="_blank" rel="noopener">Sign In</a>
+      <a href="contact.html" class="panel-link">Contact Us</a>
+    </div>
+  </div>
+
+  <!-- ===== SHOP ===== -->
+  <section class="shop-page">
+    <div class="container">
+      <header class="shop-page__head reveal">
+        <span class="eyebrow">The Society shop</span>
+        <h1>Official referee <span class="ed-em">kit</span>.</h1>
+        <p>Match-day apparel, training gear, and Society-branded merchandise — produced for active members and supporters of the Western Province whistle.</p>
+      </header>
+
+      <div class="shop-grid stagger-parent reveal">
+        <a href="#" class="product-card stagger-child">
+          <div class="product-card__media">
+            <span class="product-card__tier">Match-day</span>
+            <img src="Images/shop/product-01.png" alt="Western Province referee polo shirt" loading="lazy">
+          </div>
+          <div class="product-card__body">
+            <span class="product-card__category">Apparel</span>
+            <span class="product-card__name">Match-Day Polo</span>
+            <div class="product-card__price-row">
+              <span class="product-card__price">R 595</span>
+              <span class="product-card__cta">Shop →</span>
+            </div>
+          </div>
+        </a>
+        <a href="#" class="product-card stagger-child">
+          <div class="product-card__media">
+            <span class="product-card__tier">Warm-up</span>
+            <img src="Images/shop/product-02.png" alt="Western Province referee tracksuit top" loading="lazy">
+          </div>
+          <div class="product-card__body">
+            <span class="product-card__category">Outerwear</span>
+            <span class="product-card__name">Society Tracksuit Top</span>
+            <div class="product-card__price-row">
+              <span class="product-card__price">R 1 195</span>
+              <span class="product-card__cta">Shop →</span>
+            </div>
+          </div>
+        </a>
+        <a href="#" class="product-card stagger-child">
+          <div class="product-card__media">
+            <span class="product-card__tier">On-field</span>
+            <img src="Images/shop/product-03.png" alt="Western Province referee match jersey" loading="lazy">
+          </div>
+          <div class="product-card__body">
+            <span class="product-card__category">Apparel</span>
+            <span class="product-card__name">Referee Match Jersey</span>
+            <div class="product-card__price-row">
+              <span class="product-card__price">R 795</span>
+              <span class="product-card__cta">Shop →</span>
+            </div>
+          </div>
+        </a>
+        <a href="#" class="product-card stagger-child">
+          <div class="product-card__media">
+            <span class="product-card__tier">All-weather</span>
+            <img src="Images/shop/product-04.png" alt="Western Province referee hooded softshell" loading="lazy">
+          </div>
+          <div class="product-card__body">
+            <span class="product-card__category">Outerwear</span>
+            <span class="product-card__name">Hooded Softshell</span>
+            <div class="product-card__price-row">
+              <span class="product-card__price">R 1 495</span>
+              <span class="product-card__cta">Shop →</span>
+            </div>
+          </div>
+        </a>
+        <a href="#" class="product-card stagger-child">
+          <div class="product-card__media">
+            <span class="product-card__tier">Training</span>
+            <img src="Images/shop/product-05.png" alt="Western Province referee track pants" loading="lazy">
+          </div>
+          <div class="product-card__body">
+            <span class="product-card__category">Apparel</span>
+            <span class="product-card__name">Training Track Pants</span>
+            <div class="product-card__price-row">
+              <span class="product-card__price">R 695</span>
+              <span class="product-card__cta">Shop →</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SHOP INFO ===== -->
+  <section class="shop-info">
+    <div class="container">
+      <div class="shop-info__grid">
+        <div class="shop-info__card reveal">
+          <span class="shop-info__kicker">Sizing</span>
+          <span class="shop-info__title">Built to play, not pose.</span>
+          <p class="shop-info__body">Every item is produced in junior, senior, and women's cuts. Size guides per product live on the order page; the office can advise on bulk orders for clubs.</p>
+        </div>
+        <div class="shop-info__card reveal">
+          <span class="shop-info__kicker">Shipping</span>
+          <span class="shop-info__title">Cape Town &amp; courier.</span>
+          <p class="shop-info__body">Local collection at the Referees' Office, Newlands. Province-wide courier within 3 working days. National courier on request.</p>
+        </div>
+        <div class="shop-info__card reveal">
+          <span class="shop-info__kicker">Returns</span>
+          <span class="shop-info__title">14-day exchange.</span>
+          <p class="shop-info__body">Unworn items can be exchanged for a different size within 14 days of receipt. Custom-embroidered items are non-returnable.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="cta">
+    <span class="cta__watermark" aria-hidden="true">Shop</span>
+    <div class="container">
+      <div class="cta__inner reveal">
+        <span class="eyebrow" style="color: var(--red);">Members order</span>
+        <h2 class="cta__headline">Bulk orders, club kit, <span class="ed-em">special</span> requests.</h2>
+        <p class="cta__sub">Coaches, captains, and club secretaries can order Society-branded kit at member rates. Contact the office to set up a club account or request a quote.</p>
+        <div class="cta__actions">
+          <a href="contact.html" class="btn btn--primary">Speak to the office</a>
+          <a href="https://wprrs-refhub.vercel.app/" class="btn btn--on-dark" target="_blank" rel="noopener">Members area</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__inner">
+        <div class="footer__brand-block">
+          <div class="footer__brand">
+            <img src="Flower Logo.svg" alt="">
+            <div class="footer__brand-name">WPRRS<br><span style="font-weight:300; font-size:0.78rem; letter-spacing:0.04em;">Western Province Rugby Referees</span></div>
+          </div>
+          <p class="footer__brand-sub">An affiliate of the Western Province Rugby Union, developing world-standard referees since 1992.</p>
+        </div>
+        <div class="footer__col">
+          <h4>Organisation</h4>
+          <ul>
+            <li><a href="about-history.html">History</a></li>
+            <li><a href="about-governance.html">Governance</a></li>
+            <li><a href="about-code-of-conduct.html">Code of Conduct</a></li>
+            <li><a href="about-constitution.html">Constitution &amp; By-Laws</a></li>
+            <li><a href="about-honorary-members.html">Honorary Members</a></li>
+            <li><a href="about-prestige-awards.html">Prestige Awards</a></li>
+            <li><a href="about-annual-reports.html">Annual Reports</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h4>Referees</h4>
+          <ul>
+            <li><a href="become-a-referee.html">Become a Referee</a></li>
+            <li><a href="training.html">Training</a></li>
+            <li><a href="wprrs-platform.html">WHISTLE</a></li>
+            <li><a href="resource-library.html">Resource Library</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="news.html">News</a></li>
+            <li><a href="sponsors.html">Sponsors</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h4>Contact</h4>
+          <ul>
+            <li><a href="tel:0216594600">021 659 4600 — WP Rugby Union</a></li>
+            <li><a href="tel:0216594502">021 659 4502 — Referees' Office</a></li>
+            <li><a href="mailto:administration@wprugby.co.za">administration@wprugby.co.za</a></li>
+            <li><a href="mailto:smahlatsi@wprugby.co.za">smahlatsi@wprugby.co.za</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <span>© 2026 Western Province Rugby Referees' Society. All rights reserved.</span>
+        <span>Affiliated with <a href="#">Western Province Rugby Union</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="wprrs-shared.js"></script>
+  <script>
+    // ============================================================
+    // INTRO SPLASH — splits "Shop" into per-letter spans, dismisses
+    // the overlay after a brief hold. Same engine as the landing
+    // page splash, scaled down to the shop's shorter title.
+    // ============================================================
+    (function () {
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const splash  = document.getElementById('intro');
+      const title   = document.querySelector('.intro__title');
+      if (!splash || !title) return;
+
+      // Split "Shop" into letter spans with per-letter animation-delay.
+      // 80ms between letters; cascade starts in sync with the logo
+      // (0.5s delay) so the two read as one orchestrated reveal.
+      const PER_LETTER_MS = 80;
+      const START_MS = 500;
+      (function buildTitle() {
+        const original = title.textContent.trim();
+        const words = original.split(/\s+/);
+        let letterIdx = 0;
+        const html = words.map(word => {
+          const letters = Array.from(word).map(ch => {
+            const safe  = ch.replace(/[<>&]/g, m => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[m]));
+            const delay = ((START_MS + letterIdx * PER_LETTER_MS) / 1000).toFixed(3);
+            letterIdx++;
+            return '<span class="intro__letter" style="animation-delay:' + delay + 's">' + safe + '</span>';
+          }).join('');
+          return '<span class="intro__word">' + letters + '</span>';
+        }).join(' ');
+        title.innerHTML = html;
+      })();
+
+      const INTRO_HOLD_MS = 3000;
+      const INTRO_LIFT_MS = 1000;
+
+      function dismiss() {
+        splash.classList.add('is-leaving');
+        setTimeout(() => {
+          document.body.classList.remove('intro-locked');
+          if (splash && splash.parentNode) splash.parentNode.removeChild(splash);
+        }, INTRO_LIFT_MS);
+      }
+
+      if (reduced) {
+        document.body.classList.remove('intro-locked');
+        splash.remove();
+      } else if (document.readyState === 'complete') {
+        setTimeout(dismiss, INTRO_HOLD_MS);
+      } else {
+        window.addEventListener('load', () => setTimeout(dismiss, INTRO_HOLD_MS));
+      }
+    })();
+
+    // Scroll reveal — fires once each .reveal/.stagger-parent enters view
+    (function () {
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!reduced && 'IntersectionObserver' in window) {
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach(e => {
+            if (e.isIntersecting) {
+              e.target.classList.add('is-visible');
+              io.unobserve(e.target);
+            }
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+        document.querySelectorAll('.reveal, .stagger-parent').forEach(el => io.observe(el));
+      } else {
+        document.querySelectorAll('.reveal, .stagger-parent').forEach(el => el.classList.add('is-visible'));
+      }
+    })();
+  </script>
+</body>
+</html>

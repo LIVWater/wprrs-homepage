@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Events &amp; Calendar — Western Province Rugby Referees' Society</title>
+  <meta name="description" content="Upcoming training, fitness testing, certification courses, and society events across Western Province.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Playfair+Display:ital,wght@1,400;1,500;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="wprrs-styles.css">
+  <style>
+    /* ============================================================
+       CALENDAR VIEWS — List / Week / Month / Year toggle + grids
+       ============================================================ */
+
+    /* View toggle */
+    .cal-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.6rem;
+    }
+    .cal-views {
+      display: inline-flex;
+      align-items: center;
+      gap: 0;
+      padding: 4px;
+      background: var(--bg-mid);
+      border: 1px solid var(--line-soft);
+      border-radius: 999px;
+    }
+    .cal-view-btn {
+      font: inherit;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      background: transparent;
+      border: none;
+      padding: 0.55rem 1.1rem;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: color 0.25s, background 0.25s;
+    }
+    .cal-view-btn:hover { color: var(--navy); }
+    .cal-view-btn.is-active {
+      color: var(--white);
+      background: var(--navy);
+    }
+    .cal-view-btn:focus-visible {
+      outline: 2px solid var(--blue-light);
+      outline-offset: 2px;
+    }
+
+    /* Date navigator */
+    .cal-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .cal-nav__btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--white);
+      color: var(--navy);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.25s, color 0.25s, border-color 0.25s;
+    }
+    .cal-nav__btn:hover { background: var(--navy); color: var(--white); border-color: var(--navy); }
+    .cal-nav__btn svg { width: 14px; height: 14px; }
+    .cal-nav__today {
+      padding: 0 1rem;
+      height: 38px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--white);
+      color: var(--navy);
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.25s, color 0.25s, border-color 0.25s;
+    }
+    .cal-nav__today:hover { background: var(--navy); color: var(--white); border-color: var(--navy); }
+    .cal-nav__label {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-weight: 500;
+      font-size: 1.4rem;
+      color: var(--navy);
+      letter-spacing: -0.01em;
+      padding: 0 0.6rem;
+      min-width: 12rem;
+      text-align: center;
+    }
+
+    /* Panels — only the active one is shown */
+    .cal-panel[hidden] { display: none; }
+
+    /* Category color tokens (one accent per category) */
+    .cal-cat-development { --cat-color: var(--blue-light); }
+    .cal-cat-fitness     { --cat-color: var(--navy); }
+    .cal-cat-beginners   { --cat-color: #3DA85A; }
+    .cal-cat-certification { --cat-color: var(--red); }
+    .cal-cat-festival    { --cat-color: #C8642E; }
+    .cal-cat-society     { --cat-color: #6B4FA0; }
+
+    /* ===== Week view ===== */
+    .cal-week {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 1px;
+      background: var(--line-soft);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      min-height: 32rem;
+    }
+    .cal-week__col {
+      background: var(--white);
+      display: flex;
+      flex-direction: column;
+      min-height: 28rem;
+    }
+    .cal-week__col--today { background: rgba(19,175,240,0.04); }
+    .cal-week__day-head {
+      padding: 0.9rem 0.8rem 0.6rem;
+      border-bottom: 1px solid var(--line-soft);
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+    .cal-week__weekday {
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+    }
+    .cal-week__day-num {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-weight: 500;
+      font-size: 1.4rem;
+      line-height: 1;
+      color: var(--navy);
+    }
+    .cal-week__col--today .cal-week__day-num { color: var(--red); }
+    .cal-week__events { padding: 0.6rem 0.6rem 0.9rem; display: flex; flex-direction: column; gap: 0.4rem; }
+    .cal-week__event {
+      background: var(--bg-mid);
+      border-left: 3px solid var(--cat-color, var(--navy));
+      border-radius: 6px;
+      padding: 0.55rem 0.65rem;
+      font-size: 0.74rem;
+      line-height: 1.25;
+      color: var(--navy);
+      cursor: default;
+      transition: transform 0.25s var(--ease-r);
+    }
+    .cal-week__event:hover { transform: translateY(-1px); }
+    .cal-week__event-title { font-weight: 500; }
+    .cal-week__event-meta {
+      margin-top: 0.2rem;
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--cat-color, var(--text-tertiary));
+      font-weight: 600;
+    }
+
+    /* ===== Month view ===== */
+    .cal-month {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 1px;
+      background: var(--line-soft);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+    }
+    .cal-month__weekday {
+      background: var(--bg-mid);
+      padding: 0.7rem 0.6rem;
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      text-align: left;
+    }
+    .cal-month__cell {
+      background: var(--white);
+      min-height: 7rem;
+      padding: 0.6rem 0.55rem 0.7rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      position: relative;
+      transition: background 0.25s;
+    }
+    .cal-month__cell--other { background: var(--bg-mid); }
+    .cal-month__cell--other .cal-month__cell-num { color: var(--text-tertiary); }
+    .cal-month__cell--today { background: rgba(19,175,240,0.06); }
+    .cal-month__cell--today .cal-month__cell-num { color: var(--red); }
+    .cal-month__cell-num {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-weight: 500;
+      font-size: 1.05rem;
+      line-height: 1;
+      color: var(--navy);
+    }
+    .cal-month__events {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    .cal-month__pill {
+      background: var(--bg-mid);
+      border-left: 3px solid var(--cat-color, var(--navy));
+      border-radius: 4px;
+      padding: 0.3rem 0.45rem;
+      font-size: 0.66rem;
+      line-height: 1.2;
+      color: var(--navy);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    @media (max-width: 720px) {
+      .cal-month__cell { min-height: 4.5rem; padding: 0.4rem 0.35rem 0.5rem; }
+      .cal-month__pill { font-size: 0; padding: 0; height: 6px; border-left: 0; background: var(--cat-color, var(--navy)); border-radius: 999px; }
+    }
+
+    /* ===== Year view ===== */
+    .cal-year {
+      display: grid;
+      gap: 1.2rem;
+      grid-template-columns: repeat(2, 1fr);
+    }
+    @media (min-width: 720px) { .cal-year { grid-template-columns: repeat(3, 1fr); } }
+    @media (min-width: 1100px) { .cal-year { grid-template-columns: repeat(4, 1fr); } }
+    .cal-year__month {
+      background: var(--white);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-card);
+      padding: 1rem 1rem 1.1rem;
+      cursor: pointer;
+      transition: border-color 0.25s, transform 0.25s var(--ease-r);
+    }
+    .cal-year__month:hover { border-color: var(--navy); transform: translateY(-2px); }
+    .cal-year__month-name {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-weight: 500;
+      font-size: 1.2rem;
+      color: var(--navy);
+      letter-spacing: -0.01em;
+      margin-bottom: 0.5rem;
+    }
+    .cal-year__count {
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      float: right;
+    }
+    .cal-year__grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 3px;
+    }
+    .cal-year__weekday {
+      font-size: 0.55rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      text-align: center;
+    }
+    .cal-year__day {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.62rem;
+      color: var(--text-secondary);
+      border-radius: 50%;
+      position: relative;
+    }
+    .cal-year__day--other { color: var(--text-tertiary); opacity: 0.35; }
+    .cal-year__day--event {
+      background: var(--cat-color, var(--navy));
+      color: var(--white);
+      font-weight: 600;
+    }
+    .cal-year__day--today { outline: 1.5px solid var(--red); outline-offset: 1px; }
+
+    /* Empty state */
+    .cal-empty {
+      text-align: center;
+      padding: 4rem 1.5rem;
+      color: var(--text-tertiary);
+      font-size: 0.92rem;
+    }
+
+    /* Hide the original events-list when not in list view */
+    .events-section[data-view="week"] .events-list,
+    .events-section[data-view="month"] .events-list,
+    .events-section[data-view="year"] .events-list {
+      display: none;
+    }
+    /* Hide the date navigator when in list view */
+    .events-section[data-view="list"] .cal-nav { display: none; }
+  </style>
+</head>
+<body>
+
+  <nav class="nav" id="nav">
+    <a href="wprrs-homepage-v2.html" class="nav__logo-wrap" aria-label="WPRRS home"><img src="Flower Logo.svg" class="nav__logo" alt="WPRRS"></a>
+    <ul class="nav__links">
+      <li class="has-drop"><button type="button" class="nav__trigger" aria-haspopup="menu" aria-expanded="false">About</button><div class="nav__dropdown" role="menu"><a href="about-history.html" class="dropdown-link">History</a><a href="about-governance.html" class="dropdown-link">Governance</a><a href="about-code-of-conduct.html" class="dropdown-link">Code of Conduct</a><a href="about-constitution.html" class="dropdown-link">Constitution &amp; By-Laws</a><a href="about-honorary-members.html" class="dropdown-link">Honorary Members</a><a href="about-prestige-awards.html" class="dropdown-link">Prestige Awards</a><a href="about-annual-reports.html" class="dropdown-link">Annual Reports</a></div></li>
+      <li class="has-drop"><button type="button" class="nav__trigger" aria-haspopup="menu" aria-expanded="false">Referees</button><div class="nav__dropdown" role="menu"><a href="become-a-referee.html" class="dropdown-link">Become a Referee</a><a href="training.html" class="dropdown-link">Training &amp; Development</a></div></li>
+      <li class="has-drop"><button type="button" class="nav__trigger" aria-haspopup="menu" aria-expanded="false">Resources</button><div class="nav__dropdown" role="menu"><a href="wprrs-platform.html" class="dropdown-link">App &amp; Dashboard</a><a href="resource-library.html" class="dropdown-link">Resource Library</a></div></li>
+      <li><a href="events.html">Events</a></li>
+      <li><a href="wprrs-homepage-v2.html#news">News</a></li><li><a href="shop.html">Shop</a></li>
+    </ul>
+    <div class="nav__actions">
+      <a href="https://wprrs-refhub.vercel.app/" class="nav__btn nav__btn--ghost" target="_blank" rel="noopener">Sign In</a>
+      <a href="contact.html" class="nav__btn nav__btn--filled">Contact Us</a>
+      <button class="nav__hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <div class="nav__panel" id="panel-mobile"><div class="panel-items"><a href="about-history.html" class="panel-link">About</a><a href="become-a-referee.html" class="panel-link">Become a Referee</a><a href="training.html" class="panel-link">Training &amp; Development</a><a href="wprrs-platform.html" class="panel-link">App &amp; Dashboard</a><a href="resource-library.html" class="panel-link">Resource Library</a><a href="events.html" class="panel-link">Events</a><a href="news.html" class="panel-link">News</a><a href="shop.html" class="panel-link">Shop</a><a href="https://wprrs-refhub.vercel.app/" class="panel-link" target="_blank" rel="noopener">Sign In</a><a href="contact.html" class="panel-link">Contact Us</a></div></div>
+
+  <section class="page-hero">
+    <span class="page-hero__watermark" aria-hidden="true">Calendar</span>
+    <div class="page-hero__inner">
+      <span class="page-hero__crumb"><a href="wprrs-homepage-v2.html">Home</a><span class="sep">/</span>Events</span>
+      <h1 class="page-hero__title">Calendar of <span class="ed-em">events</span>.</h1>
+      <p class="page-hero__sub">Training sessions, certification courses, fitness testing, and society gatherings — published a season ahead so you can plan around your refereeing.</p>
+    </div>
+  </section>
+
+  <!-- ===== UPCOMING ===== -->
+  <section class="section section--pt-lg section--pb-lg events-section" data-view="list" id="events-section">
+    <div class="container">
+      <div class="events-header reveal">
+        <h2>Upcoming <span class="ed-em">events</span></h2>
+        <a href="#" class="view-all">Subscribe to calendar →</a>
+      </div>
+
+      <!-- View toolbar: View toggle (left) + date navigator (right) -->
+      <div class="cal-toolbar reveal">
+        <div class="cal-views" role="tablist" aria-label="Calendar view">
+          <button type="button" class="cal-view-btn is-active" data-view="list">List</button>
+          <button type="button" class="cal-view-btn" data-view="week">Week</button>
+          <button type="button" class="cal-view-btn" data-view="month">Month</button>
+          <button type="button" class="cal-view-btn" data-view="year">Year</button>
+        </div>
+        <div class="cal-nav">
+          <button type="button" class="cal-nav__btn" id="cal-prev" aria-label="Previous">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          <button type="button" class="cal-nav__today" id="cal-today">Today</button>
+          <span class="cal-nav__label" id="cal-label">—</span>
+          <button type="button" class="cal-nav__btn" id="cal-next" aria-label="Next">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Calendar panels (Week/Month/Year rendered by JS into these containers) -->
+      <div class="cal-panel" id="cal-week-panel" hidden></div>
+      <div class="cal-panel" id="cal-month-panel" hidden></div>
+      <div class="cal-panel" id="cal-year-panel" hidden></div>
+
+      <div class="chip-row reveal" data-chip-group=".event-row[data-cat]">
+        <button class="chip is-active" data-chip="all">All</button>
+        <button class="chip" data-chip="development">Development</button>
+        <button class="chip" data-chip="fitness">Fitness</button>
+        <button class="chip" data-chip="beginners">Beginners</button>
+        <button class="chip" data-chip="certification">Certification</button>
+        <button class="chip" data-chip="festival">Festival</button>
+        <button class="chip" data-chip="society">Society</button>
+      </div>
+      <div class="events-list">
+        <div class="event-row reveal" data-cat="development">
+          <div class="event-row__date"><span class="event-row__day">07</span><span class="event-row__month">Sep</span></div>
+          <div class="event-row__info"><h3>Regional Coaching Sessions</h3><p>Across all regions — venues confirmed with registered referees</p></div>
+          <span class="event-row__pill">Development</span>
+        </div>
+        <div class="event-row reveal" data-cat="fitness">
+          <div class="event-row__date"><span class="event-row__day">14</span><span class="event-row__month">Sep</span></div>
+          <div class="event-row__info"><h3>Annual Fitness Testing — YOYO 15 &amp; YOYO 17</h3><p>Mandatory assessment for all active referees</p></div>
+          <span class="event-row__pill">Fitness</span>
+        </div>
+        <div class="event-row reveal" data-cat="beginners">
+          <div class="event-row__date"><span class="event-row__day">20</span><span class="event-row__month">Sep</span></div>
+          <div class="event-row__info"><h3>Beginners Course — Intake 3</h3><p>Open to all new applicants in Western Province</p></div>
+          <span class="event-row__pill">Beginners</span>
+        </div>
+        <div class="event-row reveal" data-cat="certification">
+          <div class="event-row__date"><span class="event-row__day">27</span><span class="event-row__month">Sep</span></div>
+          <div class="event-row__info"><h3>World Rugby Level 1 Certification</h3><p>Cape Town — limited places, registration required</p></div>
+          <span class="event-row__pill">Certification</span>
+        </div>
+        <div class="event-row reveal" data-cat="festival">
+          <div class="event-row__date"><span class="event-row__day">04</span><span class="event-row__month">Oct</span></div>
+          <div class="event-row__info"><h3>Strand HS 7s Rugby Festival</h3><p>Strand — appointments open to graded members</p></div>
+          <span class="event-row__pill">Festival</span>
+        </div>
+        <div class="event-row reveal" data-cat="certification">
+          <div class="event-row__date"><span class="event-row__day">11</span><span class="event-row__month">Oct</span></div>
+          <div class="event-row__info"><h3>BokSmart Accreditation Course</h3><p>Newlands — re-certification window for current members</p></div>
+          <span class="event-row__pill">Certification</span>
+        </div>
+        <div class="event-row reveal" data-cat="development">
+          <div class="event-row__date"><span class="event-row__day">19</span><span class="event-row__month">Oct</span></div>
+          <div class="event-row__info"><h3>Match Reviewing Workshop</h3><p>For Division 3+ — preparing for season-end appraisals</p></div>
+          <span class="event-row__pill">Development</span>
+        </div>
+        <div class="event-row reveal" data-cat="society">
+          <div class="event-row__date"><span class="event-row__day">02</span><span class="event-row__month">Nov</span></div>
+          <div class="event-row__info"><h3>Awards Evening &amp; Annual Dinner</h3><p>Recognising the season's outstanding members</p></div>
+          <span class="event-row__pill">Society</span>
+        </div>
+        <div class="event-row reveal" data-cat="certification">
+          <div class="event-row__date"><span class="event-row__day">09</span><span class="event-row__month">Nov</span></div>
+          <div class="event-row__info"><h3>World Rugby Level 2 — Senior Cohort</h3><p>Two-day in-person course for nominated active members</p></div>
+          <span class="event-row__pill">Certification</span>
+        </div>
+        <div class="event-row reveal" data-cat="society">
+          <div class="event-row__date"><span class="event-row__day">23</span><span class="event-row__month">Nov</span></div>
+          <div class="event-row__info"><h3>Annual General Meeting</h3><p>All members — Newlands Terraces, 18:00</p></div>
+          <span class="event-row__pill">Society</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== STANDING SCHEDULES ===== -->
+  <section class="section section--mid section--pt-lg section--pb-lg">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Standing Schedules</span>
+        <h2>Recurring through the <span class="ed-em">season</span>.</h2>
+        <p>Beyond the calendar above, several activities happen on a recurring basis. Regional coaches confirm exact times and venues with their members each week.</p>
+      </div>
+      <div class="contact-grid reveal">
+        <div class="contact-block">
+          <h3>Weekly regional sessions</h3>
+          <p><strong>Monday &amp; Wednesday evenings</strong> across most regions during the playing season. Coaches confirm times and venues with their members directly.</p>
+        </div>
+        <div class="contact-block">
+          <h3>Virtual meetings</h3>
+          <p><strong>Every second Tuesday — 19:30</strong> via Microsoft Teams. Open to all active members. Recordings circulated after each session.</p>
+        </div>
+        <div class="contact-block">
+          <h3>Match assessor briefings</h3>
+          <p><strong>Monthly</strong> for senior assessors and Division 1 referees. Focus on emerging law interpretations and refereeing protocols.</p>
+        </div>
+        <div class="contact-block">
+          <h3>Junior development squads</h3>
+          <p><strong>Saturdays</strong> at selected venues. Targeted programme for promising junior referees aged 14–18.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="cta">
+    <span class="cta__watermark" aria-hidden="true">Join</span>
+    <div class="container">
+      <div class="cta__inner reveal">
+        <span class="eyebrow" style="color: var(--blue-light);">Don't miss out</span>
+        <h2 class="cta__headline">Subscribe to the <span class="ed-em">calendar</span>.</h2>
+        <p class="cta__sub">All registered members receive event updates by email and SMS. Update your contact preferences in WHISTLE or reach the office to subscribe.</p>
+        <div class="cta__actions">
+          <a href="https://wprrs-refhub.vercel.app/" class="btn btn--primary" target="_blank" rel="noopener">Open WHISTLE</a>
+          <a href="contact.html" class="btn btn--on-dark">Contact the office</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__inner">
+        <div class="footer__brand-block"><div class="footer__brand"><img src="Flower Logo.svg" alt=""><div class="footer__brand-name">WPRRS<br><span style="font-weight:300; font-size:0.78rem; letter-spacing:0.04em;">Western Province Rugby Referees</span></div></div><p class="footer__brand-sub">An affiliate of the Western Province Rugby Union, developing world-standard referees since 1992.</p></div>
+        <div class="footer__col"><h4>Organisation</h4><ul><li><a href="about-history.html">History</a></li><li><a href="about-governance.html">Governance</a></li><li><a href="about-code-of-conduct.html">Code of Conduct</a></li><li><a href="about-constitution.html">Constitution &amp; By-Laws</a></li><li><a href="about-honorary-members.html">Honorary Members</a></li><li><a href="about-prestige-awards.html">Prestige Awards</a></li><li><a href="about-annual-reports.html">Annual Reports</a></li></ul></div>
+        <div class="footer__col"><h4>Referees</h4><ul><li><a href="become-a-referee.html">Become a Referee</a></li><li><a href="training.html">Training</a></li><li><a href="training.html#grading">Grading System</a></li><li><a href="training.html#boksmart">BokSmart</a></li><li><a href="wprrs-platform.html">WHISTLE</a></li><li><a href="events.html">Events</a></li></ul></div>
+        <div class="footer__col"><h4>Contact</h4><ul><li><a href="tel:+27216594600">021 659 4600 — WP Rugby Union</a></li><li><a href="tel:+27216594502">021 659 4502 — Referees' Office</a></li><li><a href="mailto:administration@wprugby.co.za">administration@wprugby.co.za</a></li><li><a href="mailto:smahlatsi@wprugby.co.za">smahlatsi@wprugby.co.za</a></li></ul></div>
+      </div>
+      <div class="footer__bottom"><span>© 2026 Western Province Rugby Referees' Society. All rights reserved.</span><span>Affiliated with <a href="#">Western Province Rugby Union</a></span></div>
+    </div>
+  </footer>
+
+  <script src="wprrs-shared.js" defer></script>
+
+  <script>
+    // ============================================================
+    // CALENDAR VIEWS — Week / Month / Year
+    // ============================================================
+    (function () {
+      const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      const MONTH_LONG = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+      const WEEKDAY_SHORT = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+      const monthIdx = (s) => MONTH_NAMES.indexOf(s);
+      const ASSUMED_YEAR = 2026; // Static demo data — events live in this year
+
+      // --- Parse events from the existing static list HTML -----------------
+      const events = Array.from(document.querySelectorAll('.event-row[data-cat]')).map(row => {
+        const day = parseInt(row.querySelector('.event-row__day').textContent.trim(), 10);
+        const monStr = row.querySelector('.event-row__month').textContent.trim();
+        const m = monthIdx(monStr.slice(0,3));
+        const title = row.querySelector('.event-row__info h3').textContent.trim();
+        const info = row.querySelector('.event-row__info p').textContent.trim();
+        const cat = row.dataset.cat;
+        return { date: new Date(ASSUMED_YEAR, m, day), title, info, cat };
+      }).filter(e => !isNaN(e.date));
+
+      // --- State -----------------------------------------------------------
+      const section = document.getElementById('events-section');
+      const label = document.getElementById('cal-label');
+      const wkPanel = document.getElementById('cal-week-panel');
+      const moPanel = document.getElementById('cal-month-panel');
+      const yrPanel = document.getElementById('cal-year-panel');
+      let view = 'list';
+      let cursor = new Date(ASSUMED_YEAR, 8, 7); // Sep 7, 2026 — first event
+
+      // --- Utilities -------------------------------------------------------
+      function startOfWeek(d) {
+        const out = new Date(d);
+        const day = (out.getDay() + 6) % 7; // Mon = 0
+        out.setDate(out.getDate() - day);
+        out.setHours(0,0,0,0);
+        return out;
+      }
+      function addDays(d, n) { const o = new Date(d); o.setDate(o.getDate()+n); return o; }
+      function sameDay(a,b) { return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate(); }
+      function sameYMD(a,b) { return sameDay(a,b); }
+      function eventsOn(d) { return events.filter(e => sameDay(e.date, d)); }
+
+      // --- Renderers -------------------------------------------------------
+      function renderWeek() {
+        const start = startOfWeek(cursor);
+        const today = new Date();
+        let html = '';
+        for (let i = 0; i < 7; i++) {
+          const d = addDays(start, i);
+          const isToday = sameDay(d, today);
+          const dayEvents = eventsOn(d);
+          html += '<div class="cal-week__col ' + (isToday ? 'cal-week__col--today' : '') + '">';
+          html += '<div class="cal-week__day-head"><span class="cal-week__weekday">' + WEEKDAY_SHORT[i] + '</span><span class="cal-week__day-num">' + d.getDate() + '</span></div>';
+          html += '<div class="cal-week__events">';
+          for (const ev of dayEvents) {
+            html += '<div class="cal-week__event cal-cat-' + ev.cat + '"><div class="cal-week__event-title">' + ev.title + '</div><div class="cal-week__event-meta">' + ev.cat + '</div></div>';
+          }
+          html += '</div></div>';
+        }
+        wkPanel.innerHTML = '<div class="cal-week">' + html + '</div>';
+        const end = addDays(start, 6);
+        label.textContent = start.getDate() + ' ' + MONTH_NAMES[start.getMonth()] + ' – ' + end.getDate() + ' ' + MONTH_NAMES[end.getMonth()] + ' ' + start.getFullYear();
+      }
+
+      function renderMonth() {
+        const year = cursor.getFullYear();
+        const month = cursor.getMonth();
+        const firstOfMonth = new Date(year, month, 1);
+        const gridStart = startOfWeek(firstOfMonth);
+        const today = new Date();
+        let html = '';
+        for (const w of WEEKDAY_SHORT) html += '<div class="cal-month__weekday">' + w + '</div>';
+        // 6 rows = 42 cells covers every month
+        for (let i = 0; i < 42; i++) {
+          const d = addDays(gridStart, i);
+          const isOther = d.getMonth() !== month;
+          const isToday = sameDay(d, today);
+          const dayEvents = eventsOn(d);
+          const classes = ['cal-month__cell'];
+          if (isOther) classes.push('cal-month__cell--other');
+          if (isToday) classes.push('cal-month__cell--today');
+          html += '<div class="' + classes.join(' ') + '">';
+          html += '<span class="cal-month__cell-num">' + d.getDate() + '</span>';
+          if (dayEvents.length) {
+            html += '<div class="cal-month__events">';
+            for (const ev of dayEvents) {
+              html += '<div class="cal-month__pill cal-cat-' + ev.cat + '" title="' + ev.title.replace(/"/g,'&quot;') + '">' + ev.title + '</div>';
+            }
+            html += '</div>';
+          }
+          html += '</div>';
+        }
+        moPanel.innerHTML = '<div class="cal-month">' + html + '</div>';
+        label.textContent = MONTH_LONG[month] + ' ' + year;
+      }
+
+      function renderYear() {
+        const year = cursor.getFullYear();
+        const today = new Date();
+        let html = '';
+        for (let m = 0; m < 12; m++) {
+          const firstOfMonth = new Date(year, m, 1);
+          const gridStart = startOfWeek(firstOfMonth);
+          const monthEvents = events.filter(e => e.date.getFullYear() === year && e.date.getMonth() === m);
+          html += '<div class="cal-year__month" data-month="' + m + '">';
+          html += '<span class="cal-year__count">' + (monthEvents.length || 0) + (monthEvents.length === 1 ? ' event' : ' events') + '</span>';
+          html += '<div class="cal-year__month-name">' + MONTH_LONG[m] + '</div>';
+          html += '<div class="cal-year__grid">';
+          for (const w of WEEKDAY_SHORT) html += '<div class="cal-year__weekday">' + w[0] + '</div>';
+          // up to 6 rows × 7 days
+          for (let i = 0; i < 42; i++) {
+            const d = addDays(gridStart, i);
+            const isOther = d.getMonth() !== m;
+            const isToday = sameDay(d, today);
+            const dayEvents = eventsOn(d);
+            const classes = ['cal-year__day'];
+            if (isOther) classes.push('cal-year__day--other');
+            if (isToday) classes.push('cal-year__day--today');
+            if (dayEvents.length) classes.push('cal-year__day--event', 'cal-cat-' + dayEvents[0].cat);
+            const title = dayEvents.length ? ' title="' + dayEvents.map(e => e.title).join(', ').replace(/"/g,'&quot;') + '"' : '';
+            // Only show day numbers for current-month cells; keep grid layout
+            const content = isOther ? '' : d.getDate();
+            html += '<div class="' + classes.join(' ') + '"' + title + '>' + content + '</div>';
+          }
+          html += '</div></div>';
+        }
+        yrPanel.innerHTML = '<div class="cal-year">' + html + '</div>';
+        label.textContent = String(year);
+
+        // Click month tile → switch to month view
+        yrPanel.querySelectorAll('.cal-year__month').forEach(el => {
+          el.addEventListener('click', () => {
+            const m = parseInt(el.dataset.month, 10);
+            cursor = new Date(year, m, 1);
+            setView('month');
+          });
+        });
+      }
+
+      // --- View management -------------------------------------------------
+      function showPanel() {
+        wkPanel.hidden = view !== 'week';
+        moPanel.hidden = view !== 'month';
+        yrPanel.hidden = view !== 'year';
+      }
+      function render() {
+        if (view === 'week') renderWeek();
+        else if (view === 'month') renderMonth();
+        else if (view === 'year') renderYear();
+        else label.textContent = '—';
+      }
+      function setView(v) {
+        view = v;
+        section.dataset.view = v;
+        document.querySelectorAll('.cal-view-btn').forEach(b => b.classList.toggle('is-active', b.dataset.view === v));
+        showPanel();
+        render();
+      }
+
+      // --- Navigation handlers ---------------------------------------------
+      document.querySelectorAll('.cal-view-btn').forEach(b => {
+        b.addEventListener('click', () => setView(b.dataset.view));
+      });
+      document.getElementById('cal-prev').addEventListener('click', () => {
+        if (view === 'week') cursor = addDays(cursor, -7);
+        else if (view === 'month') cursor = new Date(cursor.getFullYear(), cursor.getMonth() - 1, 1);
+        else if (view === 'year') cursor = new Date(cursor.getFullYear() - 1, 0, 1);
+        render();
+      });
+      document.getElementById('cal-next').addEventListener('click', () => {
+        if (view === 'week') cursor = addDays(cursor, 7);
+        else if (view === 'month') cursor = new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1);
+        else if (view === 'year') cursor = new Date(cursor.getFullYear() + 1, 0, 1);
+        render();
+      });
+      document.getElementById('cal-today').addEventListener('click', () => {
+        cursor = new Date();
+        render();
+      });
+
+      // Initial paint — render all so the cached HTML is ready when toggled
+      renderWeek();
+      renderMonth();
+      renderYear();
+      showPanel();
+    })();
+  </script>
+</body>
+</html>

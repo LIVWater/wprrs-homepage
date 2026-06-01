@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Become a Referee — Western Province Rugby Referees' Society</title>
+  <meta name="description" content="Aged 16+, male or female — take up the whistle. Application steps, fees, training pathway, and what to expect as a Western Province referee.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Playfair+Display:ital,wght@1,400;1,500;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="wprrs-styles.css">
+  <style>
+    /* Step CTAs (per-step button row) */
+    .step__cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 1.2rem;
+    }
+    .step__cta-row .btn {
+      font-size: 0.65rem;
+      padding: 0.65rem 1.2rem;
+    }
+
+    /* ============================================================
+       APPLICATION MODAL — full form with payment options
+       ============================================================ */
+    .apply-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(15, 18, 50, 0.55);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.35s var(--ease-p), visibility 0s linear 0.35s;
+    }
+    .apply-modal.is-open {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.35s var(--ease-p);
+    }
+    .apply-modal__panel {
+      position: relative;
+      max-width: 44rem;
+      width: 100%;
+      max-height: 92vh;
+      background: var(--white);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      isolation: isolate;
+      display: flex;
+      flex-direction: column;
+      transform: scale(0.96) translateY(20px);
+      opacity: 0;
+      transition: transform 0.45s var(--ease-r), opacity 0.4s var(--ease-p);
+    }
+    .apply-modal.is-open .apply-modal__panel {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+    }
+    .apply-modal__panel::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: var(--red);
+      z-index: 2;
+    }
+    .apply-modal__head {
+      padding: 2rem 2rem 1.2rem;
+      border-bottom: 1px solid var(--line-soft);
+      flex-shrink: 0;
+    }
+    .apply-modal__close {
+      position: absolute;
+      top: 1.1rem;
+      right: 1.1rem;
+      width: 2.2rem;
+      height: 2.2rem;
+      border-radius: 50%;
+      border: none;
+      background: transparent;
+      color: var(--text-tertiary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.25s, background 0.25s;
+      z-index: 3;
+    }
+    .apply-modal__close:hover { color: var(--navy); background: var(--bg-mid); }
+    .apply-modal__close svg { width: 14px; height: 14px; }
+    .apply-modal__kicker {
+      font-size: 0.66rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--red);
+      display: block;
+      margin-bottom: 0.6rem;
+    }
+    .apply-modal__title {
+      font-family: 'Raleway', sans-serif;
+      font-weight: 200;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      line-height: 1.05;
+      letter-spacing: -0.018em;
+      color: var(--navy);
+      margin-bottom: 0.5rem;
+    }
+    .apply-modal__title .ed-em { color: var(--navy); }
+    .apply-modal__sub {
+      font-size: 0.94rem;
+      line-height: 1.55;
+      color: var(--text-secondary);
+    }
+    .apply-modal__body {
+      padding: 1.5rem 2rem 2rem;
+      overflow-y: auto;
+      flex: 1;
+    }
+    @media (max-width: 600px) {
+      .apply-modal { padding: 0; }
+      .apply-modal__panel { max-height: 100vh; max-height: 100dvh; height: 100%; border-radius: 0; }
+      .apply-modal__head { padding: 1.5rem 1.25rem 1rem; }
+      .apply-modal__body { padding: 1.2rem 1.25rem 1.5rem; }
+    }
+
+    /* Section grouping inside the modal */
+    .apply-modal__section {
+      margin-top: 1.6rem;
+    }
+    .apply-modal__section:first-child { margin-top: 0; }
+    .apply-modal__section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.9rem;
+    }
+    .apply-modal__section-head h4 {
+      font-family: 'Raleway', sans-serif;
+      font-weight: 500;
+      font-size: 1rem;
+      color: var(--navy);
+      letter-spacing: -0.005em;
+    }
+    .apply-modal__section-head .label {
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+    }
+
+    /* Payment-method radio cards */
+    .pay-methods {
+      display: grid;
+      gap: 0.7rem;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 640px) { .pay-methods { grid-template-columns: 1fr 1fr; } }
+    .pay-method {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.7rem;
+      padding: 1rem 1.1rem;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--white);
+      cursor: pointer;
+      transition: border-color 0.25s, background 0.25s;
+    }
+    .pay-method:hover { border-color: var(--navy); }
+    .pay-method input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .pay-method__mark {
+      flex-shrink: 0;
+      width: 1.1rem;
+      height: 1.1rem;
+      margin-top: 0.15rem;
+      border: 1.5px solid var(--line);
+      border-radius: 50%;
+      position: relative;
+      transition: border-color 0.25s;
+    }
+    .pay-method__mark::after {
+      content: '';
+      position: absolute;
+      inset: 3px;
+      border-radius: 50%;
+      background: var(--red);
+      opacity: 0;
+      transform: scale(0.6);
+      transition: opacity 0.25s, transform 0.25s var(--ease-r);
+    }
+    .pay-method input[type="radio"]:checked ~ .pay-method__body .pay-method__mark { border-color: var(--red); }
+    .pay-method input[type="radio"]:checked + .pay-method__body .pay-method__mark { border-color: var(--red); }
+    .pay-method:has(input:checked) { border-color: var(--red); background: rgba(218,29,39,0.03); }
+    .pay-method:has(input:checked) .pay-method__mark { border-color: var(--red); }
+    .pay-method:has(input:checked) .pay-method__mark::after { opacity: 1; transform: scale(1); }
+    .pay-method__body {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+      flex: 1;
+    }
+    .pay-method__name {
+      font-size: 0.92rem;
+      font-weight: 500;
+      color: var(--navy);
+      letter-spacing: -0.005em;
+    }
+    .pay-method__meta {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+    .pay-method__logos {
+      display: flex;
+      gap: 0.3rem;
+      align-items: center;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+    .pay-method__chip {
+      font-size: 0.58rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--navy);
+      background: var(--bg-mid);
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+    }
+    .pay-method__chip--red { background: var(--red); color: var(--white); }
+    .pay-method__chip--blue { background: var(--blue-light); color: var(--white); }
+    .pay-method__chip--green { background: #3DA85A; color: var(--white); }
+
+    /* Conditional detail panels per payment method */
+    .pay-detail {
+      display: none;
+      margin-top: 1rem;
+      padding: 1.1rem;
+      background: var(--bg-mid);
+      border-radius: 10px;
+      font-size: 0.86rem;
+      line-height: 1.55;
+      color: var(--text-secondary);
+    }
+    .pay-detail.is-active { display: block; }
+    .pay-detail strong { color: var(--navy); font-weight: 500; }
+    .pay-detail-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.8rem;
+      padding: 0.35rem 0;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .pay-detail-row:last-child { border-bottom: none; }
+    .pay-detail-row span:first-child { color: var(--text-tertiary); letter-spacing: 0.04em; }
+    .pay-detail-row span:last-child { color: var(--navy); font-weight: 500; }
+
+    /* Fee summary */
+    .apply-fee {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.1rem 1.3rem;
+      background: var(--navy-deep);
+      color: var(--white);
+      border-radius: 12px;
+      margin-top: 1.4rem;
+    }
+    .apply-fee__label {
+      font-size: 0.66rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+    }
+    .apply-fee__amount {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-weight: 500;
+      font-size: 1.8rem;
+      color: var(--white);
+      line-height: 1;
+    }
+    .apply-fee__note {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.5;
+      max-width: 22ch;
+      text-align: right;
+    }
+
+    /* Modal form actions */
+    .apply-modal__actions {
+      display: flex;
+      gap: 0.7rem;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 1.6rem;
+    }
+    .apply-modal__actions .btn { padding: 0.95rem 1.7rem; font-size: 0.7rem; }
+    .apply-modal__note {
+      font-size: 0.78rem;
+      color: var(--text-tertiary);
+      max-width: 30ch;
+      line-height: 1.5;
+    }
+
+    /* Success state */
+    .apply-modal__success {
+      display: none;
+      padding: 2.5rem 2rem 2rem;
+      text-align: center;
+    }
+    .apply-modal__success-icon {
+      width: 4rem;
+      height: 4rem;
+      border-radius: 50%;
+      background: rgba(61,168,90,0.12);
+      color: #3DA85A;
+      margin: 0 auto 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .apply-modal__success-icon svg { width: 1.5rem; height: 1.5rem; }
+    .apply-modal__success h4 {
+      font-family: 'Raleway', sans-serif;
+      font-weight: 300;
+      font-size: clamp(1.4rem, 2.2vw, 1.8rem);
+      color: var(--navy);
+      margin-bottom: 0.6rem;
+      letter-spacing: -0.012em;
+    }
+    .apply-modal__success p {
+      font-size: 0.96rem;
+      line-height: 1.65;
+      color: var(--text-secondary);
+      max-width: 36ch;
+      margin: 0 auto 1.5rem;
+    }
+    .apply-modal.is-submitted .apply-modal__head,
+    .apply-modal.is-submitted .apply-modal__body { display: none; }
+    .apply-modal.is-submitted .apply-modal__success { display: block; }
+  </style>
+</head>
+<body>
+
+  <nav class="nav" id="nav">
+    <a href="wprrs-homepage-v2.html" class="nav__logo-wrap" aria-label="WPRRS home">
+      <img src="Flower Logo.svg" class="nav__logo" alt="WPRRS">
+    </a>
+    <ul class="nav__links">
+      <li class="has-drop">
+        <button type="button" class="nav__trigger" aria-haspopup="menu" aria-expanded="false">About</button>
+        <div class="nav__dropdown" role="menu">
+          <a href="about-history.html" class="dropdown-link">History</a>
+          <a href="about-governance.html" class="dropdown-link">Governance</a>
+          <a href="about-code-of-conduct.html" class="dropdown-link">Code of Conduct</a>
+          <a href="about-constitution.html" class="dropdown-link">Constitution &amp; By-Laws</a>
+          <a href="about-honorary-members.html" class="dropdown-link">Honorary Members</a>
+          <a href="about-prestige-awards.html" class="dropdown-link">Prestige Awards</a>
+          <a href="about-annual-reports.html" class="dropdown-link">Annual Reports</a>
+        </div>
+      </li>
+      <li class="has-drop">
+        <button type="button" class="nav__trigger" aria-haspopup="menu" aria-expanded="false">Referees</button>
+        <div class="nav__dropdown" role="menu">
+          <a href="become-a-referee.html" class="dropdown-link">Become a Referee</a>
+          <a href="training.html" class="dropdown-link">Training &amp; Development</a>
+        </div>
+      </li>
+      <li class="has-drop">
+        <button type="button" class="nav__trigger" aria-haspopup="menu" aria-expanded="false">Resources</button>
+        <div class="nav__dropdown" role="menu">
+          <a href="wprrs-platform.html" class="dropdown-link">App &amp; Dashboard</a>
+          <a href="resource-library.html" class="dropdown-link">Resource Library</a>
+        </div>
+      </li>
+      <li><a href="events.html">Events</a></li>
+      <li><a href="wprrs-homepage-v2.html#news">News</a></li><li><a href="shop.html">Shop</a></li>
+    </ul>
+    <div class="nav__actions">
+      <a href="https://wprrs-refhub.vercel.app/" class="nav__btn nav__btn--ghost" target="_blank" rel="noopener">Sign In</a>
+      <a href="contact.html" class="nav__btn nav__btn--filled">Contact Us</a>
+      <button class="nav__hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="nav__panel" id="panel-mobile">
+    <div class="panel-items" style="flex-direction:column;">
+      <a href="about-history.html" class="panel-link">About</a>
+      <a href="become-a-referee.html" class="panel-link">Become a Referee</a>
+      <a href="training.html" class="panel-link">Training &amp; Development</a>
+      <a href="wprrs-platform.html" class="panel-link">App &amp; Dashboard</a>
+      <a href="resource-library.html" class="panel-link">Resource Library</a>
+      <a href="events.html" class="panel-link">Events</a>
+      <a href="news.html" class="panel-link">News</a><a href="shop.html" class="panel-link">Shop</a>
+      <a href="https://wprrs-refhub.vercel.app/" class="panel-link" target="_blank" rel="noopener">Sign In</a>
+      <a href="contact.html" class="panel-link">Contact Us</a>
+    </div>
+  </div>
+
+  <section class="page-hero">
+    <span class="page-hero__watermark" aria-hidden="true">Whistle</span>
+    <div class="page-hero__inner">
+      <span class="page-hero__crumb">
+        <a href="wprrs-homepage-v2.html">Home</a><span class="sep">/</span><a href="become-a-referee.html">Referees</a><span class="sep">/</span>Become a Referee
+      </span>
+      <h1 class="page-hero__title">Take up <span class="ed-em">the</span> whistle.</h1>
+      <p class="page-hero__sub">Aged 16 or older, male or female — if you love rugby and want to give back to the game, here is everything you need to start the journey.</p>
+    </div>
+  </section>
+
+  <!-- ===== WHY REFEREE ===== -->
+  <section class="section section--brand section--pt-lg section--pb-lg">
+    <div class="container">
+      <div class="quote reveal">
+        <div class="quote__dots"><span></span><span></span></div>
+        <p>The whistle is a different way to stay in the game — one that often opens more doors than playing ever did.</p>
+      </div>
+      <p class="quote__body reveal">Refereeing keeps you on the field after your playing days end, lets you give back to a sport that gave you so much, and — for those with the drive — opens a pathway to provincial, national, and international honours that most players never reach.</p>
+    </div>
+  </section>
+
+  <!-- ===== WHY (numbered cards) ===== -->
+  <section class="section section--pt-lg section--pb-lg">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Why become a referee</span>
+        <h2>Five good <span class="ed-em">reasons</span>.</h2>
+      </div>
+      <div class="values__grid stagger-parent" style="grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));">
+        <div class="value-card stagger-child" style="background:var(--bg-mid); border-color:var(--line-soft);">
+          <div class="value-card__idx">01</div>
+          <div class="value-card__name" style="color:var(--navy);">Stay in the game</div>
+          <p class="value-card__desc" style="color:var(--text-secondary);">When your playing career ends — by choice or injury — the whistle keeps you connected to the sport you love.</p>
+        </div>
+        <div class="value-card stagger-child" style="background:var(--bg-mid); border-color:var(--line-soft);">
+          <div class="value-card__idx">02</div>
+          <div class="value-card__name" style="color:var(--navy);">Give back</div>
+          <p class="value-card__desc" style="color:var(--text-secondary);">Every match needs an official. Rugby relies on volunteers and full-time refs to keep grassroots competition alive.</p>
+        </div>
+        <div class="value-card stagger-child" style="background:var(--bg-mid); border-color:var(--line-soft);">
+          <div class="value-card__idx">03</div>
+          <div class="value-card__name" style="color:var(--navy);">A second pathway</div>
+          <p class="value-card__desc" style="color:var(--text-secondary);">Many refs reach higher honours than they ever did as players — from Currie Cup to international Test rugby.</p>
+        </div>
+        <div class="value-card stagger-child" style="background:var(--bg-mid); border-color:var(--line-soft);">
+          <div class="value-card__idx">04</div>
+          <div class="value-card__name" style="color:var(--navy);">Be a leader</div>
+          <p class="value-card__desc" style="color:var(--text-secondary);">A ref runs 30 players' game. The decision-making, fitness, and presence build skills that transfer far beyond the pitch.</p>
+        </div>
+        <div class="value-card stagger-child" style="background:var(--bg-mid); border-color:var(--line-soft);">
+          <div class="value-card__idx">05</div>
+          <div class="value-card__name" style="color:var(--navy);">Earn while you ref</div>
+          <p class="value-card__desc" style="color:var(--text-secondary);">Graded referees receive match-day payments. Reach higher divisions and the financial return scales with you.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== APPLICATION STEPS ===== -->
+  <section class="section section--mid section--pt-lg section--pb-lg" id="how">
+    <div class="container">
+      <div class="split">
+        <div class="split__aside reveal">
+          <span class="eyebrow">How to apply</span>
+          <h2>Five steps to <span class="ed-em">the</span> first match.</h2>
+          <p>The application process is structured so that by your first appointment you've completed safety certification, World Rugby online qualifications, and Level 1 training. Plan around three to six weeks.</p>
+        </div>
+        <div class="reveal">
+          <div class="steps">
+            <div class="step">
+              <span class="step__num">01</span>
+              <div class="step__body">
+                <h3 class="step__title">Submit your application</h3>
+                <p>Open the application form below, fill in your details, choose a membership tier, and pay the R250 registration fee in the same flow. The recruitment team confirms receipt and your Level 1 cohort within two working days.</p>
+                <ul>
+                  <li>R250 once-off registration</li>
+                  <li>Pay by EFT, card, SnapScan or Zapper</li>
+                  <li>Choose Standby or Active membership</li>
+                </ul>
+                <div class="step__cta-row">
+                  <button type="button" class="btn btn--primary" id="apply-open">Open application form</button>
+                  <a href="contact.html" class="btn btn--secondary">Talk to the recruitment team</a>
+                </div>
+              </div>
+            </div>
+            <div class="step">
+              <span class="step__num">02</span>
+              <div class="step__body">
+                <h3 class="step__title">Complete the World Rugby online courses</h3>
+                <p>Free, online, and worked through at your own pace. Create your World Rugby Passport account and complete all three modules.</p>
+                <ul>
+                  <li>Rugby Ready</li>
+                  <li>Introduction to Rugby Refereeing</li>
+                  <li>Laws of the Game</li>
+                </ul>
+                <div class="step__cta-row">
+                  <a href="https://passport.world.rugby" target="_blank" rel="noopener" class="btn btn--primary">Open World Rugby Passport</a>
+                  <a href="useful-links.html#laws" class="btn btn--secondary">Law references</a>
+                </div>
+              </div>
+            </div>
+            <div class="step">
+              <span class="step__num">03</span>
+              <div class="step__body">
+                <h3 class="step__title">Send through your certificates</h3>
+                <p>Download the electronic certificates from your World Rugby Passport and forward copies to the recruitment team. Three addresses ensure none get missed.</p>
+                <ul>
+                  <li><a href="mailto:recruitmentrefs@wprugby.co.za">recruitmentrefs@wprugby.co.za</a></li>
+                  <li><a href="mailto:fsaid@wprugby.co.za">fsaid@wprugby.co.za</a></li>
+                  <li><a href="mailto:btheron@wprugby.co.za">btheron@wprugby.co.za</a></li>
+                </ul>
+                <div class="step__cta-row">
+                  <a href="mailto:recruitmentrefs@wprugby.co.za?subject=World%20Rugby%20certificates%20-%20WPRRS%20application&amp;body=Hi%20recruitment%20team%2C%0A%0AAttached%20are%20my%20completed%20World%20Rugby%20certificates%3A%20Rugby%20Ready%2C%20Introduction%20to%20Rugby%20Refereeing%2C%20Laws%20of%20the%20Game.%0A%0AFull%20name%3A%0AID%2FPassport%3A%0ARegion%3A%0A%0AThank%20you." class="btn btn--primary">Email certificates</a>
+                  <a href="contact.html" class="btn btn--secondary">Office contact</a>
+                </div>
+              </div>
+            </div>
+            <div class="step">
+              <span class="step__num">04</span>
+              <div class="step__body">
+                <h3 class="step__title">Complete BokSmart certification</h3>
+                <p>BokSmart is non-negotiable — every coach, referee and player support official must hold a valid BokSmart accreditation to enter the playing enclosure. We run accreditation courses several times a year.</p>
+                <div class="step__cta-row">
+                  <a href="https://my.boksmart.com" target="_blank" rel="noopener" class="btn btn--primary">Start MyBokSmart</a>
+                  <a href="events.html" class="btn btn--secondary">Upcoming WPRRS courses</a>
+                </div>
+              </div>
+            </div>
+            <div class="step">
+              <span class="step__num">05</span>
+              <div class="step__body">
+                <h3 class="step__title">World Rugby Level 1 with WPRRS</h3>
+                <p>Once your online courses are complete, you'll join a Level 1 cohort run by the Society. This is where you bridge theory to the field — practical scenarios, signals, positioning, and a real test in match conditions.</p>
+                <div class="step__cta-row">
+                  <a href="events.html" class="btn btn--primary">Next Level 1 cohort</a>
+                  <a href="training.html" class="btn btn--secondary">Training pathway</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== WHAT TO EXPECT ===== -->
+  <section class="section section--pt-lg section--pb-lg">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">After Level 1</span>
+        <h2>What happens <span class="ed-em">next</span>.</h2>
+        <p>Qualification is the beginning, not the end. The grading system rewards consistent on-field performance, fitness, and law knowledge — and the pathway leads directly to provincial and national appointments for those who put in the work.</p>
+      </div>
+      <div class="what">
+        <div class="what__sticky reveal">
+          <span class="eyebrow">The pathway</span>
+          <h2>From <span class="ed-em">first</span> match to international ref.</h2>
+        </div>
+        <div class="what__list">
+          <div class="what-card reveal">
+            <div class="what-card__num">01</div>
+            <div class="what-card__body">
+              <h3>Active or Standby</h3>
+              <p>Choose your starting tier. Standby refs are appointed to their own club's home games. Active members are graded and appointed across the Province based on fitness and exam marks.</p>
+              <span class="what-card__tag">Membership</span>
+            </div>
+          </div>
+          <div class="what-card reveal">
+            <div class="what-card__num">02</div>
+            <div class="what-card__body">
+              <h3>Regional coaching</h3>
+              <p>Each region has a dedicated coach who runs sessions, reviews your matches, and gives feedback. This is where the on-field craft actually develops.</p>
+              <a href="contact.html#reg-coach-contact" class="what-card__link">Find your regional coach →</a>
+              <span class="what-card__tag">Development</span>
+            </div>
+          </div>
+          <div class="what-card reveal">
+            <div class="what-card__num">03</div>
+            <div class="what-card__body">
+              <h3>Grade up</h3>
+              <p>Three measurable elements determine promotion: fitness test results, examination marks, and on-field performance reviews. Hit the criteria, you move up a division.</p>
+              <a href="training.html#grading" class="what-card__link">Grading system →</a>
+              <span class="what-card__tag">Grading</span>
+            </div>
+          </div>
+          <div class="what-card reveal">
+            <div class="what-card__num">04</div>
+            <div class="what-card__body">
+              <h3>Provincial &amp; national</h3>
+              <p>From Division 1 the path opens to the SARRA National Panel and national appointments. Western Province has produced Currie Cup, Test, and international referees — the pathway is real.</p>
+              <span class="what-card__tag">National</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ELIGIBILITY + FEES ===== -->
+  <section class="section section--mid section--pt-lg section--pb-lg">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Eligibility &amp; fees</span>
+        <h2>The simple <span class="ed-em">requirements</span>.</h2>
+      </div>
+      <div class="contact-grid reveal">
+        <div class="contact-block">
+          <h3>Who can apply</h3>
+          <p>Anyone aged <strong>16 or older</strong>. We actively recruit female and male applicants from across Western Province — no playing experience required.</p>
+        </div>
+        <div class="contact-block">
+          <h3>Registration fee</h3>
+          <p><strong>R250 once-off</strong> on application. Banking details are included on the application form. Proof of payment must accompany your submission.</p>
+        </div>
+        <div class="contact-block">
+          <h3>Two membership tiers</h3>
+          <p><strong>Standby Referees</strong> — appointed to home games at your own club.<br>
+          <strong>Active Referees</strong> — graded and appointed across the Province by fitness and exam marks.</p>
+        </div>
+        <div class="contact-block">
+          <h3>Application forms</h3>
+          <p><a href="#">Junior application (14–18 years) →</a><br>
+          <a href="#">Senior application →</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="cta">
+    <span class="cta__watermark" aria-hidden="true">Apply</span>
+    <div class="container">
+      <div class="cta__inner reveal">
+        <span class="eyebrow" style="color: var(--blue-light);">Get started</span>
+        <h2 class="cta__headline">Apply <span class="ed-em">now</span>.</h2>
+        <p class="cta__sub">Send your completed form and proof of payment to the recruitment team. We'll come back to you with the next intake date and a Level 1 cohort start.</p>
+        <div class="cta__actions">
+          <a href="mailto:recruitmentrefs@wprugby.co.za" class="btn btn--primary">Email recruitment</a>
+          <a href="contact.html" class="btn btn--on-dark">Speak to the office</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__inner">
+        <div class="footer__brand-block">
+          <div class="footer__brand">
+            <img src="Flower Logo.svg" alt="">
+            <div class="footer__brand-name">WPRRS<br><span style="font-weight:300; font-size:0.78rem; letter-spacing:0.04em;">Western Province Rugby Referees</span></div>
+          </div>
+          <p class="footer__brand-sub">An affiliate of the Western Province Rugby Union, developing world-standard referees since 1992.</p>
+        </div>
+        <div class="footer__col">
+          <h4>Organisation</h4>
+          <ul>
+            <li><a href="about-history.html">History</a></li>
+            <li><a href="about-governance.html">Governance</a></li>
+            <li><a href="about-code-of-conduct.html">Code of Conduct</a></li>
+            <li><a href="about-constitution.html">Constitution &amp; By-Laws</a></li>
+            <li><a href="about-honorary-members.html">Honorary Members</a></li>
+            <li><a href="about-prestige-awards.html">Prestige Awards</a></li>
+            <li><a href="about-annual-reports.html">Annual Reports</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h4>Referees</h4>
+          <ul>
+            <li><a href="become-a-referee.html">Become a Referee</a></li>
+            <li><a href="training.html">Training</a></li>
+            <li><a href="training.html#grading">Grading System</a></li>
+            <li><a href="training.html#boksmart">BokSmart</a></li>
+            <li><a href="wprrs-platform.html">WHISTLE</a></li>
+            <li><a href="events.html">Events</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h4>Contact</h4>
+          <ul>
+            <li><a href="tel:+27216594600">021 659 4600 — WP Rugby Union</a></li>
+            <li><a href="tel:+27216594502">021 659 4502 — Referees' Office</a></li>
+            <li><a href="mailto:administration@wprugby.co.za">administration@wprugby.co.za</a></li>
+            <li><a href="mailto:smahlatsi@wprugby.co.za">smahlatsi@wprugby.co.za</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <span>© 2026 Western Province Rugby Referees' Society. All rights reserved.</span>
+        <span>Affiliated with <a href="#">Western Province Rugby Union</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== APPLICATION MODAL ===== -->
+  <div class="apply-modal" id="apply-modal" role="dialog" aria-modal="true" aria-labelledby="apply-modal-title" hidden>
+    <div class="apply-modal__panel">
+      <button type="button" class="apply-modal__close" id="apply-modal-close" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <div class="apply-modal__head">
+        <span class="apply-modal__kicker">Apply to the Society</span>
+        <h2 class="apply-modal__title" id="apply-modal-title">Become a <span class="ed-em">referee</span>.</h2>
+        <p class="apply-modal__sub">Fill in your details, choose a membership tier, and pay the R250 registration fee. We confirm receipt and the date of your next Level 1 cohort within two working days.</p>
+      </div>
+
+      <div class="apply-modal__body">
+        <form class="form" id="apply-form" novalidate>
+
+          <!-- ===== Personal details ===== -->
+          <div class="apply-modal__section">
+            <div class="apply-modal__section-head">
+              <h4>About you</h4>
+              <span class="label">Step 1 of 3</span>
+            </div>
+            <div class="form__row form__row--2">
+              <div class="form__field">
+                <label class="form__label" for="apply-first">First name</label>
+                <input class="form__input" type="text" id="apply-first" name="first_name" autocomplete="given-name" required>
+              </div>
+              <div class="form__field">
+                <label class="form__label" for="apply-last">Last name</label>
+                <input class="form__input" type="text" id="apply-last" name="last_name" autocomplete="family-name" required>
+              </div>
+            </div>
+            <div class="form__row form__row--2">
+              <div class="form__field">
+                <label class="form__label" for="apply-email">Email</label>
+                <input class="form__input" type="email" id="apply-email" name="email" autocomplete="email" required>
+              </div>
+              <div class="form__field">
+                <label class="form__label" for="apply-phone">Mobile</label>
+                <input class="form__input" type="tel" id="apply-phone" name="phone" autocomplete="tel" required>
+              </div>
+            </div>
+            <div class="form__row form__row--2">
+              <div class="form__field">
+                <label class="form__label" for="apply-age">Age</label>
+                <select class="form__select" id="apply-age" name="age_group" required>
+                  <option value="">Select</option>
+                  <option>14 – 18 (Junior)</option>
+                  <option>19 – 25</option>
+                  <option>26 – 40</option>
+                  <option>41+</option>
+                </select>
+              </div>
+              <div class="form__field">
+                <label class="form__label" for="apply-region">Region</label>
+                <select class="form__select" id="apply-region" name="region" required>
+                  <option value="">Select</option>
+                  <option>Khayelitsha</option>
+                  <option>Parow</option>
+                  <option>Brackenfell</option>
+                  <option>Langa</option>
+                  <option>Stellenbosch</option>
+                  <option>Wynberg</option>
+                  <option>Helderberg</option>
+                  <option>Paarl</option>
+                  <option>Table View</option>
+                  <option>Other / undecided</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== Membership ===== -->
+          <div class="apply-modal__section">
+            <div class="apply-modal__section-head">
+              <h4>Membership</h4>
+              <span class="label">Step 2 of 3</span>
+            </div>
+            <div class="form__row form__row--2">
+              <div class="form__field">
+                <label class="form__label" for="apply-type">Membership tier</label>
+                <select class="form__select" id="apply-type" name="membership" required>
+                  <option value="">Select</option>
+                  <option>Active (graded, all WP fixtures)</option>
+                  <option>Standby (own club home games)</option>
+                  <option>Not sure yet</option>
+                </select>
+              </div>
+              <div class="form__field">
+                <label class="form__label" for="apply-experience">Playing experience</label>
+                <select class="form__select" id="apply-experience" name="experience">
+                  <option value="">Select</option>
+                  <option>None</option>
+                  <option>Schools rugby</option>
+                  <option>Club rugby</option>
+                  <option>Provincial / higher</option>
+                </select>
+              </div>
+            </div>
+            <div class="form__field">
+              <label class="form__label" for="apply-notes">Anything we should know? (optional)</label>
+              <textarea class="form__textarea" id="apply-notes" name="notes" rows="2" style="min-height: 4.5rem;"></textarea>
+            </div>
+          </div>
+
+          <!-- ===== Payment ===== -->
+          <div class="apply-modal__section">
+            <div class="apply-modal__section-head">
+              <h4>Payment method</h4>
+              <span class="label">Step 3 of 3</span>
+            </div>
+            <div class="pay-methods" id="pay-methods">
+              <label class="pay-method">
+                <input type="radio" name="payment_method" value="eft" required checked>
+                <span class="pay-method__mark"></span>
+                <span class="pay-method__body">
+                  <span class="pay-method__name">EFT / Bank transfer</span>
+                  <span class="pay-method__meta">Pay directly into the Society's account.</span>
+                </span>
+                <span class="pay-method__logos">
+                  <span class="pay-method__chip">EFT</span>
+                </span>
+              </label>
+              <label class="pay-method">
+                <input type="radio" name="payment_method" value="card">
+                <span class="pay-method__mark"></span>
+                <span class="pay-method__body">
+                  <span class="pay-method__name">Credit / Debit card</span>
+                  <span class="pay-method__meta">Secure card payment via PayFast.</span>
+                </span>
+                <span class="pay-method__logos">
+                  <span class="pay-method__chip pay-method__chip--blue">VISA</span>
+                  <span class="pay-method__chip pay-method__chip--red">MC</span>
+                </span>
+              </label>
+              <label class="pay-method">
+                <input type="radio" name="payment_method" value="snapscan">
+                <span class="pay-method__mark"></span>
+                <span class="pay-method__body">
+                  <span class="pay-method__name">SnapScan</span>
+                  <span class="pay-method__meta">Scan the QR code with the SnapScan app.</span>
+                </span>
+                <span class="pay-method__logos">
+                  <span class="pay-method__chip pay-method__chip--red">Snap</span>
+                </span>
+              </label>
+              <label class="pay-method">
+                <input type="radio" name="payment_method" value="zapper">
+                <span class="pay-method__mark"></span>
+                <span class="pay-method__body">
+                  <span class="pay-method__name">Zapper</span>
+                  <span class="pay-method__meta">Scan the QR code with the Zapper app.</span>
+                </span>
+                <span class="pay-method__logos">
+                  <span class="pay-method__chip pay-method__chip--green">Zap</span>
+                </span>
+              </label>
+            </div>
+
+            <!-- EFT details (shown when EFT selected) -->
+            <div class="pay-detail is-active" data-pay-detail="eft">
+              <strong style="display:block; margin-bottom: 0.6rem;">Banking details</strong>
+              <div class="pay-detail-row"><span>Account name</span><span>WPRRS - Recruitment</span></div>
+              <div class="pay-detail-row"><span>Bank</span><span>Standard Bank</span></div>
+              <div class="pay-detail-row"><span>Branch code</span><span>051001</span></div>
+              <div class="pay-detail-row"><span>Account number</span><span>271 845 902</span></div>
+              <div class="pay-detail-row"><span>Reference</span><span>Your full name</span></div>
+              <p style="margin-top:0.7rem; font-size:0.8rem; color:var(--text-tertiary);">Upload proof of payment after submitting this form. The recruitment team will email instructions.</p>
+            </div>
+            <div class="pay-detail" data-pay-detail="card">
+              You'll be redirected to PayFast's secure payment page after submitting this form. Card details never touch the Society's servers.
+            </div>
+            <div class="pay-detail" data-pay-detail="snapscan">
+              A SnapScan QR code will appear on the next screen. Open the SnapScan app on your phone, scan the code, and confirm the R250 payment. We receive confirmation instantly.
+            </div>
+            <div class="pay-detail" data-pay-detail="zapper">
+              A Zapper QR code will appear on the next screen. Open the Zapper app, scan the code, and confirm the R250 payment. We receive confirmation instantly.
+            </div>
+          </div>
+
+          <!-- ===== Fee summary ===== -->
+          <div class="apply-fee">
+            <div>
+              <div class="apply-fee__label">Registration fee</div>
+              <div class="apply-fee__amount">R 250.00</div>
+            </div>
+            <div class="apply-fee__note">Once-off. No annual subscription on top.</div>
+          </div>
+
+          <div class="apply-modal__actions">
+            <button class="btn btn--primary" type="submit">Submit &amp; pay</button>
+            <button type="button" class="btn btn--secondary" id="apply-modal-cancel">Cancel</button>
+            <span class="apply-modal__note">Your details stay with the Society. POPIA-aligned.</span>
+          </div>
+        </form>
+      </div>
+
+      <!-- Success state (shown after submit) -->
+      <div class="apply-modal__success" id="apply-modal-success" role="status">
+        <div class="apply-modal__success-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <h4>Application started.</h4>
+        <p>We've received your details. The recruitment team will email you within two working days with payment confirmation and the date of your next Level 1 cohort.</p>
+        <button type="button" class="btn btn--primary" id="apply-modal-done">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="wprrs-shared.js" defer></script>
+
+  <script>
+    // Step 01 — application modal + payment method handling
+    (function () {
+      const openBtn = document.getElementById('apply-open');
+      const modal = document.getElementById('apply-modal');
+      const closeBtn = document.getElementById('apply-modal-close');
+      const cancelBtn = document.getElementById('apply-modal-cancel');
+      const doneBtn = document.getElementById('apply-modal-done');
+      const form = document.getElementById('apply-form');
+      if (!openBtn || !modal || !form) return;
+
+      function open() {
+        modal.hidden = false;
+        modal.offsetHeight; // force layout so the transition fires
+        modal.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => closeBtn && closeBtn.focus(), 50);
+      }
+      function close() {
+        modal.classList.remove('is-open');
+        document.body.style.overflow = '';
+        setTimeout(() => {
+          modal.hidden = true;
+          // Reset the form so the next open is fresh
+          modal.classList.remove('is-submitted');
+          form.reset();
+          // Restore the default-active EFT detail panel
+          document.querySelectorAll('.pay-detail').forEach(d => d.classList.toggle('is-active', d.dataset.payDetail === 'eft'));
+        }, 380);
+      }
+
+      openBtn.addEventListener('click', open);
+      closeBtn.addEventListener('click', close);
+      cancelBtn.addEventListener('click', close);
+      doneBtn.addEventListener('click', close);
+      modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('is-open')) close();
+      });
+
+      // Switch detail panel when payment method changes
+      document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
+        radio.addEventListener('change', () => {
+          const v = radio.value;
+          document.querySelectorAll('.pay-detail').forEach(d => d.classList.toggle('is-active', d.dataset.payDetail === v));
+        });
+      });
+
+      // Form submit — lightweight validation + swap to success state
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const required = form.querySelectorAll('[required]');
+        let ok = true;
+        for (const f of required) {
+          const filled = f.type === 'radio'
+            ? form.querySelector('input[name="' + f.name + '"]:checked')
+            : (f.value && String(f.value).trim());
+          if (!filled) {
+            ok = false;
+            if (f.type !== 'radio') f.style.borderColor = 'var(--red)';
+          } else if (f.type !== 'radio') {
+            f.style.borderColor = '';
+          }
+        }
+        if (!ok) {
+          const firstBad = form.querySelector('[style*="--red"]') || form.querySelector('[required]');
+          if (firstBad) firstBad.focus();
+          return;
+        }
+        // UI shell — wire to backend (PayFast / SnapScan / Zapper API
+        // or a form-handling service) here. For EFT, the success copy
+        // already tells the user what to do next.
+        modal.classList.add('is-submitted');
+        document.getElementById('apply-modal-success').scrollIntoView({ block: 'center' });
+        if (doneBtn) doneBtn.focus();
+      });
+      form.querySelectorAll('input, select, textarea').forEach(f => {
+        f.addEventListener('input', () => { f.style.borderColor = ''; });
+        f.addEventListener('change', () => { f.style.borderColor = ''; });
+      });
+    })();
+  </script>
+</body>
+</html>

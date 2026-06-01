@@ -496,6 +496,58 @@
       background: rgba(218, 29, 39, 0.04);
       padding-left: calc(var(--margin) + 0.6rem);
     }
+    /* Panel accordion sections (mobile — mirrors desktop dropdowns) */
+    .panel-section { border-bottom: 1px solid var(--line-soft); }
+    .panel-section:last-of-type { border-bottom: none; }
+    .panel-section__toggle {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      padding: 0.95rem var(--margin);
+      font-size: 0.78rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      color: var(--text-secondary);
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      transition: color 0.25s var(--ease-p), background 0.25s var(--ease-p);
+    }
+    .panel-section__toggle:hover,
+    .panel-section__toggle[aria-expanded="true"] { color: var(--red); }
+    .panel-section__chevron {
+      flex-shrink: 0;
+      width: 14px; height: 14px;
+      transition: transform 0.28s var(--ease-p);
+      color: inherit;
+    }
+    .panel-section__toggle[aria-expanded="true"] .panel-section__chevron {
+      transform: rotate(180deg);
+    }
+    .panel-section__links {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.32s var(--ease-p);
+      background: rgba(22, 28, 73, 0.025);
+    }
+    .panel-section__links.is-open { max-height: 500px; }
+    .panel-sub-link {
+      display: block;
+      padding: 0.7rem var(--margin) 0.7rem calc(var(--margin) + 1.1rem);
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
+      color: var(--text-secondary);
+      border-top: 1px solid var(--line-soft);
+      transition: color 0.2s var(--ease-p), background 0.2s var(--ease-p), padding-left 0.2s var(--ease-p);
+    }
+    .panel-sub-link:hover {
+      color: var(--red);
+      background: rgba(218, 29, 39, 0.04);
+      padding-left: calc(var(--margin) + 1.7rem);
+    }
+    .panel-sub-link.is-current { color: var(--red); font-weight: 500; }
     /* Disable boxed dropdowns at mobile breakpoint (drawer takes over) */
     @media (max-width: 920px) {
       .nav__dropdown { display: none; }
@@ -3465,16 +3517,62 @@
 
   <!-- Mobile panel -->
   <div class="nav__panel" id="panel-mobile">
-    <div class="panel-items" style="flex-direction:column;">
-      <a href="about-history.html" class="panel-link">About</a>
-      <a href="become-a-referee.html" class="panel-link">Become a Referee</a>
-      <a href="training.html" class="panel-link">Training &amp; Development</a>
-      <a href="wprrs-platform.html" class="panel-link">App &amp; Dashboard</a>
-      <a href="resource-library.html" class="panel-link">Resource Library</a>
+    <div class="panel-items">
+
+      <!-- About (accordion) -->
+      <div class="panel-section">
+        <button type="button" class="panel-section__toggle" aria-expanded="false">
+          About
+          <svg class="panel-section__chevron" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M2.5 5l4.5 4 4.5-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="panel-section__links">
+          <a href="about-history.html" class="panel-sub-link">History</a>
+          <a href="about-governance.html" class="panel-sub-link">Governance</a>
+          <a href="about-code-of-conduct.html" class="panel-sub-link">Code of Conduct</a>
+          <a href="about-constitution.html" class="panel-sub-link">Constitution &amp; By-Laws</a>
+          <a href="about-honorary-members.html" class="panel-sub-link">Honorary Members</a>
+          <a href="about-prestige-awards.html" class="panel-sub-link">Prestige Awards</a>
+          <a href="about-annual-reports.html" class="panel-sub-link">Annual Reports</a>
+        </div>
+      </div>
+
+      <!-- Referees (accordion) -->
+      <div class="panel-section">
+        <button type="button" class="panel-section__toggle" aria-expanded="false">
+          Referees
+          <svg class="panel-section__chevron" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M2.5 5l4.5 4 4.5-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="panel-section__links">
+          <a href="become-a-referee.html" class="panel-sub-link">Become a Referee</a>
+          <a href="training.html" class="panel-sub-link">Training &amp; Development</a>
+        </div>
+      </div>
+
+      <!-- Resources (accordion) -->
+      <div class="panel-section">
+        <button type="button" class="panel-section__toggle" aria-expanded="false">
+          Resources
+          <svg class="panel-section__chevron" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M2.5 5l4.5 4 4.5-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="panel-section__links">
+          <a href="wprrs-platform.html" class="panel-sub-link">App &amp; Dashboard</a>
+          <a href="resource-library.html" class="panel-sub-link">Resource Library</a>
+        </div>
+      </div>
+
+      <!-- Direct links -->
       <a href="events.html" class="panel-link">Events</a>
-      <a href="news.html" class="panel-link">News</a><a href="shop.html" class="panel-link">Shop</a>
+      <a href="news.html" class="panel-link">News</a>
+      <a href="shop.html" class="panel-link">Shop</a>
       <a href="https://wprrs-refhub.vercel.app/" class="panel-link" target="_blank" rel="noopener">Sign In</a>
       <a href="contact.html" class="panel-link">Contact Us</a>
+
     </div>
   </div>
 
@@ -4681,6 +4779,28 @@
       mobilePanel.querySelectorAll('.panel-link').forEach(link => {
         link.addEventListener('click', closeMobilePanel);
       });
+
+      // Accordion sections — toggle open/close
+      mobilePanel.querySelectorAll('.panel-section__toggle').forEach(toggle => {
+        toggle.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const links = toggle.nextElementSibling;
+          const isOpen = links.classList.toggle('is-open');
+          toggle.setAttribute('aria-expanded', String(isOpen));
+          // Close other open sections
+          mobilePanel.querySelectorAll('.panel-section__toggle').forEach(other => {
+            if (other !== toggle) {
+              other.setAttribute('aria-expanded', 'false');
+              other.nextElementSibling.classList.remove('is-open');
+            }
+          });
+        });
+      });
+      // Close panel when a sub-link is tapped
+      mobilePanel.querySelectorAll('.panel-sub-link').forEach(link => {
+        link.addEventListener('click', closeMobilePanel);
+      });
+
       document.addEventListener('click', (e) => {
         if (!nav.contains(e.target) && !mobilePanel.contains(e.target)) closeMobilePanel();
       });

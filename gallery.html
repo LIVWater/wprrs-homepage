@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gallery — Western Province Rugby Referees' Society</title>
+  <meta name="description" content="Match day, training, awards evenings, society moments — a visual record of WPRRS across the season.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Playfair+Display:ital,wght@1,400;1,500;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="wprrs-styles.css">
+</head>
+<body>
+
+  <nav class="nav" id="nav">
+    <a href="wprrs-homepage-v2.html" class="nav__logo-wrap" aria-label="WPRRS home"><img src="Flower Logo.svg" class="nav__logo" alt="WPRRS"></a>
+    <ul class="nav__links">
+      <li class="has-drop"><button type="button" class="nav__trigger" aria-haspopup="menu" aria-expanded="false">About</button><div class="nav__dropdown" role="menu"><a href="about-history.html" class="dropdown-link">History</a><a href="about-governance.html" class="dropdown-link">Governance</a><a href="about-code-of-conduct.html" class="dropdown-link">Code of Conduct</a><a href="about-constitution.html" class="dropdown-link">Constitution &amp; By-Laws</a><a href="about-honorary-members.html" class="dropdown-link">Honorary Members</a><a href="about-prestige-awards.html" class="dropdown-link">Prestige Awards</a><a href="about-annual-reports.html" class="dropdown-link">Annual Reports</a></div></li>
+      <li class="has-drop"><button type="button" class="nav__trigger" aria-haspopup="menu" aria-expanded="false">Referees</button><div class="nav__dropdown" role="menu"><a href="become-a-referee.html" class="dropdown-link">Become a Referee</a><a href="training.html" class="dropdown-link">Training &amp; Development</a></div></li>
+      <li class="has-drop"><button type="button" class="nav__trigger" aria-haspopup="menu" aria-expanded="false">Resources</button><div class="nav__dropdown" role="menu"><a href="wprrs-platform.html" class="dropdown-link">App &amp; Dashboard</a><a href="resource-library.html" class="dropdown-link">Resource Library</a></div></li>
+      <li><a href="events.html">Events</a></li>
+      <li><a href="news.html">News</a></li><li><a href="shop.html">Shop</a></li>
+    </ul>
+    <div class="nav__actions">
+      <a href="https://wprrs-refhub.vercel.app/" class="nav__btn nav__btn--ghost" target="_blank" rel="noopener">Sign In</a>
+      <a href="contact.html" class="nav__btn nav__btn--filled">Contact Us</a>
+      <button class="nav__hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <div class="nav__panel" id="panel-mobile"><div class="panel-items"><a href="about-history.html" class="panel-link">About</a><a href="become-a-referee.html" class="panel-link">Become a Referee</a><a href="training.html" class="panel-link">Training &amp; Development</a><a href="wprrs-platform.html" class="panel-link">App &amp; Dashboard</a><a href="resource-library.html" class="panel-link">Resource Library</a><a href="events.html" class="panel-link">Events</a><a href="news.html" class="panel-link">News</a><a href="shop.html" class="panel-link">Shop</a><a href="https://wprrs-refhub.vercel.app/" class="panel-link" target="_blank" rel="noopener">Sign In</a><a href="contact.html" class="panel-link">Contact Us</a></div></div>
+
+  <section class="page-hero">
+    <span class="page-hero__watermark" aria-hidden="true">Gallery</span>
+    <div class="page-hero__inner">
+      <span class="page-hero__crumb"><a href="wprrs-homepage-v2.html">Home</a><span class="sep">/</span>Gallery</span>
+      <h1 class="page-hero__title">A season in <span class="ed-em">pictures</span>.</h1>
+      <p class="page-hero__sub">Match day across Western Province, training and certification, the awards evening, and the moments in between — captured by Alliance Photo and ZA Photos for the Society.</p>
+    </div>
+  </section>
+
+  <!-- ===== FILTER + GALLERY ===== -->
+  <section class="section section--pt-lg section--pb-lg">
+    <div class="container">
+      <div class="chip-row reveal" data-chip-group=".gallery-tile[data-cat]">
+        <button class="chip is-active" data-chip="all">All</button>
+        <button class="chip" data-chip="match">Match day</button>
+        <button class="chip" data-chip="training">Training</button>
+        <button class="chip" data-chip="awards">Awards</button>
+        <button class="chip" data-chip="society">Society</button>
+      </div>
+
+      <div class="gallery-grid reveal">
+        <a href="#" class="gallery-tile gallery-tile--featured" data-cat="match">
+          <img class="gallery-tile__img" src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=1600&q=80" alt="Referee at the heart of the action during a Western Province club fixture">
+          <div class="gallery-tile__caption">
+            <span class="gallery-tile__kicker">Match day · Newlands</span>
+            <span class="gallery-tile__title">Division 1 club fixture, mid-season</span>
+          </div>
+        </a>
+
+        <a href="#" class="gallery-tile" data-cat="training">
+          <img class="gallery-tile__img" src="https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?auto=format&fit=crop&w=1200&q=80" alt="Regional coaching session in progress">
+          <div class="gallery-tile__caption">
+            <span class="gallery-tile__kicker">Training · Brackenfell</span>
+            <span class="gallery-tile__title">Weekly regional coaching</span>
+          </div>
+        </a>
+
+        <a href="#" class="gallery-tile" data-cat="training">
+          <img class="gallery-tile__img" src="https://images.unsplash.com/photo-1551958219-acbc608c6377?auto=format&fit=crop&w=1200&q=80" alt="World Rugby Level 1 cohort during certification">
+          <div class="gallery-tile__caption">
+            <span class="gallery-tile__kicker">Certification</span>
+            <span class="gallery-tile__title">World Rugby Level 1 intake</span>
+          </div>
+        </a>
+
+        <a href="#" class="gallery-tile" data-cat="match">
+          <img class="gallery-tile__img" src="https://images.unsplash.com/photo-1546608235-3310a2494cdf?auto=format&fit=crop&w=1200&q=80" alt="Touch judge signalling on the sideline">
+          <div class="gallery-tile__caption">
+            <span class="gallery-tile__kicker">Match day · Stellenbosch</span>
+            <span class="gallery-tile__title">Touch judge in action</span>
+          </div>
+        </a>
+
+        <a href="#" class="gallery-tile" data-cat="awards">
+          <img class="gallery-tile__img" src="https://images.unsplash.com/photo-1559223607-a43c990c692c?auto=format&fit=crop&w=1200&q=80" alt="Annual awards evening at Newlands">
+          <div class="gallery-tile__caption">
+            <span class="gallery-tile__kicker">Awards · Newlands</span>
+            <span class="gallery-tile__title">Annual Prestige Awards Evening</span>
+          </div>
+        </a>
+
+        <a href="#" class="gallery-tile" data-cat="match">
+          <img class="gallery-tile__img" src="https://images.unsplash.com/photo-1592872703499-86a16bd45afe?auto=format&fit=crop&w=1200&q=80" alt="Schools rugby fixture in Cape Town">
+          <div class="gallery-tile__caption">
+            <span class="gallery-tile__kicker">Match day · Schools</span>
+            <span class="gallery-tile__title">U18 schools fixture, Strand</span>
+          </div>
+        </a>
+
+        <a href="#" class="gallery-tile" data-cat="training">
+          <img class="gallery-tile__img" src="https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=1200&q=80" alt="Fitness testing — YOYO intermittent recovery test">
+          <div class="gallery-tile__caption">
+            <span class="gallery-tile__kicker">Fitness</span>
+            <span class="gallery-tile__title">Annual YOYO testing</span>
+          </div>
+        </a>
+
+        <a href="#" class="gallery-tile" data-cat="society">
+          <img class="gallery-tile__img" src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=1200&q=80" alt="AGM at Newlands Terraces">
+          <div class="gallery-tile__caption">
+            <span class="gallery-tile__kicker">Society · AGM</span>
+            <span class="gallery-tile__title">Annual General Meeting</span>
+          </div>
+        </a>
+
+        <a href="#" class="gallery-tile" data-cat="society">
+          <img class="gallery-tile__img" src="https://images.unsplash.com/photo-1466721591366-2d5fba72006d?auto=format&fit=crop&w=1200&q=80" alt="Junior development squad warm up">
+          <div class="gallery-tile__caption">
+            <span class="gallery-tile__kicker">Junior development</span>
+            <span class="gallery-tile__title">Saturday squad session</span>
+          </div>
+        </a>
+
+        <a href="#" class="gallery-tile gallery-tile--wide" data-cat="match">
+          <img class="gallery-tile__img" src="https://images.unsplash.com/photo-1538886285014-3b69fa5fbd91?auto=format&fit=crop&w=1600&q=80" alt="Wide view of a Western Province club rugby ground">
+          <div class="gallery-tile__caption">
+            <span class="gallery-tile__kicker">Match day</span>
+            <span class="gallery-tile__title">Pre-kick-off, Stellenbosch derby</span>
+          </div>
+        </a>
+
+        <a href="#" class="gallery-tile" data-cat="awards">
+          <img class="gallery-tile__img" src="https://images.unsplash.com/photo-1530023367847-a683933f4172?auto=format&fit=crop&w=1200&q=80" alt="Willem Brits Award presentation">
+          <div class="gallery-tile__caption">
+            <span class="gallery-tile__kicker">Awards · 2024</span>
+            <span class="gallery-tile__title">Willem Brits Award presentation</span>
+          </div>
+        </a>
+
+        <a href="#" class="gallery-tile" data-cat="society">
+          <img class="gallery-tile__img" src="https://images.unsplash.com/photo-1574629173362-fed01d54f2a4?auto=format&fit=crop&w=1200&q=80" alt="Honorary members gathering">
+          <div class="gallery-tile__caption">
+            <span class="gallery-tile__kicker">Society</span>
+            <span class="gallery-tile__title">Honorary members at the awards evening</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="reveal" style="margin-top:3rem; text-align:center;">
+        <a href="#" class="btn btn--secondary">Load more</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ATTRIBUTION ===== -->
+  <section class="section section--mid section--pt-lg section--pb-lg">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Photography credits</span>
+        <h2>Captured by our <span class="ed-em">partners</span>.</h2>
+        <p>The Society's match-day and event photography is provided by two of our subsidiary sponsors. Their support means every season is documented in depth.</p>
+      </div>
+      <div class="contact-grid reveal">
+        <div class="contact-block">
+          <h3>Alliance Photo</h3>
+          <p>Match-day photography across Division 1, 2 and 3 fixtures. Annual awards evening. Junior development sessions.</p>
+        </div>
+        <div class="contact-block">
+          <h3>ZA Photos</h3>
+          <p>Schools rugby festivals, training sessions, and Society events. Long-form season galleries.</p>
+        </div>
+        <div class="contact-block">
+          <h3>Member contributions</h3>
+          <p>Members are welcome to send through high-resolution match-day photos. Credit is provided to the photographer where used.</p>
+        </div>
+        <div class="contact-block">
+          <h3>Permissions</h3>
+          <p>All photography is published with consent. To request removal of an image or to enquire about reuse, contact the office.</p>
+          <p><a href="contact.html" class="what-card__link" style="margin-top:0.5rem;">Contact →</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__inner">
+        <div class="footer__brand-block"><div class="footer__brand"><img src="Flower Logo.svg" alt=""><div class="footer__brand-name">WPRRS<br><span style="font-weight:300; font-size:0.78rem; letter-spacing:0.04em;">Western Province Rugby Referees</span></div></div><p class="footer__brand-sub">An affiliate of the Western Province Rugby Union, developing world-standard referees since 1992.</p></div>
+        <div class="footer__col"><h4>Organisation</h4><ul><li><a href="about-history.html">History</a></li><li><a href="about-governance.html">Governance</a></li><li><a href="about-code-of-conduct.html">Code of Conduct</a></li><li><a href="about-constitution.html">Constitution &amp; By-Laws</a></li><li><a href="about-honorary-members.html">Honorary Members</a></li><li><a href="about-prestige-awards.html">Prestige Awards</a></li><li><a href="about-annual-reports.html">Annual Reports</a></li></ul></div>
+        <div class="footer__col"><h4>Referees</h4><ul><li><a href="become-a-referee.html">Become a Referee</a></li><li><a href="training.html">Training</a></li><li><a href="training.html#grading">Grading System</a></li><li><a href="training.html#boksmart">BokSmart</a></li><li><a href="wprrs-platform.html">WHISTLE</a></li><li><a href="news.html">News</a></li><li><a href="shop.html">Shop</a></li><li><a href="sponsors.html">Sponsors</a></li><li><a href="gallery.html">Gallery</a></li></ul></div>
+        <div class="footer__col"><h4>Contact</h4><ul><li><a href="tel:+27216594600">021 659 4600 — WP Rugby Union</a></li><li><a href="tel:+27216594502">021 659 4502 — Referees' Office</a></li><li><a href="mailto:administration@wprugby.co.za">administration@wprugby.co.za</a></li><li><a href="mailto:smahlatsi@wprugby.co.za">smahlatsi@wprugby.co.za</a></li></ul></div>
+      </div>
+      <div class="footer__bottom"><span>© 2026 Western Province Rugby Referees' Society. All rights reserved.</span><span>Affiliated with <a href="#">Western Province Rugby Union</a></span></div>
+    </div>
+  </footer>
+
+  <script src="wprrs-shared.js" defer></script>
+</body>
+</html>
